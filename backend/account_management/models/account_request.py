@@ -8,5 +8,6 @@ class AccountRequest(db.Model):
     id: int = db.Column(db.Integer, primary_key=True)
     user_id: int = db.Column(db.Integer, nullable=False)
     account_type: str = db.Column(db.String(50), nullable=False)
-    status: str = db.Column(db.String(50), default='Pending')
+    initial_deposit: float = db.Column(db.Float, nullable=False)
+    status: str = db.Column(db.String(20), default='pending')
     created_at: datetime = db.Column(db.DateTime, default=datetime.utcnow)
