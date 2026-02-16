@@ -1,27 +1,22 @@
 # Epic Title: Implement Multi-Factor Authentication (MFA)
 
+from datetime import datetime, timedelta
 from backend.authentication.models.otp import OTP
 from backend.database import db
-from datetime import datetime, timedelta
+import random
 
 class OTPRepository:
 
-    def create_otp(self, user_id: int, otp_code: str, method: str) -> OTP:
-        new_otp = OTP(
-            user_id=user_id,
-            otp_code=otp_code,
-            method=method,
-            expires_at=datetime.utcnow() + timedelta(minutes=5)  # OTP expires in 5 minutes
-        )
-        db.session.add(new_otp)
+    def generate_otp(self, user_id: int) -> OTP:
+        otp_code = f"{random.randint(100000, 999999)}"
+        expires_at = datetime.utcnow() + timedelta(minutes=5)
+        otp = OTP(user_id=user_id, otp_code=otp_code, expires_at=expires_at)
+        db.session.add(otp)
         db.session.commit()
-        return new_otp
+        return otp
 
-    def get_valid_otp(self, user_id: int, otp_code: str, method: str) -> OTP:
-        now = datetime.utcnow()
-        return OTP.query.filter(
-            OTP.user_id == user_id,
-            OTP.otp_code == otp_code,
-            OTP.method == method,
-            OTP.expires_at > now
-        ).first()
+    def get_valid_otp(self, user_id: int, otp_code: str) -> bool:
+        otp = OTP.query.filter_by(user_id=user_id, otp_code=otp_code).first()
+        if otp and otp.expires_at > datetime.utcnow():
+            return True
+        return False
