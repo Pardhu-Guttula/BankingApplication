@@ -1,2 +1,4 @@
-sql_admin_username = "sqladmin"
-sql_admin_password = "P@ssw0rd123"
+project_id = "my-gcp-project"
+region     = "us-central1"
+source_archive_bucket = "my-source-bucket"
+source_archive_object = "source.zip"
