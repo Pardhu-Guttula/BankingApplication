@@ -1,4 +1,4 @@
-# Epic Title: Intuitive Dashboard Interface
+# Epic Title: Display Personalized Banking Products
 
 from flask_sqlalchemy import SQLAlchemy
 
