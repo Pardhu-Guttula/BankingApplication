@@ -1,9 +1,9 @@
-# Epic Title: Intuitive Dashboard Interface
+# Epic Title: Save and Resume Incomplete Applications
 
 import logging
 from flask import Flask
 from backend.database import db
-from backend.personalized_dashboard.controllers.dashboard_ui_controller import dashboard_ui_controller
+from backend.account_management.controllers.application_controller import application_controller
 
 def create_app() -> Flask:
     app = Flask(__name__)
@@ -11,7 +11,7 @@ def create_app() -> Flask:
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
-    app.register_blueprint(dashboard_ui_controller, url_prefix='/ui')
+    app.register_blueprint(application_controller, url_prefix='/application')
 
     return app
 
