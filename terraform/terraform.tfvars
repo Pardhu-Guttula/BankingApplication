@@ -1,1 +1,2 @@
-sql_admin_password = "ChangeMe123!"
+sql_admin_username = "sqladmin"
+sql_admin_password = "P@ssw0rd123"
