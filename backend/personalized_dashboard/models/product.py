@@ -4,7 +4,7 @@ from backend.database import db
 
 class Product(db.Model):
     __tablename__ = 'products'
-    id: int = db.Column(db.Integer, primary_key=True)
-    name: str = db.Column(db.String(100), nullable=False)
-    eligibility_criteria: str = db.Column(db.String(255), nullable=False)
-    recommended_for: str = db.Column(db.String(255), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.String(255), nullable=False)
+    eligibility_criteria = db.Column(db.Text, nullable=False)  # JSON containing criteria
