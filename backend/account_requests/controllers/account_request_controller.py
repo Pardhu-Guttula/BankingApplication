@@ -20,3 +20,17 @@ def create_account_request():
         'request_id': account_request.id,
         'status': account_request.status
     }), 200
+
+@account_request_controller.route('/account/request/documents', methods=['POST'])
+def upload_account_request_documents():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    document = data.get('document')
+
+    if not user_id or not document:
+        return jsonify({'error': 'User ID and document are required'}), 400
+
+    AccountRequestService.upload_document(user_id, document)
+    return jsonify({
+        'message': 'Document uploaded successfully'
+    }), 200
