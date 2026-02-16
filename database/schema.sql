@@ -1,7 +1,9 @@
-# Epic Title: Integrate Authentication with Bank Security Infrastructure
+# Epic Title: Implement Multi-Factor Authentication (MFA)
 
-CREATE TABLE users (
+CREATE TABLE otps (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(80) UNIQUE NOT NULL,
-    password_hash VARCHAR(120) NOT NULL
+    user_id INT NOT NULL,
+    otp_code VARCHAR(6) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
