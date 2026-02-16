@@ -1,19 +1,19 @@
-# Epic Title: Implement Data Encryption Protocols
+# Epic Title: User-Friendly Account Service Interface
 
 import logging
 from flask import Flask
-from backend.authentication.controllers.encryption_controller import encryption_controller
-from backend.authentication.models.mfa_model import db
+from backend.account_requests.controllers.account_service_interface_controller import account_service_interface_controller
+from backend.account_requests.models.service_modification_request_model import db as service_modification_db
 
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://user:password@localhost/dbname'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    db.init_app(app)
-    
-    app.register_blueprint(encryption_controller)
-    
+    service_modification_db.init_app(app)
+
+    app.register_blueprint(account_service_interface_controller)
+
     return app
 
 if __name__ == "__main__":
