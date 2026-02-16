@@ -1,18 +1,17 @@
-# Epic Title: Implement Account Lockout Mechanism
+# Epic Title: Implement Multi-Factor Authentication
 
 import logging
 from flask import Flask
-from backend.authentication.controllers.login_attempt_controller import login_attempt_controller
-from backend.authentication.models.failed_login_attempt_model import db as login_db
+from backend.authentication.controllers.mfa_controller import mfa_controller
+from backend.authentication.models.mfa_model import db as auth_db
 
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://user:password@localhost/dbname'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    login_db.init_app(app)
-
-    app.register_blueprint(login_attempt_controller)
+    auth_db.init_app(app)
+    app.register_blueprint(mfa_controller)
 
     return app
 
