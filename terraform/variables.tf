@@ -1,16 +1,19 @@
-variable "location" {
-  description = "The location where resources will be created."
-  type        = string
-  default     = "West Europe"
-}
-
-variable "sql_admin_username" {
-  description = "The username for the SQL Server admin."
+variable "project_id" {
+  description = "The GCP project ID"
   type        = string
 }
 
-variable "sql_admin_password" {
-  description = "The password for the SQL Server admin."
+variable "region" {
+  description = "The GCP project region"
   type        = string
-  sensitive   = true
+}
+
+variable "source_archive_bucket" {
+  description = "The GCS bucket containing the Cloud Functions source code"
+  type        = string
+}
+
+variable "source_archive_object" {
+  description = "The GCS object containing the Cloud Functions source code"
+  type        = string
 }
