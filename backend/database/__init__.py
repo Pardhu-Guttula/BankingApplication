@@ -1,4 +1,4 @@
-# Epic Title: Save and Resume Incomplete Applications
+# Epic Title: Enable Account Opening Requests
 
 from flask_sqlalchemy import SQLAlchemy
 
