@@ -1,26 +1,22 @@
 # Epic Title: Design User Profile-Based Dashboard
 
-from typing import Dict, Any
-from backend.dashboard.models.user_profile_model import db, UserProfile
+from backend.dashboard.repositories.dashboard_repository import DashboardRepository
+from backend.dashboard.models.user_profile_model import UserProfile, BankingProduct
 
 class DashboardService:
 
     @staticmethod
-    def get_dashboard_content(user_id: int) -> Dict[str, Any]:
-        user_profile = UserProfile.query.filter_by(user_id=user_id).first()
-        
+    def get_personalized_dashboard(user_id: int) -> dict:
+        user_profile: UserProfile = DashboardRepository.get_user_profile(user_id)
         if not user_profile:
-            return {'error': 'User not found'}
+            return {'error': 'User profile not found'}
 
-        content = {
-            'user_name': user_profile.name,
-            'recommended_products': DashboardService.get_recommended_products(user_profile)
+        products: List[BankingProduct] = DashboardRepository.get_relevant_products(user_profile.eligibility_criteria)
+
+        product_details = [{'name': product.name, 'description': product.description} for product in products]
+
+        return {
+            'user_id': user_profile.user_id,
+            'preferences': user_profile.preferences,
+            'products': product_details
         }
-        
-        return content
-
-    @staticmethod
-    def get_recommended_products(user_profile: UserProfile) -> list:
-        # Placeholder logic for product recommendation based on user profile
-        # In real application, actual logic or an external service should be used
-        return user_profile.favorite_products.split(',') if user_profile.favorite_products else []
