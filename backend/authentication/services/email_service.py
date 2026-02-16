@@ -3,6 +3,6 @@
 class EmailService:
 
     @staticmethod
-    def send_account_locked_email(user_id: int) -> None:
+    def send_account_lockout_notification(user_id: int) -> None:
         # Placeholder for email sending logic
-        pass  # Implementation for sending email
+        pass  # Implement email sending functionality here
