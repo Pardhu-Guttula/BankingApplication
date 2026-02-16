@@ -1,10 +1,8 @@
-# Epic Title: Implement Multi-Factor Authentication (MFA)
+# Epic Title: Upload Documentation for Account Requests
 
-CREATE TABLE otps (
+CREATE TABLE documents (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    otp_code VARCHAR(6) NOT NULL,
-    method VARCHAR(50) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    expires_at DATETIME NOT NULL
+    filename VARCHAR(255) NOT NULL,
+    uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
