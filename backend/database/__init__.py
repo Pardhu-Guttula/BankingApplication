@@ -1,4 +1,4 @@
-# Epic Title: Implement Multi-Factor Authentication (MFA)
+# Epic Title: Save and Resume Incomplete Applications
 
 from flask_sqlalchemy import SQLAlchemy
 
