@@ -1,14 +1,10 @@
 variable "sql_admin_username" {
-  description = "The SQL server admin username"
+  description = "The administrator username for the SQL server."
   type        = string
 }
 
 variable "sql_admin_password" {
-  description = "The SQL server admin password"
+  description = "The administrator password for the SQL server."
   type        = string
-}
-
-variable "log_analytics_workspace_id" {
-  description = "The Log Analytics workspace ID"
-  type        = string
+  sensitive   = true
 }
