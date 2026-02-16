@@ -1,31 +1,21 @@
-# Epic Title: Implement Multi-Factor Authentication
+# Epic Title: Implement Multi-Factor Authentication (MFA)
 
+import logging
 import random
-import string
-from backend.authentication.repositories.mfa_repository import MFARepository
-from backend.authentication.models.mfa_model import User
+from backend.authentication.repositories.otp_repository import OTPRepository
 
 class MFAService:
+    def __init__(self):
+        self.otp_repository = OTPRepository()
 
-    @staticmethod
-    def generate_token(length: int = 6) -> str:
-        return ''.join(random.choices(string.digits, k=length))
+    def generate_otp(self, user_id: int, method: str) -> None:
+        otp_code = self._generate_random_otp()
+        self.otp_repository.create_otp(user_id, otp_code, method)
+        self._send_otp(user_id, otp_code, method)
 
-    @staticmethod
-    def send_mfa_token(user: User, token_type: str) -> str:
-        token = MFAService.generate_token()
-        MFARepository.save_mfa_token(user.id, token, token_type, validity_minutes=5)
+    def _generate_random_otp(self) -> str:
+        return ''.join([str(random.randint(0, 9)) for _ in range(6)])
 
-        # Here, you would integrate with an SMS, email, or authenticator app service provider
-        if token_type == "sms":
-            print(f"Sending SMS token to {user.phone_number}: {token}")
-        elif token_type == "email":
-            print(f"Sending Email token to {user.email}: {token}")
-        elif token_type == "authenticator":
-            print(f"Authenticator token generated: {token}")
-
-        return token
-
-    @staticmethod
-    def verify_mfa_token(user: User, token: str, token_type: str) -> bool:
-        return MFARepository.validate_mfa_token(user.id, token, token_type)
+    def _send_otp(self, user_id: int, otp_code: str, method: str) -> None:
+        # Placeholder for actual sending logic (email, SMS, biometric)
+        logging.info(f'Sending OTP {otp_code} to user {user_id} via {method}')
