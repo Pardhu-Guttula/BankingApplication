@@ -1,4 +1,4 @@
-# Epic Title: Integrate Authentication with Bank Security Infrastructure
+# Epic Title: Implement Multi-Factor Authentication (MFA)
 
 from flask_sqlalchemy import SQLAlchemy
 
