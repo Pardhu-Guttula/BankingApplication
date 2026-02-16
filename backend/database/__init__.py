@@ -1,4 +1,4 @@
-# Epic Title: Enable Account Opening Requests
+# Epic Title: Intuitive Dashboard Interface
 
 from flask_sqlalchemy import SQLAlchemy
 
