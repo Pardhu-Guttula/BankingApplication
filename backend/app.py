@@ -1,18 +1,15 @@
-# Epic Title: Display Banking Products Dynamically
+# Epic Title: User-Friendly Account Service Interface
 
 import logging
 from flask import Flask
-from backend.dashboard.controllers.product_controller import product_controller
-from backend.dashboard.models.user_profile_model import db as dashboard_db
+from backend.account_requests.controllers.account_modification_controller import account_modification_controller
 
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://user:password@localhost/dbname'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    dashboard_db.init_app(app)
-
-    app.register_blueprint(product_controller)
+    app.register_blueprint(account_modification_controller)
 
     return app
 
