@@ -1,9 +1,9 @@
-# Epic Title: Integrate Authentication with Bank Security Infrastructure
+# Epic Title: Implement Multi-Factor Authentication (MFA)
 
 import logging
 from flask import Flask
 from backend.database import db
-from backend.user_authentication.controllers.security_integration_controller import security_integration_controller
+from backend.user_authentication.controllers.mfa_controller import mfa_controller
 
 def create_app() -> Flask:
     app = Flask(__name__)
@@ -11,7 +11,7 @@ def create_app() -> Flask:
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
-    app.register_blueprint(security_integration_controller, url_prefix='/security')
+    app.register_blueprint(mfa_controller, url_prefix='/mfa')
 
     return app
 
