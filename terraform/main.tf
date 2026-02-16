@@ -4,50 +4,47 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "example" {
   name     = "example-resources"
-  location = "East US"
+  location = "West Europe"
 }
 
-resource "azurerm_app_service_plan" "example" {
-  name                = "example-appserviceplan"
+resource "azurerm_virtual_network" "example" {
+  name                = "example-vnet"
+  address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
-  sku {
-    tier   = "Standard"
-    size   = "S1"
-  }
 }
 
-resource "azurerm_app_service" "example" {
-  name                = "example-appservice"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  app_service_plan_id = azurerm_app_service_plan.example.id
+resource "azurerm_subnet" "example" {
+  name                 = "example-subnet"
+  resource_group_name  = azurerm_resource_group.example.name
+  virtual_network_name = azurerm_virtual_network.example.name
+  address_prefixes     = ["10.0.1.0/24"]
 }
 
 resource "azurerm_sql_server" "example" {
-  name                         = "example-sqlserver"
+  name                         = "mysqlserver12345"
   resource_group_name          = azurerm_resource_group.example.name
   location                     = azurerm_resource_group.example.location
   version                      = "12.0"
-  administrator_login          = var.sql_admin_username
-  administrator_login_password = var.sql_admin_password
+  administrator_login          = "sqladmin"
+  administrator_login_password = "H@Sh1CoR3!"
 }
 
 resource "azurerm_sql_database" "example" {
-  name                = "example-sqldatabase"
+  name                = "example-db"
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location
   server_name         = azurerm_sql_server.example.name
-  sku_name            = "S0"
 }
 
-resource "azurerm_monitor_diagnostic_setting" "example" {
-  name               = "example-diagnostic-setting"
-  target_resource_id = azurerm_sql_database.example.id
-  log_analytics_workspace_id = var.log_analytics_workspace_id
+resource "azurerm_network_interface" "example" {
+  name                = "example-nic"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
 
-  enabled_log {
-    category = "SQLInsights"
-    enabled  = true
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.example.id
+    private_ip_address_allocation = "Dynamic"
   }
 }
