@@ -1,8 +1,8 @@
-# Epic Title: User-Friendly Account Service Interface
+# Epic Title: Streamline Service Modification Requests
 
 import logging
 from flask import Flask
-from backend.account_requests.controllers.account_service_interface_controller import account_service_interface_controller
+from backend.account_requests.controllers.service_modification_controller import service_modification_controller
 from backend.account_requests.models.service_modification_request_model import db as service_modification_db
 
 def create_app() -> Flask:
@@ -12,7 +12,7 @@ def create_app() -> Flask:
 
     service_modification_db.init_app(app)
 
-    app.register_blueprint(account_service_interface_controller)
+    app.register_blueprint(service_modification_controller)
 
     return app
 
