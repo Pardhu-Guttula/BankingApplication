@@ -1,7 +1,7 @@
 # Epic Title: Streamline Service Modification Requests
 
-from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -12,5 +12,5 @@ class ServiceModificationRequest(db.Model):
     user_id = db.Column(db.Integer, nullable=False)
     service_id = db.Column(db.Integer, nullable=False)
     modification_details = db.Column(db.String(255), nullable=False)
-    request_date = db.Column(db.DateTime, default=datetime.utcnow)
-    status = db.Column(db.String(50), nullable=False)
+    status = db.Column(db.String(50), nullable=False, default='Pending')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
