@@ -1,9 +1,9 @@
-# Epic Title: Enable Account Opening Requests
+# Epic Title: Intuitive Dashboard Interface
 
 import logging
 from flask import Flask
 from backend.database import db
-from backend.account_management.controllers.account_opening_controller import account_opening_controller
+from backend.personalized_dashboard.controllers.ui_controller import ui_controller
 
 def create_app() -> Flask:
     app = Flask(__name__)
@@ -11,7 +11,7 @@ def create_app() -> Flask:
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
-    app.register_blueprint(account_opening_controller, url_prefix='/account')
+    app.register_blueprint(ui_controller, url_prefix='/ui')
 
     return app
 
