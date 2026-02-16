@@ -1,9 +1,9 @@
-# Epic Title: Save and Resume Incomplete Applications
+# Epic Title: Enable Account Opening Requests
 
 import logging
 from flask import Flask
 from backend.database import db
-from backend.account_management.controllers.application_controller import application_controller
+from backend.account_management.controllers.account_request_controller import account_request_controller
 
 def create_app() -> Flask:
     app = Flask(__name__)
@@ -11,7 +11,7 @@ def create_app() -> Flask:
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
-    app.register_blueprint(application_controller, url_prefix='/application')
+    app.register_blueprint(account_request_controller, url_prefix='/account')
 
     return app
 
