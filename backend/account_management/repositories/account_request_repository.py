@@ -5,11 +5,12 @@ from backend.database import db
 
 class AccountRequestRepository:
 
-    def create_account_request(self, user_id: int, account_type: str) -> AccountRequest:
-        new_request = AccountRequest(
+    def submit_request(self, user_id: int, account_type: str, initial_deposit: float) -> AccountRequest:
+        account_request = AccountRequest(
             user_id=user_id,
-            account_type=account_type
+            account_type=account_type,
+            initial_deposit=initial_deposit
         )
-        db.session.add(new_request)
+        db.session.add(account_request)
         db.session.commit()
-        return new_request
+        return account_request
