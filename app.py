@@ -1,9 +1,9 @@
-# Epic Title: Integrate Authentication with Bank Security Infrastructure
+# Epic Title: Display Personalized Banking Products
 
 import logging
 from flask import Flask
 from backend.database import db
-from backend.authentication.controllers.auth_integration_controller import auth_integration_controller
+from backend.personalized_dashboard.controllers.dashboard_controller import dashboard_controller
 
 def create_app() -> Flask:
     app = Flask(__name__)
@@ -11,7 +11,7 @@ def create_app() -> Flask:
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
-    app.register_blueprint(auth_integration_controller, url_prefix='/auth')
+    app.register_blueprint(dashboard_controller, url_prefix='/dashboard')
 
     return app
 
