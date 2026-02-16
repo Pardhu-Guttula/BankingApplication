@@ -1,9 +1,9 @@
-# Epic Title: Enable Account Opening Requests
+# Epic Title: Display Personalized Banking Products
 
 import logging
 from flask import Flask
 from backend.database import db
-from backend.account_management.controllers.account_opening_controller import account_opening_controller
+from backend.personalized_dashboard.controllers.dashboard_controller import dashboard_controller
 
 def create_app() -> Flask:
     app = Flask(__name__)
@@ -11,7 +11,7 @@ def create_app() -> Flask:
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
-    app.register_blueprint(account_opening_controller, url_prefix='/account')
+    app.register_blueprint(dashboard_controller, url_prefix='/dashboard')
 
     return app
 
