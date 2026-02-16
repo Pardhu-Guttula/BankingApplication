@@ -6,14 +6,15 @@ from backend.database import db
 class ApplicationRepository:
 
     def save_application(self, user_id: int, application_data: str) -> Application:
-        application = Application.query.filter_by(user_id=user_id, status='incomplete').first()
-        if not application:
-            application = Application(user_id=user_id, application_data=application_data)
-        else:
-            application.application_data = application_data
-        db.session.add(application)
+        existing_application = Application.query.filter_by(user_id=user_id).first()
+        if existing_application:
+            existing_application.application_data = application_data
+            db.session.commit()
+            return existing_application
+        new_application = Application(user_id=user_id, application_data=application_data)
+        db.session.add(new_application)
         db.session.commit()
-        return application
+        return new_application
 
-    def get_application_by_user(self, user_id: int) -> Application:
-        return Application.query.filter_by(user_id=user_id, status='incomplete').first()
+    def get_application(self, user_id: int) -> Application:
+        return Application.query.filter_by(user_id=user_id).first()
