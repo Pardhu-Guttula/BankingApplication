@@ -4,20 +4,13 @@ from flask import Blueprint, jsonify
 
 ui_controller = Blueprint('ui_controller', __name__)
 
-@ui_controller.route('/dashboard/ui', methods=['GET'])
-def get_dashboard_ui():
-    ui_structure = {
-        'navigation': [
-            {'name': 'Home', 'link': '/dashboard'},
-            {'name': 'Profile', 'link': '/profile'},
-            {'name': 'Settings', 'link': '/settings'},
-            {'name': 'Logout', 'link': '/logout'}
-        ],
-        'sections': [
-            {'name': 'Overview', 'id': 'overview-section'},
-            {'name': 'Accounts', 'id': 'accounts-section'},
-            {'name': 'Transactions', 'id': 'transactions-section'},
-            {'name': 'Support', 'id': 'support-section'}
-        ]
-    }
-    return jsonify(ui_structure), 200
+@ui_controller.route('/dashboard/navigation', methods=['GET'])
+def get_navigation_options():
+    navigation_options = [
+        {'name': 'Account Summary', 'link': '/dashboard/account_summary'},
+        {'name': 'Transfer Funds', 'link': '/dashboard/transfer_funds'},
+        {'name': 'View Statements', 'link': '/dashboard/view_statements'},
+        {'name': 'Manage Profile', 'link': '/dashboard/manage_profile'},
+        {'name': 'Customer Support', 'link': '/dashboard/customer_support'}
+    ]
+    return jsonify(navigation_options), 200
