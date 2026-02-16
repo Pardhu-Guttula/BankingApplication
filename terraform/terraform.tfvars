@@ -1,5 +1,3 @@
-aws_region  = "us-west-2"
-lambda_zip  = "path/to/lambda-code.zip"
-db_name     = "banking"
-db_username = "admin"
-db_password = "password1234"
+sql_admin_username = "exampleadmin"
+sql_admin_password = "P@ssw0rd1234!"
+log_analytics_workspace_id = "example-log-analytics-workspace-id"
