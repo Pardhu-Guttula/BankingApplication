@@ -1,4 +1,4 @@
-# Epic Title: Upload Documentation for Account Requests
+# Epic Title: Enable Account Opening Requests
 
 from flask_sqlalchemy import SQLAlchemy
 
