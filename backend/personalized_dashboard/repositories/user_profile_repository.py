@@ -1,7 +1,6 @@
 # Epic Title: Display Personalized Banking Products
 
 from backend.personalized_dashboard.models.user_profile import UserProfile
-from backend.database import db
 
 class UserProfileRepository:
 
