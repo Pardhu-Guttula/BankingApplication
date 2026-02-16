@@ -10,10 +10,14 @@ def modify_service():
     data = request.get_json()
     user_id = data.get('user_id')
     service_id = data.get('service_id')
-    modification_details = data.get('modification_details')
+    modification_type = data.get('modification_type')
 
-    if not user_id or not service_id or not modification_details:
-        return jsonify({'error': 'User ID, service ID, and modification details are required'}), 400
+    if not user_id or not service_id or not modification_type:
+        return jsonify({'error': 'User ID, service ID and modification type are required'}), 400
 
-    response = ServiceModificationService.submit_service_modification_request(user_id, service_id, modification_details)
-    return jsonify(response), 200
+    mod_request = ServiceModificationService.create_modification_request(user_id, service_id, modification_type)
+    return jsonify({
+        'message': 'Service modification request submitted successfully',
+        'request_id': mod_request.id,
+        'status': mod_request.status
+    }), 200
