@@ -1,15 +1,15 @@
-# Epic Title: User-Friendly Account Service Interface
+# Epic Title: Ensure Intuitive Dashboard Interface
 
 import logging
 from flask import Flask
-from backend.account_requests.controllers.interface_controller import interface_controller
+from backend.dashboard.controllers.ui_controller import ui_controller
 
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://user:password@localhost/dbname'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    app.register_blueprint(interface_controller)
+    app.register_blueprint(ui_controller)
 
     return app
 
