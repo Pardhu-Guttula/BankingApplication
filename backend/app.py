@@ -1,17 +1,17 @@
-# Epic Title: Simplify Account Opening Workflow
+# Epic Title: Streamline Service Modification Requests
 
 import logging
 from flask import Flask
-from backend.account_requests.controllers.account_request_controller import account_request_controller
-from backend.account_requests.models.account_request_model import db as account_request_db
+from backend.account_requests.controllers.service_modification_controller import service_modification_controller
+from backend.account_requests.models.service_modification_model import db as service_mod_db
 
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://user:password@localhost/dbname'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    account_request_db.init_app(app)
-    app.register_blueprint(account_request_controller)
+    service_mod_db.init_app(app)
+    app.register_blueprint(service_modification_controller)
 
     return app
 
