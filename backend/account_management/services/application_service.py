@@ -6,18 +6,16 @@ class ApplicationService:
     def __init__(self):
         self.application_repository = ApplicationRepository()
 
-    def save_application(self, user_id: int, application_data: str) -> bool:
+    def save_application(self, user_id: int, application_data: dict) -> bool:
         try:
-            self.application_repository.save_application(user_id, application_data)
+            application_data_json = json.dumps(application_data)
+            self.application_repository.save_application(user_id, application_data_json)
             return True
-        except Exception as e:
+        except Exception:
             return False
 
-    def get_saved_application(self, user_id: int) -> dict:
-        application = self.application_repository.get_application_by_user(user_id)
+    def resume_application(self, user_id: int) -> dict:
+        application = self.application_repository.get_application(user_id)
         if application:
-            return {
-                "application_data": application.application_data,
-                "status": application.status
-            }
-        return None
+            return json.loads(application.application_data)
+        return {}
