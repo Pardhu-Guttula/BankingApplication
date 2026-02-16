@@ -1,10 +1,17 @@
-# Epic Title: Enable Account Opening Requests
+# Epic Title: Display Personalized Banking Products
 
-CREATE TABLE account_requests (
+CREATE TABLE user_profiles (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    account_type VARCHAR(50) NOT NULL,
-    initial_deposit FLOAT NOT NULL,
-    status VARCHAR(20) DEFAULT 'pending',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    user_id INT UNIQUE NOT NULL,
+    user_data TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE banking_products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    eligibility_criteria TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
