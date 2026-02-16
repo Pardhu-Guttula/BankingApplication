@@ -13,8 +13,11 @@ class ApplicationService:
         except Exception as e:
             return False
 
-    def get_application(self, user_id: int) -> dict:
-        application = self.application_repository.get_application(user_id)
+    def get_saved_application(self, user_id: int) -> dict:
+        application = self.application_repository.get_application_by_user(user_id)
         if application:
-            return {"application_data": application.application_data}
-        return {}
+            return {
+                "application_data": application.application_data,
+                "status": application.status
+            }
+        return None
