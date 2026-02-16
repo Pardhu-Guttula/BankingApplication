@@ -1,3 +1,5 @@
-project_id = "my-gcp-project"
-region     = "us-central1"
-backend_bucket_name = "my-backend-bucket"
+aws_region  = "us-west-2"
+lambda_zip  = "path/to/lambda-code.zip"
+db_name     = "banking"
+db_username = "admin"
+db_password = "password1234"
