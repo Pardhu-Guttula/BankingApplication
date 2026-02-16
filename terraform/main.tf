@@ -1,12 +1,11 @@
 terraform {
   required_providers {
     azurerm = {
-      source = "hashicorp/azurerm"
+      source  = "hashicorp/azurerm"
       version = "~> 4.56.0"
     }
   }
-
-  required_version = ">= 1.0.0"
+  backend "local" {}
 }
 
 provider "azurerm" {
@@ -15,17 +14,14 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "example" {
   name     = "example-resources"
-  location = "West Europe"
+  location = var.location
 }
 
 resource "azurerm_app_service_plan" "example" {
   name                = "example-appserviceplan"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
-  sku {
-    tier = "Standard"
-    size = "S1"
-  }
+  sku_name            = "B1"
 }
 
 resource "azurerm_app_service" "example" {
@@ -33,31 +29,10 @@ resource "azurerm_app_service" "example" {
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
   app_service_plan_id = azurerm_app_service_plan.example.id
-  site_config {
-    default_documents = ["index.html"]
-  }
-  https_only = true
-}
-
-resource "azurerm_sql_server" "example" {
-  name                         = "examplesqlserver"
-  resource_group_name          = azurerm_resource_group.example.name
-  location                     = azurerm_resource_group.example.location
-  version                      = "12.0"
-  administrator_login          = "sqladmin"
-  administrator_login_password = "H@Sh1CoR3!"
-}
-
-resource "azurerm_sql_database" "example" {
-  name                = "examplesqldb"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
-  server_name         = azurerm_sql_server.example.name
-  sku_name            = "S0"
 }
 
 resource "azurerm_api_management" "example" {
-  name                = "example-apim"
+  name                = "example-api"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
   publisher_name      = "My Company"
@@ -65,25 +40,25 @@ resource "azurerm_api_management" "example" {
   sku_name            = "Developer_1"
 }
 
-resource "azurerm_api_management_api" "example" {
-  name                = "example-api"
+resource "azurerm_sql_server" "example" {
+  name                = "example-sqlserver"
+  location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
-  api_management_name = azurerm_api_management.example.name
-  revision            = "1"
-  display_name        = "Example API"
-  path                = "example"
-  protocols           = ["https"]
-  import {
-    content_format = "swagger-link-json"
-    content_value  = "https://path/to/swagger.json"
-  }
+  version             = "12.0"
+  administrator_login = var.sql_admin_username
+  administrator_login_password = var.sql_admin_password
 }
 
-resource "azurerm_b2c_directory" "b2c" {
-  tenant_name             = "exampleb2c"
-  resource_group_name     = azurerm_resource_group.example.name
-  location                = azurerm_resource_group.example.location
-  sku_tier                = "Free"
-  sku_type                = "Standard"
-  admins                  = ["admin@example.com"]
+resource "azurerm_sql_database" "example" {
+  name                = "example-sqldatabase"
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
+  server_name         = azurerm_sql_server.example.name
+  requested_service_objective_name = "S0"
+}
+
+resource "azurerm_active_directory_b2c_directory" "example" {
+  name                = "example-b2c-directory"
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
 }
