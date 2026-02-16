@@ -1,21 +1,20 @@
 # Epic Title: Implement Account Lockout Mechanism
 
+from werkzeug.security import check_password_hash
 from backend.authentication.repositories.login_attempt_repository import LoginAttemptRepository
-from backend.authentication.services.email_service import EmailService
+from backend.authentication.models.login_attempt_model import User
 
 class LoginService:
 
-    MAX_FAILED_ATTEMPTS = 5
-    LOCKOUT_DURATION_MINUTES = 30
-
     @staticmethod
-    def handle_failed_login(user_id: int):
-        if LoginAttemptRepository.is_account_locked(user_id):
-            raise Exception("Account is locked")
-
-        LoginAttemptRepository.record_failed_attempt(user_id)
-        failed_attempts = LoginAttemptRepository.get_failed_attempts(user_id, LoginService.LOCKOUT_DURATION_MINUTES)
-
-        if failed_attempts >= LoginService.MAX_FAILED_ATTEMPTS:
-            LoginAttemptRepository.lock_account(user_id, LoginService.LOCKOUT_DURATION_MINUTES)
-            EmailService.send_account_lockout_notification(user_id)
+    def authenticate_user(username: str, password: str) -> bool:
+        user = User.query.filter_by(username=username).first()
+        if user and not LoginAttemptRepository.is_account_locked(user.id):
+            if check_password_hash(user.password, password):
+                LoginAttemptRepository.reset_failed_attempts(user.id)
+                return True
+            else:
+                LoginAttemptRepository.record_login_attempt(user.id, successful=False)
+        elif user:
+            LoginAttemptRepository.record_login_attempt(user.id, successful=False)        
+        return False
