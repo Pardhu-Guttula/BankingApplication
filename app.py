@@ -1,18 +1,17 @@
-# Epic Title: Upload Documentation for Account Requests
+# Epic Title: Enable Account Opening Requests
 
 import logging
 from flask import Flask
 from backend.database import db
-from backend.account_management.controllers.document_upload_controller import document_upload_controller
+from backend.account_management.controllers.account_opening_controller import account_opening_controller
 
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://user:password@localhost/dbname'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['UPLOAD_FOLDER'] = '/path/to/uploads'
 
     db.init_app(app)
-    app.register_blueprint(document_upload_controller, url_prefix='/document')
+    app.register_blueprint(account_opening_controller, url_prefix='/account')
 
     return app
 
