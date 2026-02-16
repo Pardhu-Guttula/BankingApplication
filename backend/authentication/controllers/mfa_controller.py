@@ -33,3 +33,28 @@ def verify_otp():
     except Exception as e:
         logging.error(f"Error in verify_otp: {e}")
         return jsonify({"message": "Failed to verify OTP"}), 500
+
+@mfa_controller.route('/mfa/request_biometric_verification', methods=['POST'])
+def request_biometric_verification():
+    try:
+        data = request.json
+        user_id = data.get("user_id")
+        if mfa_service.send_biometric_verification_request(user_id):
+            return jsonify({"message": "Biometric verification request sent successfully"}), 200
+        return jsonify({"message": "Failed to send biometric verification request"}), 400
+    except Exception as e:
+        logging.error(f"Error in request_biometric_verification: {e}")
+        return jsonify({"message": "Failed to request biometric verification"}), 500
+
+@mfa_controller.route('/mfa/verify_biometric', methods=['POST'])
+def verify_biometric():
+    try:
+        data = request.json
+        user_id = data.get("user_id")
+        biometric_data = data.get("biometric_data")
+        if mfa_service.verify_biometric(user_id, biometric_data):
+            return jsonify({"message": "Biometric data verified successfully"}), 200
+        return jsonify({"message": "Failed to verify biometric data"}), 400
+    except Exception as e:
+        logging.error(f"Error in verify_biometric: {e}")
+        return jsonify({"message": "Failed to verify biometric data"}), 500
