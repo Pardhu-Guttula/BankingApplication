@@ -1,8 +1,9 @@
-# Epic Title: Upload Documentation for Account Requests
+# Epic Title: Save and Resume Incomplete Applications
 
-CREATE TABLE documents (
+CREATE TABLE applications (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    filename VARCHAR(255) NOT NULL,
-    uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL UNIQUE,
+    application_data TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
