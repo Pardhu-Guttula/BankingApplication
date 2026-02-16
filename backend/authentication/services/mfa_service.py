@@ -2,29 +2,30 @@
 
 import random
 import string
-from typing import Optional
 from backend.authentication.repositories.mfa_repository import MFARepository
+from backend.authentication.models.mfa_model import User
 
 class MFAService:
 
     @staticmethod
-    def generate_secret(length: int = 16) -> str:
-        return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+    def generate_token(length: int = 6) -> str:
+        return ''.join(random.choices(string.digits, k=length))
 
     @staticmethod
-    def setup_mfa(user_id: int, mfa_type: str) -> dict:
-        secret = MFAService.generate_secret()
-        mfa = MFARepository.create_mfa(user_id, mfa_type, secret)
-        return {
-            'mfa_id': mfa.id,
-            'mfa_type': mfa.mfa_type,
-            'mfa_secret': mfa.mfa_secret
-        }
+    def send_mfa_token(user: User, token_type: str) -> str:
+        token = MFAService.generate_token()
+        MFARepository.save_mfa_token(user.id, token, token_type, validity_minutes=5)
+
+        # Here, you would integrate with an SMS, email, or authenticator app service provider
+        if token_type == "sms":
+            print(f"Sending SMS token to {user.phone_number}: {token}")
+        elif token_type == "email":
+            print(f"Sending Email token to {user.email}: {token}")
+        elif token_type == "authenticator":
+            print(f"Authenticator token generated: {token}")
+
+        return token
 
     @staticmethod
-    def verify_mfa(user_id: int, mfa_code: str) -> bool:
-        mfa = MFARepository.get_active_mfa(user_id)
-        if not mfa:
-            return False
-        # Placeholder for real verification logic
-        return mfa.mfa_secret == mfa_code
+    def verify_mfa_token(user: User, token: str, token_type: str) -> bool:
+        return MFARepository.validate_mfa_token(user.id, token, token_type)
