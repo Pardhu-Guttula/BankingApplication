@@ -9,12 +9,10 @@ account_opening_controller = Blueprint('account_opening_controller', __name__)
 def open_account():
     data = request.get_json()
     user_id = data.get('user_id')
-    
-    if user_id is None:
-        return jsonify({'error': 'User ID is required'}), 400
+    account_type = data.get('account_type')
 
-    success, message = AccountOpeningService.submit_account_opening_request(user_id)
-    if success:
-        return jsonify({'message': 'Account opening request submitted successfully'}), 200
-    else:
-        return jsonify({'error': message}), 400
+    if not user_id or not account_type:
+        return jsonify({'error': 'User ID and account type are required'}), 400
+
+    response = AccountOpeningService.submit_account_opening_request(user_id, account_type)
+    return jsonify(response), 200
