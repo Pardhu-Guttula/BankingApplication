@@ -1,21 +1,29 @@
 # Epic Title: Implement Multi-Factor Authentication (MFA)
 
-import logging
-import random
 from backend.authentication.repositories.otp_repository import OTPRepository
 
 class MFAService:
     def __init__(self):
         self.otp_repository = OTPRepository()
 
-    def generate_otp(self, user_id: int, method: str) -> None:
-        otp_code = self._generate_random_otp()
-        self.otp_repository.create_otp(user_id, otp_code, method)
-        self._send_otp(user_id, otp_code, method)
+    def send_otp(self, user_id: int, otp_method: str) -> bool:
+        try:
+            otp = self.otp_repository.generate_otp(user_id)
+            if otp_method == 'email':
+                self._send_email(user_id, otp.otp_code)
+            elif otp_method == 'sms':
+                self._send_sms(user_id, otp.otp_code)
+            return True
+        except Exception as e:
+            return False
 
-    def _generate_random_otp(self) -> str:
-        return ''.join([str(random.randint(0, 9)) for _ in range(6)])
+    def verify_otp(self, user_id: int, otp_code: str) -> bool:
+        return self.otp_repository.get_valid_otp(user_id, otp_code)
 
-    def _send_otp(self, user_id: int, otp_code: str, method: str) -> None:
-        # Placeholder for actual sending logic (email, SMS, biometric)
-        logging.info(f'Sending OTP {otp_code} to user {user_id} via {method}')
+    def _send_email(self, user_id: int, otp_code: str) -> None:
+        # Integrate email sending logic here
+        pass
+
+    def _send_sms(self, user_id: int, otp_code: str) -> None:
+        # Integrate SMS sending logic here
+        pass
