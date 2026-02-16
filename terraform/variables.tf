@@ -1,15 +1,24 @@
-variable "project_id" {
-  description = "The ID of the project in which to create resources."
+variable "aws_region" {
+  description = "AWS region"
   type        = string
 }
 
-variable "region" {
-  description = "The region in which to create resources."
+variable "lambda_zip" {
+  description = "Path to the ZIP package containing the Lambda function code"
   type        = string
-  default     = "us-central1"
 }
 
-variable "backend_bucket_name" {
-  description = "The name of the Google Cloud Storage bucket used as a backend bucket."
+variable "db_name" {
+  description = "Database name"
+  type        = string
+}
+
+variable "db_username" {
+  description = "Database username"
+  type        = string
+}
+
+variable "db_password" {
+  description = "Database password"
   type        = string
 }
