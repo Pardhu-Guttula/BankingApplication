@@ -1,9 +1,9 @@
-# Epic Title: Save and Resume Incomplete Applications
+# Epic Title: Enable Account Opening Requests
 
-CREATE TABLE applications (
+CREATE TABLE account_requests (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL UNIQUE,
-    application_data TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    account_type VARCHAR(50) NOT NULL,
+    status VARCHAR(50) DEFAULT 'Pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
