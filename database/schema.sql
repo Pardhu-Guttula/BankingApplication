@@ -1,9 +1,10 @@
-# Epic Title: Implement Multi-Factor Authentication (MFA)
+# Epic Title: Save and Resume Incomplete Applications
 
-CREATE TABLE otps (
+CREATE TABLE applications (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    otp_code VARCHAR(6) NOT NULL,
-    expires_at DATETIME NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    application_data TEXT NOT NULL,
+    status VARCHAR(20) DEFAULT 'incomplete',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
