@@ -1,24 +1,14 @@
-variable "aws_region" {
-  description = "AWS region"
+variable "sql_admin_username" {
+  description = "The SQL server admin username"
   type        = string
 }
 
-variable "lambda_zip" {
-  description = "Path to the ZIP package containing the Lambda function code"
+variable "sql_admin_password" {
+  description = "The SQL server admin password"
   type        = string
 }
 
-variable "db_name" {
-  description = "Database name"
-  type        = string
-}
-
-variable "db_username" {
-  description = "Database username"
-  type        = string
-}
-
-variable "db_password" {
-  description = "Database password"
+variable "log_analytics_workspace_id" {
+  description = "The Log Analytics workspace ID"
   type        = string
 }
