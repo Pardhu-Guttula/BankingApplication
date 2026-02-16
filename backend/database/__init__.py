@@ -1,4 +1,4 @@
-# Epic Title: Enable Account Opening Requests
+# Epic Title: Display Personalized Banking Products
 
 from flask_sqlalchemy import SQLAlchemy
 
