@@ -5,32 +5,29 @@ from backend.authentication.services.mfa_service import MFAService
 
 mfa_controller = Blueprint('mfa_controller', __name__)
 
-@mfa_controller.route('/mfa/send_code', methods=['POST'])
-def send_code():
+@mfa_controller.route('/mfa/setup', methods=['POST'])
+def setup_mfa():
     data = request.get_json()
     user_id = data.get('user_id')
-    method = data.get('method')
-    
-    if user_id is None or method is None:
-        return jsonify({'error': 'Invalid data'}), 400
+    mfa_type = data.get('mfa_type')
 
-    success, error = MFAService.send_code(user_id, method)
-    if success:
-        return jsonify({'message': 'MFA code sent successfully'}), 200
-    else:
-        return jsonify({'error': error}), 400
+    if not user_id or not mfa_type:
+        return jsonify({'error': 'User ID and MFA type are required'}), 400
 
-@mfa_controller.route('/mfa/verify_code', methods=['POST'])
-def verify_code():
+    mfa_details = MFAService.setup_mfa(user_id, mfa_type)
+    return jsonify(mfa_details), 201
+
+@mfa_controller.route('/mfa/verify', methods=['POST'])
+def verify_mfa():
     data = request.get_json()
     user_id = data.get('user_id')
-    code = data.get('code')
-    
-    if user_id is None or code is None:
-        return jsonify({'error': 'Invalid data'}), 400
+    mfa_code = data.get('mfa_code')
 
-    success, error = MFAService.verify_code(user_id, code)
-    if success:
-        return jsonify({'message': 'MFA verified successfully'}), 200
+    if not user_id or not mfa_code:
+        return jsonify({'error': 'User ID and MFA code are required'}), 400
+
+    is_verified = MFAService.verify_mfa(user_id, mfa_code)
+    if is_verified:
+        return jsonify({'message': 'MFA verification successful'}), 200
     else:
-        return jsonify({'error': error}), 400
+        return jsonify({'error': 'MFA verification failed'}), 400
