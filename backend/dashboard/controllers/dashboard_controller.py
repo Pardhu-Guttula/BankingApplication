@@ -8,9 +8,9 @@ dashboard_controller = Blueprint('dashboard_controller', __name__)
 @dashboard_controller.route('/dashboard', methods=['GET'])
 def get_dashboard():
     user_id = request.args.get('user_id')
-    
-    if user_id is None:
+
+    if not user_id:
         return jsonify({'error': 'User ID is required'}), 400
 
-    dashboard_content = DashboardService.get_dashboard_content(user_id)
+    dashboard_content = DashboardService.get_personalized_dashboard(int(user_id))
     return jsonify(dashboard_content), 200
