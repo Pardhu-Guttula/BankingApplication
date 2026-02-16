@@ -5,17 +5,18 @@ from backend.account_requests.services.service_modification_service import Servi
 
 service_modification_controller = Blueprint('service_modification_controller', __name__)
 
-@service_modification_controller.route('/service/modify', methods=['POST'])
-def modify_service():
+@service_modification_controller.route('/service_modifications', methods=['POST'])
+def submit_service_modification_request():
     data = request.get_json()
     user_id = data.get('user_id')
-    modifications = data.get('modifications')
-    
-    if user_id is None or modifications is None:
-        return jsonify({'error': 'Invalid data'}), 400
+    service_id = data.get('service_id')
+    modification_details = data.get('modification_details')
 
-    success, message = ServiceModificationService.submit_service_modification_request(user_id, modifications)
-    if success:
-        return jsonify({'message': 'Service modification request submitted successfully'}), 200
-    else:
-        return jsonify({'error': message}), 400
+    if not user_id or not service_id or not modification_details:
+        return jsonify({'error': 'User ID, Service ID, and Modification Details are required'}), 400
+
+    modification_request = ServiceModificationService.submit_modification_request(user_id, service_id, modification_details)
+    return jsonify({
+        'message': 'Service modification request submitted successfully',
+        'request_id': modification_request.id
+    }), 201
