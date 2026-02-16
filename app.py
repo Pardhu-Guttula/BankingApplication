@@ -1,9 +1,9 @@
-# Epic Title: Implement Multi-Factor Authentication (MFA)
+# Epic Title: Intuitive Dashboard Interface
 
 import logging
 from flask import Flask
 from backend.database import db
-from backend.authentication.controllers.mfa_controller import mfa_controller
+from backend.personalized_dashboard.controllers.dashboard_ui_controller import dashboard_ui_controller
 
 def create_app() -> Flask:
     app = Flask(__name__)
@@ -11,7 +11,7 @@ def create_app() -> Flask:
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
-    app.register_blueprint(mfa_controller, url_prefix='/auth')
+    app.register_blueprint(dashboard_ui_controller, url_prefix='/ui')
 
     return app
 
