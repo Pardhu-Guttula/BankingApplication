@@ -1,9 +1,9 @@
-# Epic Title: Intuitive Dashboard Interface
+# Epic Title: Integrate Authentication with Bank Security Infrastructure
 
 import logging
 from flask import Flask
 from backend.database import db
-from backend.personalized_dashboard.controllers.ui_controller import ui_controller
+from backend.user_authentication.controllers.security_integration_controller import security_integration_controller
 
 def create_app() -> Flask:
     app = Flask(__name__)
@@ -11,7 +11,7 @@ def create_app() -> Flask:
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
-    app.register_blueprint(ui_controller, url_prefix='/ui')
+    app.register_blueprint(security_integration_controller, url_prefix='/security')
 
     return app
 
