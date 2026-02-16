@@ -1,18 +1,18 @@
-# Epic Title: Design User Profile-Based Dashboard
+# Epic Title: Implement Account Lockout Mechanism
 
 import logging
 from flask import Flask
-from backend.dashboard.controllers.dashboard_controller import dashboard_controller
-from backend.dashboard.models.user_profile_model import db as dashboard_db
+from backend.authentication.controllers.login_attempt_controller import login_attempt_controller
+from backend.authentication.models.failed_login_attempt_model import db as login_db
 
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://user:password@localhost/dbname'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    dashboard_db.init_app(app)
+    login_db.init_app(app)
 
-    app.register_blueprint(dashboard_controller)
+    app.register_blueprint(login_attempt_controller)
 
     return app
 
