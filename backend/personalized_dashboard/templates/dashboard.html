@@ -6,37 +6,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personalized Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
     <header>
-        <h1>Welcome to Your Personalized Dashboard</h1>
+        Personalized Banking Dashboard
     </header>
-    <main>
-        <section id="user-info">
-            <h2>User Profile</h2>
-            <p>{{ data.user_profile }}</p>
-        </section>
-        <section id="personalized-products">
-            <h2>Personalized Products</h2>
-            <ul>
-                {% for product in data.personalized_products %}
-                <li>{{ product }}</li>
-                {% endfor %}
-            </ul>
-        </section>
-        <section id="features">
-            <h2>Key Features</h2>
-            <ul>
-                <li><a href="/feature1">Feature 1</a></li>
-                <li><a href="/feature2">Feature 2</a></li>
-                <li><a href="/feature3">Feature 3</a></li>
-                <!-- Add more features as needed -->
-            </ul>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2023 Personalized Dashboard</p>
-    </footer>
+    <div class="container">
+        <div class="feature">
+            <h2>Profile</h2>
+            <p>View and update your profile information.</p>
+        </div>
+        <div class="feature">
+            <h2>Products</h2>
+            <p>Browse personalized banking products and services.</p>
+        </div>
+        <div class="feature">
+            <h2>Notifications</h2>
+            <p>Check the latest updates and notifications.</p>
+        </div>
+        <div class="feature">
+            <h2>Settings</h2>
+            <p>Manage your account settings.</p>
+        </div>
+    </div>
 </body>
 </html>
