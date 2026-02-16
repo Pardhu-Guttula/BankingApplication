@@ -1,23 +1,25 @@
 # Epic Title: Implement Multi-Factor Authentication
 
-from backend.authentication.models.mfa_model import db, MFA
+from datetime import datetime, timedelta
+from backend.authentication.models.mfa_model import db, User, MFAToken
 
 class MFARepository:
 
     @staticmethod
-    def create_mfa(user_id: int, mfa_type: str, mfa_secret: str) -> MFA:
-        mfa = MFA(user_id=user_id, mfa_type=mfa_type, mfa_secret=mfa_secret)
-        db.session.add(mfa)
+    def get_user_by_username(username: str) -> User:
+        return User.query.filter_by(username=username).first()
+
+    @staticmethod
+    def save_mfa_token(user_id: int, token: str, token_type: str, validity_minutes: int) -> MFAToken:
+        expires_at = datetime.utcnow() + timedelta(minutes=validity_minutes)
+        mfa_token = MFAToken(user_id=user_id, token=token, token_type=token_type, expires_at=expires_at)
+        db.session.add(mfa_token)
         db.session.commit()
-        return mfa
+        return mfa_token
 
     @staticmethod
-    def get_active_mfa(user_id: int) -> MFA:
-        return MFA.query.filter_by(user_id=user_id, is_active=True).first()
-
-    @staticmethod
-    def deactivate_mfa(user_id: int):
-        mfa = MFA.query.filter_by(user_id=user_id, is_active=True).first()
-        if mfa:
-            mfa.is_active = False
-            db.session.commit()
+    def validate_mfa_token(user_id: int, token: str, token_type: str) -> bool:
+        mfa_token = MFAToken.query.filter_by(user_id=user_id, token=token, token_type=token_type).first()
+        if mfa_token and mfa_token.expires_at > datetime.utcnow():
+            return True
+        return False
