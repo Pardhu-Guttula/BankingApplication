@@ -34,3 +34,17 @@ def upload_account_request_documents():
     return jsonify({
         'message': 'Document uploaded successfully'
     }), 200
+
+@account_request_controller.route('/account/request/save', methods=['POST'])
+def save_incomplete_account_request():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    application_data = data.get('application_data')
+
+    if not user_id or not application_data:
+        return jsonify({'error': 'User ID and application data are required'}), 400
+
+    AccountRequestService.save_incomplete_request(user_id, application_data)
+    return jsonify({
+        'message': 'Account request saved successfully'
+    }), 200
