@@ -1,19 +1,15 @@
 variable "project_id" {
-  description = "The GCP project ID"
+  description = "The ID of the project in which to create resources."
   type        = string
 }
 
 variable "region" {
-  description = "The GCP project region"
+  description = "The region in which to create resources."
   type        = string
+  default     = "us-central1"
 }
 
-variable "source_archive_bucket" {
-  description = "The GCS bucket containing the Cloud Functions source code"
-  type        = string
-}
-
-variable "source_archive_object" {
-  description = "The GCS object containing the Cloud Functions source code"
+variable "backend_bucket_name" {
+  description = "The name of the Google Cloud Storage bucket used as a backend bucket."
   type        = string
 }
