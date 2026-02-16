@@ -1,8 +1,10 @@
-# Epic Title: Upload Documentation for Account Requests
+# Epic Title: Enable Account Opening Requests
 
-CREATE TABLE documents (
+CREATE TABLE account_requests (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    filename VARCHAR(255) NOT NULL,
-    file_path VARCHAR(255) NOT NULL,
-    uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    account_type VARCHAR(50) NOT NULL,
+    initial_deposit FLOAT NOT NULL,
+    status VARCHAR(20) DEFAULT 'pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
