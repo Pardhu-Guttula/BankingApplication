@@ -1,4 +1,4 @@
-# Epic Title: Display Banking Products Dynamically
+# Epic Title: Design User Profile-Based Dashboard
 
 from flask_sqlalchemy import SQLAlchemy
 
