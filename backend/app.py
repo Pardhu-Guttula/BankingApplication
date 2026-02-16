@@ -1,15 +1,18 @@
-# Epic Title: User-Friendly Account Service Interface
+# Epic Title: Streamline Service Modification Requests
 
 import logging
 from flask import Flask
-from backend.account_requests.controllers.account_modification_controller import account_modification_controller
+from backend.account_requests.controllers.service_modification_controller import service_modification_controller
+from backend.account_requests.models.service_modification_request_model import db as account_requests_db
 
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://user:password@localhost/dbname'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    app.register_blueprint(account_modification_controller)
+    account_requests_db.init_app(app)
+
+    app.register_blueprint(service_modification_controller)
 
     return app
 
