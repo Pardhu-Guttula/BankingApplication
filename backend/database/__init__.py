@@ -1,4 +1,4 @@
-# Epic Title: Intuitive Dashboard Interface
+# Epic Title: Integrate Authentication with Bank Security Infrastructure
 
 from flask_sqlalchemy import SQLAlchemy
 
