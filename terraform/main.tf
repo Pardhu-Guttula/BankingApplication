@@ -10,7 +10,7 @@ resource "azurerm_resource_group" "example" {
 resource "azurerm_virtual_network" "example" {
   name                = "example-vnet"
   address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.example.location
+  location            = "West Europe"
   resource_group_name = azurerm_resource_group.example.name
 }
 
@@ -22,29 +22,26 @@ resource "azurerm_subnet" "example" {
 }
 
 resource "azurerm_sql_server" "example" {
-  name                         = "mysqlserver12345"
+  name                         = "mysqlserverexample"
   resource_group_name          = azurerm_resource_group.example.name
-  location                     = azurerm_resource_group.example.location
+  location                     = "West Europe"
   version                      = "12.0"
-  administrator_login          = "sqladmin"
-  administrator_login_password = "H@Sh1CoR3!"
+  administrator_login          = var.sql_admin_username
+  administrator_login_password = var.sql_admin_password
 }
 
 resource "azurerm_sql_database" "example" {
   name                = "example-db"
   resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
+  location            = "West Europe"
   server_name         = azurerm_sql_server.example.name
+  sku_name            = "S0"
 }
 
-resource "azurerm_network_interface" "example" {
-  name                = "example-nic"
-  location            = azurerm_resource_group.example.location
+resource "azurerm_virtual_network_rule" "example" {
+  name                = "example_vnet_rule"
   resource_group_name = azurerm_resource_group.example.name
-
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.example.id
-    private_ip_address_allocation = "Dynamic"
-  }
+  server_name         = azurerm_sql_server.example.name
+  subnet_id           = azurerm_subnet.example.id
+  action              = "Allow"
 }
