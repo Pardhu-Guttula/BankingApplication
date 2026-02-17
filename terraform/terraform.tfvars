@@ -1,2 +1,1 @@
-sql_admin_username = "adminuser"
-sql_admin_password = "adminpass"
+sql_password = "changeme"
