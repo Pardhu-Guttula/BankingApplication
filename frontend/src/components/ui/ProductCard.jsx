@@ -1,56 +1,42 @@
 import React from "react";
 import { useIntl } from "react-intl";
-
-import StatusPill from "./StatusPill";
+import IconTile from "./IconTile";
+import BadgePill from "./BadgePill";
 import PrimaryButton from "./PrimaryButton";
 
 export default function ProductCard({
-  id,
   icon,
-  iconBg,
-  iconColor,
-  badge,
+  iconBgVariant,
+  badgeText,
   title,
   description,
   ctaLabel,
   onCta = () => {},
 }) {
   const intl = useIntl();
-  const IconComp = icon;
 
   const resolvedCtaLabel =
-    ctaLabel ?? intl.formatMessage({ id: "common.applyNow" });
+    ctaLabel || intl.formatMessage({ id: "common.applyNow" });
 
   return (
-    <article className="flex h-full flex-col rounded-[14px] border border-[rgba(0,0,0,0.1)] bg-white p-[24px]">
-      <div className="flex flex-1 flex-col gap-[6px]">
+    <article className="flex w-full flex-col rounded-[14px] border border-[rgba(0,0,0,0.1)] bg-white p-[16px]">
+      <div className="flex flex-col gap-[6px]">
         <div className="flex items-start justify-between">
-          <div
-            className="h-[44px] w-[44px] rounded-[10px]"
-            style={{ backgroundColor: iconBg }}
-          >
-            <div className="flex h-full w-full items-center justify-center">
-              <IconComp
-                className="h-[20px] w-[20px]"
-                style={{ color: iconColor }}
-                aria-hidden="true"
-              />
-            </div>
-          </div>
-          <StatusPill label={badge} />
+          <IconTile variant={iconBgVariant} icon={icon} />
+          <BadgePill text={badgeText} />
         </div>
 
-        <h3 className="text-[18px] font-medium leading-[28px] tracking-[-0.4395px] text-[#0A0A0A]">
+        <h3 className="text-[16px] font-medium leading-[24px] tracking-[-0.2px] text-[#0A0A0A]">
           {title}
         </h3>
 
-        <p className="text-[16px] font-normal leading-[24px] tracking-[-0.3125px] text-[#717182]">
+        <p className="text-[14px] font-normal leading-[20px] tracking-[-0.15px] text-[#717182]">
           {description}
         </p>
       </div>
 
-      <div className="mt-[24px]">
-        <PrimaryButton label={resolvedCtaLabel} onClick={() => onCta(id)} />
+      <div className="mt-[12px]">
+        <PrimaryButton label={resolvedCtaLabel} onClick={onCta} />
       </div>
     </article>
   );
