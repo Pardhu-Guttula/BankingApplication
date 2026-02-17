@@ -1,13 +1,11 @@
 import React from "react";
 import { useIntl } from "react-intl";
-import IconTile from "./IconTile";
-import BadgePill from "./BadgePill";
-import PrimaryButton from "./PrimaryButton";
+import StatusBadge from "./StatusBadge";
 
 export default function ProductCard({
   icon,
-  iconBgClass,
-  iconColorClass,
+  iconTileBg = "#F0FDF4",
+  iconColor = "#16A34A",
   badge,
   title,
   description,
@@ -16,29 +14,41 @@ export default function ProductCard({
 }) {
   const intl = useIntl();
 
-  const resolvedCtaLabel = ctaLabel || intl.formatMessage({ id: "common.applyNow" });
+  const IconComp = icon;
+
+  const resolvedCtaLabel =
+    ctaLabel ?? intl.formatMessage({ id: "common.applyNow" });
 
   return (
-    <article className="flex h-full flex-col rounded-[14px] border border-black/10 bg-white p-6">
+    <article className="flex flex-col rounded-[12px] border border-black/10 bg-white p-4">
       <div className="flex items-start justify-between">
-        <IconTile icon={icon} bgClass={iconBgClass} iconClass={iconColorClass} />
-        <BadgePill>{badge}</BadgePill>
+        <div
+          className="flex h-10 w-10 items-center justify-center rounded-[10px]"
+          style={{ backgroundColor: iconTileBg }}
+          aria-hidden="true"
+        >
+          <IconComp className="h-5 w-5" style={{ color: iconColor }} />
+        </div>
+
+        <StatusBadge label={badge} />
       </div>
 
-      <div className="mt-6">
-        <h3 className="text-[18px] font-medium leading-[28px] tracking-[-0.4395px] text-[#0a0a0a]">
+      <div className="mt-3">
+        <h3 className="text-[16px] font-medium leading-6 tracking-[-0.2px] text-[#0A0A0A]">
           {title}
         </h3>
-        <p className="mt-[6px] text-[16px] font-normal leading-[24px] tracking-[-0.3125px] text-[#717182]">
+        <p className="mt-1 text-[14px] font-normal leading-5 tracking-[-0.2px] text-[#717182]">
           {description}
         </p>
       </div>
 
-      <div className="mt-auto pt-6">
-        <PrimaryButton ariaLabel={`${resolvedCtaLabel}: ${title}`} onClick={onCta}>
-          {resolvedCtaLabel}
-        </PrimaryButton>
-      </div>
+      <button
+        type="button"
+        onClick={onCta}
+        className="mt-4 h-9 w-full rounded-md bg-[#030213] text-[13px] font-medium leading-5 tracking-[-0.1504px] text-white hover:bg-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
+      >
+        {resolvedCtaLabel}
+      </button>
     </article>
   );
 }
