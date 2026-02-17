@@ -3,17 +3,14 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: './',
 
+  base: '${VITE_BASE_PATH}',
   server: {
     host: '0.0.0.0',
     port: 5173,
-    strictPort: true,
-    allowedHosts: 'all',
-
+    allowedHosts: true,
     hmr: {
-      clientPort: 443,
-      host: 'code-generation-server.eastus2.cloudapp.azure.com'
+      path: '${VITE_BASE_PATH}',
     }
   }
 })
