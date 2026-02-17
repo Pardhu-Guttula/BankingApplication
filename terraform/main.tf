@@ -7,41 +7,89 @@ resource "azurerm_resource_group" "example" {
   location = "West Europe"
 }
 
-resource "azurerm_virtual_network" "example" {
-  name                = "example-vnet"
-  address_space       = ["10.0.0.0/16"]
-  location            = "West Europe"
+resource "azurerm_app_service" "app" {
+  name                = "example-appservice"
+  location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
+  app_service_plan_id = azurerm_app_service_plan.example.id
 }
 
-resource "azurerm_subnet" "example" {
-  name                 = "example-subnet"
-  resource_group_name  = azurerm_resource_group.example.name
-  virtual_network_name = azurerm_virtual_network.example.name
-  address_prefixes     = ["10.0.1.0/24"]
+resource "azurerm_app_service_plan" "example" {
+  name                = "example-appservice-plan"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  sku {
+    tier = "Standard"
+    size = "S1"
+  }
+}
+
+resource "azurerm_active_directory_domain_service" "example" {
+  name                = "example-aad"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  domain_name         = "example.com"
+}
+
+resource "azurerm_storage_account" "example" {
+  name                     = "examplestoracc"
+  resource_group_name      = azurerm_resource_group.example.name
+  location                 = azurerm_resource_group.example.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
 }
 
 resource "azurerm_sql_server" "example" {
-  name                         = "mysqlserverexample"
+  name                         = "examplesqlserver"
   resource_group_name          = azurerm_resource_group.example.name
-  location                     = "West Europe"
+  location                     = azurerm_resource_group.example.location
   version                      = "12.0"
-  administrator_login          = var.sql_admin_username
-  administrator_login_password = var.sql_admin_password
+  administrator_login          = "admin"
+  administrator_login_password = var.sql_password
 }
 
-resource "azurerm_sql_database" "example" {
-  name                = "example-db"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = "West Europe"
-  server_name         = azurerm_sql_server.example.name
-  sku_name            = "S0"
+resource "azurerm_key_vault" "example" {
+  name                        = "examplekeyvault"
+  location                    = azurerm_resource_group.example.location
+  resource_group_name         = azurerm_resource_group.example.name
 }
 
-resource "azurerm_virtual_network_rule" "example" {
-  name                = "example_vnet_rule"
+resource "azurerm_api_management" "example" {
+  name                = "example-apim"
+  location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
-  server_name         = azurerm_sql_server.example.name
-  subnet_id           = azurerm_subnet.example.id
-  action              = "Allow"
+}
+
+resource "azurerm_signalr_service" "example" {
+  name                = "example-signalr"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  sku {
+    name     = "Free_F1"
+    capacity = 1
+  }
+}
+
+resource "azurerm_communication_service" "example" {
+  name                = "example-comms"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+}
+
+resource "azurerm_content_moderator" "example" {
+  name                = "example-contentmod"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+}
+
+resource "azurerm_logic_app" "example" {
+  name                = "example-logicapp"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+}
+
+resource "azurerm_devops_project" "example" {
+  name                = "example-devops"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
 }
