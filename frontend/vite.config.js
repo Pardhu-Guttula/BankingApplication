@@ -10,7 +10,7 @@ export default defineConfig({
     port: 5173,
     allowedHosts: true,
     hmr: {
-      path: '${VITE_BASE_PATH}',
+      path: process.env.VITE_BASE_PATH||'/',
     }
   }
 })
