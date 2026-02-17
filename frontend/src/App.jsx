@@ -1,6 +1,6 @@
 import React from "react";
-import ProductCardPage from "./components/ProductCardPage";
+import ProductsForYou from "./components/ProductsForYou";
 
-export default function App(props) {
-  return <ProductCardPage {...props} />;
+export default function App() {
+  return <ProductsForYou />;
 }

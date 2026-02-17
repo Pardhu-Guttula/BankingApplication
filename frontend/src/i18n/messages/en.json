@@ -1,10 +1,17 @@
 {
-  "addToCartButton.label": "Add to Cart",
-  "common.categoryElectronics": "ELECTRONICS",
-  "productCardPage.ariaProductCard": "Product card",
-  "productCardPage.productTitle": "WD 4TB Gaming Drive Works with Playstati…",
-  "productMeta.ariaOpenProduct": "Open product: {title}",
-  "productMeta.category": "ELECTRONICS",
-  "productMeta.title": "WD 4TB Gaming Drive Works with Playstati…",
-  "starRating.ariaRating": "Rating: {safeValue} out of {max}"
+  "badgePill.label": "Badge",
+  "common.applyNow": "Apply Now",
+  "iconTile.label": "Icon",
+  "primaryButton.ariaLabel": "Primary action",
+  "productsForYou.badgeLimitedOffer": "Limited Offer",
+  "productsForYou.badgePreApproved": "Pre-approved",
+  "productsForYou.badgeRecommended": "Recommended",
+  "productsForYou.productCardDescription": "0% APR for 12 months + 2% cashback",
+  "productsForYou.productCardTitle": "Gold Credit Card",
+  "productsForYou.productLoanDescription": "Pre-approved up to $50,000 at 6.9% APR",
+  "productsForYou.productLoanTitle": "Personal Loan",
+  "productsForYou.productSavingsDescription": "Earn up to 4.5% APY with no minimum balance",
+  "productsForYou.productSavingsTitle": "Premium Savings Account",
+  "productsForYou.title": "Products for You",
+  "productsForYou.viewAll": "View All"
 }
