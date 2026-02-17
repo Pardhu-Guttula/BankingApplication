@@ -1,6 +1,6 @@
 import React from "react";
-import FoundationalSolutions from "./components/FoundationalSolutions";
+import ProductCardPage from "./components/ProductCardPage";
 
-export default function App() {
-  return <FoundationalSolutions />;
+export default function App(props) {
+  return <ProductCardPage {...props} />;
 }
