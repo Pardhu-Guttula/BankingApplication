@@ -1,6 +1,6 @@
 import React from "react";
-import BankingDashboardPage from "./components/BankingDashboardPage";
+import FoundationalSolutions from "./components/FoundationalSolutions";
 
 export default function App() {
-  return <BankingDashboardPage />;
+  return <FoundationalSolutions />;
 }
