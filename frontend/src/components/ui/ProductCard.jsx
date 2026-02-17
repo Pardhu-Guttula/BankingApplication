@@ -1,43 +1,72 @@
 import React from "react";
-import { useIntl } from "react-intl";
-import IconTile from "./IconTile";
 import BadgePill from "./BadgePill";
-import PrimaryButton from "./PrimaryButton";
+import ApplyButton from "./ApplyButton";
 
 export default function ProductCard({
-  icon,
-  iconBgVariant,
-  badgeText,
+  id,
+  icon: Icon,
+  iconBgClassName = "bg-[#EFF6FF]",
+  iconClassName = "text-[#155DFC]",
+  badge,
   title,
   description,
-  ctaLabel,
-  onCta = () => {},
+  ctaLabel = "Apply Now",
+  onApply = () => {},
+  selected = false,
+  onSelect = () => {},
 }) {
-  const intl = useIntl();
-
-  const resolvedCtaLabel =
-    ctaLabel || intl.formatMessage({ id: "common.applyNow" });
-
   return (
-    <article className="flex w-full flex-col rounded-[14px] border border-[rgba(0,0,0,0.1)] bg-white p-[16px]">
-      <div className="flex flex-col gap-[6px]">
-        <div className="flex items-start justify-between">
-          <IconTile variant={iconBgVariant} icon={icon} />
-          <BadgePill text={badgeText} />
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={() => onSelect(id)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") onSelect(id);
+      }}
+      className={[
+        "bg-white border border-[rgba(0,0,0,0.1)] rounded-[14px]",
+        "p-[24px]",
+        "flex flex-col",
+        "h-[250px]",
+        "transition-shadow",
+        selected ? "shadow-[0_0_0_2px_rgba(21,93,252,0.35)]" : "hover:shadow-sm",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#155DFC] focus-visible:ring-offset-2",
+      ].join(" ")}
+      aria-label={`${title} product card`}
+    >
+      <div className="flex items-start justify-between">
+        <div
+          className={[
+            "w-[44px] h-[44px] rounded-[10px]",
+            "flex items-center justify-center",
+            iconBgClassName,
+          ].join(" ")}
+          aria-hidden="true"
+        >
+          <Icon className={["w-5 h-5", iconClassName].join(" ")} />
         </div>
 
-        <h3 className="text-[16px] font-medium leading-[24px] tracking-[-0.2px] text-[#0A0A0A]">
+        <BadgePill label={badge} />
+      </div>
+
+      <div className="mt-[14px]">
+        <div className="text-[#0A0A0A] text-[18px] leading-[28px] font-medium tracking-[-0.4395px]">
           {title}
-        </h3>
-
-        <p className="text-[14px] font-normal leading-[20px] tracking-[-0.15px] text-[#717182]">
+        </div>
+        <div className="mt-[6px] text-[#717182] text-[16px] leading-[24px] font-normal tracking-[-0.3125px]">
           {description}
-        </p>
+        </div>
       </div>
 
-      <div className="mt-[12px]">
-        <PrimaryButton label={resolvedCtaLabel} onClick={onCta} />
+      <div className="mt-auto">
+        <ApplyButton
+          label={ctaLabel}
+          onClick={(e) => {
+            e.stopPropagation();
+            onApply(id);
+          }}
+        />
       </div>
-    </article>
+    </div>
   );
 }

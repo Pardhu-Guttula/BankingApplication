@@ -1,13 +1,19 @@
 import React from "react";
-import { useIntl } from "react-intl";
 
-export default function BadgePill({ text }) {
-  const intl = useIntl();
-  const resolvedText = text || intl.formatMessage({ id: "common.badge" });
-
+export default function BadgePill({ label = "", className = "" }) {
   return (
-    <span className="inline-flex items-center justify-center rounded-[8px] bg-[#ECEEF2] px-[9px] py-[3px] text-[12px] font-medium leading-[16px] text-[#030213]">
-      {resolvedText}
+    <span
+      className={[
+        "inline-flex items-center justify-center",
+        "h-[22px] px-[9px] py-[3px]",
+        "rounded-[8px]",
+        "bg-[#ECEEF2] text-[#030213]",
+        "text-[12px] leading-[16px] font-medium",
+        "whitespace-nowrap",
+        className,
+      ].join(" ")}
+    >
+      {label}
     </span>
   );
 }
