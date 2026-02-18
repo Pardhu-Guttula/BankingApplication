@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Source Code
+      - name: Checkout Code
         uses: actions/checkout@v2
       
       - name: Set up JDK 11
@@ -20,7 +20,7 @@ jobs:
         with:
           java-version: 11
       
-      - name: Build using Gradle
+      - name: Build with Gradle
         run: ./gradlew build
       
       - name: Upload Build Artifacts
@@ -33,17 +33,19 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
         with:
           name: build-artifacts
           path: build/libs
-      
-      - name: Deploy to AWS Elastic Beanstalk
+
+      - name: Deploy to Heroku
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP_NAME: BankingApplication
         run: |
-          eb init -p java-11 BankingApplication --region $AWS_REGION
-          eb deploy
+          git remote add heroku https://git.heroku.com/${{ env.HEROKU_APP_NAME }}.git
+          git push heroku main
