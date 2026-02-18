@@ -3,10 +3,10 @@ name: CICD for BankingApplication
 on:
   push:
     branches:
-      - main4
+      - main
   pull_request:
     branches:
-      - main4
+      - main
 
 jobs:
   build:
