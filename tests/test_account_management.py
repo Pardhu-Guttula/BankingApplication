@@ -1,21 +1,19 @@
 import pytest
+from backend.app import create_account, delete_account, get_account_balance
 
-class TestAccountManagement:
-    def test_create_account(self):
-        # Simulate account creation
-        assert True
 
-    def test_delete_account(self):
-        # Simulate account deletion
-        assert True
+def test_create_account():
+    account_id = create_account("John Doe", 500)
+    assert account_id is not None
 
-    def test_update_account(self):
-        # Simulate account update
-        assert True
 
-    def test_view_account(self):
-        # Simulate viewing account
-        assert True
+def test_delete_account():
+    account_id = create_account("Jane Doe", 1000)
+    result = delete_account(account_id)
+    assert result is True
 
-if __name__ == '__main__':
-    pytest.main()
+
+def test_get_account_balance():
+    account_id = create_account("Alice Smith", 1500)
+    balance = get_account_balance(account_id)
+    assert balance == 1500
