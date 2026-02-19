@@ -1,10 +1,34 @@
-{
-   "EPIC-2": {
-      "epic_title": "Personalized Dashboard",
-      "language": "The BankingApplication repository uses multiple programming and configuration languages. Based on the analysis of the repository structure and the files provided:",
-      "framework": "The dominant programming language used in the repository \"BankingApplication\" is Python, indicated by the presence of a `requirements.txt` file listing Python dependencies such as Flask and Flask-SQLAlchemy. The selected testing framework for this repository is pytest, which is the default and most widely used testing framework in the Python ecosystem.",
-      "test_case": "Use the standard test folder for The BankingApplication repository uses multiple programming and configuration languages. Based on the analysis of the repository structure and the files provided: 1. **Python**: - `app.py` - `backend/app.py` - `tests/*.py` 2. **JavaScript**: - `frontend/eslint.config.js` - `frontend/postcss.config.js` - `frontend/tailwind.config.js` - `frontend/vite.config.js` 3. **SQL**: - `database/schema.sql` 4. **JSON**: - `tests/ALL_EPICS_TESTS.json` 5. **HTML**: - `frontend/index.html` 6. **Terraform**: - `terraform/main.tf` - `terraform/terraform.tfvars` - `terraform/variables.tf`. Based on the presence of these files and their respective extensions, the languages and technologies identified in this repository include Python, JavaScript, SQL, JSON, HTML, and Terraform.",
-      "repository_owner": "Pardhu-Guttula",
-      "repository_name": "BankingApplication"
-   }
-}
+[
+  {
+    "epic_id": "EPIC-1",
+    "test_case_path": "tests/test_epic1_user_authentication.py"
+  },
+  {
+    "epic_id": "EPIC-2",
+    "test_case_path": "tests/test_EPIC-2_dashboard.py"
+  },
+  {
+    "epic_id": "EPIC-3",
+    "test_case_path": "tests/test_EPIC-3_app.py"
+  },
+  {
+    "epic_id": "EPIC-4",
+    "test_case_path": "tests/test_EPIC-4_interaction_history_2.py"
+  },
+  {
+    "epic_id": "EPIC-5",
+    "test_case_path": "tests/test_EPIC-5_responsive_design_2.py"
+  },
+  {
+    "epic_id": "EPIC-6",
+    "test_case_path": "tests/test_EPIC-6_backend_app.py"
+  },
+  {
+    "epic_id": "EPIC-7",
+    "test_case_path": "tests/test_identified_programming_languages.py"
+  },
+  {
+    "epic_id": "EPIC-8",
+    "test_case_path": "tests/test_role_based_access_control.py"
+  }
+]
