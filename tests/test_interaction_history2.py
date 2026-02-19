@@ -1,6 +1,5 @@
 import pytest
 
-
 def test_interaction_history():
     # Setup
     user_id = 1
