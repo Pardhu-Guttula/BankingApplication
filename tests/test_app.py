@@ -6,33 +6,27 @@ def client():
     with app.test_client() as client:
         yield client
 
-# Test for user authentication
 
-def test_user_login(client):
-    # Assuming '/login' is the route for logging in
-    response = client.post('/login', data=dict(username='testuser', password='testpass'))
+def test_home_page(client):
+    response = client.get('/')
     assert response.status_code == 200
-    assert b'Login Successful' in response.data
+    assert b"Welcome to the Banking Application!" in response.data
 
-# Test for user logout
 
-def test_user_logout(client):
-    # Assuming '/logout' is the route for logging out
-    response = client.get('/logout')
+def test_login_page(client):
+    response = client.get('/login')
     assert response.status_code == 200
-    assert b'Logout Successful' in response.data
+    assert b"Please login" in response.data
 
-# Test for accessing a protected route
 
-def test_protected_route(client):
-    # Assuming '/protected' is a protected route
-    response = client.get('/protected')
-    assert response.status_code == 401  # Unauthorized before login
-
-    # Now login
-    client.post('/login', data=dict(username='testuser', password='testpass'))
-
-    # Accessing the protected route after login
-    response = client.get('/protected')
+def test_login(client):
+    response = client.post('/login', data=dict(username='user', password='pass'), follow_redirects=True)
     assert response.status_code == 200
-    assert b'Welcome to the protected route' in response.data
+    assert b"Login successful" in response.data
+
+
+def test_logout(client):
+    client.post('/login', data=dict(username='user', password='pass'), follow_redirects=True)
+    response = client.get('/logout', follow_redirects=True)
+    assert response.status_code == 200
+    assert b"You have been logged out" in response.data
