@@ -1,24 +1,33 @@
+# Test cases for Role-Based Access Control
+
 import pytest
+from app import create_app, db
+from app.models import User, Role
 
-class TestRoleBasedAccessControl:
+@pytest.fixture(scope='module')
+def new_user():
+    user = User(username='testuser', email='testuser@example.com')
+    user.set_password('testpassword')
+    return user
 
-    def test_admin_access(self):
-        user_role = 'admin'
-        assert self.has_access(user_role) == True
+@pytest.fixture(scope='module')
+def init_db():
+    app = create_app()
+    app.config['TESTING'] = True
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    with app.app_context():
+        db.create_all()
+        yield db
+        db.session.remove()
+        db.drop_all()
 
-    def test_user_access(self):
-        user_role = 'user'
-        assert self.has_access(user_role) == True
+def test_create_user(init_db, new_user):
+    init_db.session.add(new_user)
+    init_db.session.commit()
+    assert new_user in init_db.session
 
-    def test_guest_access(self):
-        user_role = 'guest'
-        assert self.has_access(user_role) == False
-
-    def has_access(self, role):
-        if role == 'admin':
-            return True
-        elif role == 'user':
-            return True
-        elif role == 'guest':
-            return False
-        return False
+def test_user_role(init_db, new_user):
+    role = Role(name='User')
+    new_user.roles.append(role)
+    init_db.session.commit()
+    assert role in new_user.roles
