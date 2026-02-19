@@ -1,4 +1,3 @@
-location = "East US"
-sql_admin_username = "adminUser"
-sql_admin_password = "AdminPassword123!"
-key_vault_secret_id = "<key-vault-secret-id>"
+sql_admin_username = "<your-sql-admin-username>"
+sql_admin_password = "<your-sql-admin-password>"
+user_object_id    = "<your-user-object-id>"
