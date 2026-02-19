@@ -1,0 +1,34 @@
+[
+  {
+    "epic_id": "EPIC-1",
+    "test_case_path": "tests/test_app.py"
+  },
+  {
+    "epic_id": "EPIC-2",
+    "test_case_path": "tests/test_EPIC-2_app.py"
+  },
+  {
+    "epic_id": "EPIC-3",
+    "test_case_path": "tests/test_EPIC-3_app.py"
+  },
+  {
+    "epic_id": "EPIC-4",
+    "test_case_path": "tests/test_EPIC-4_app.py"
+  },
+  {
+    "epic_id": "EPIC-5",
+    "test_case_path": "tests/test_EPIC-5_responsive_design.py"
+  },
+  {
+    "epic_id": "EPIC-6",
+    "test_case_path": "tests/test_incomplete_application.py"
+  },
+  {
+    "epic_id": "EPIC-7",
+    "test_case_path": "tests/test_EPIC-7_app.py"
+  },
+  {
+    "epic_id": "EPIC-8",
+    "test_case_path": "tests/test_EPIC-8_role_based_access_control_2.py"
+  }
+]
