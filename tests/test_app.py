@@ -1,32 +1,20 @@
 import pytest
-from app import app
-
-@pytest.fixture
-def client():
-    with app.test_client() as client:
-        yield client
+from app import create_account, delete_account, get_account_details
 
 
-def test_home_page(client):
-    response = client.get('/')
-    assert response.status_code == 200
-    assert b"Welcome to the Banking Application!" in response.data
+def test_create_account():
+    account_id = create_account('John Doe', 1000)
+    assert account_id is not None
 
 
-def test_login_page(client):
-    response = client.get('/login')
-    assert response.status_code == 200
-    assert b"Please login" in response.data
+def test_delete_account():
+    account_id = create_account('Jane Doe', 2000)
+    delete_account(account_id)
+    assert get_account_details(account_id) is None
 
 
-def test_login(client):
-    response = client.post('/login', data=dict(username='user', password='pass'), follow_redirects=True)
-    assert response.status_code == 200
-    assert b"Login successful" in response.data
-
-
-def test_logout(client):
-    client.post('/login', data=dict(username='user', password='pass'), follow_redirects=True)
-    response = client.get('/logout', follow_redirects=True)
-    assert response.status_code == 200
-    assert b"You have been logged out" in response.data
+def test_get_account_details():
+    account_id = create_account('Alice', 3000)
+    account_details = get_account_details(account_id)
+    assert account_details is not None
+    assert account_details['balance'] == 3000
