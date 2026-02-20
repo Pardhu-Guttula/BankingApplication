@@ -1,29 +1,14 @@
-variable "resource_group_name" {
-  description = "The name of the resource group"
+variable "tenant_id" {
+  description = "The tenant ID for the Azure subscription"
   type        = string
 }
 
-variable "location" {
-  description = "The Azure location to deploy the resources"
+variable "object_id" {
+  description = "The object ID of the application or user"
   type        = string
 }
 
-variable "sql_admin_username" {
-  description = "The administrator username for SQL Server"
-  type        = string
-}
-
-variable "sql_admin_password" {
-  description = "The administrator password for SQL Server"
-  type        = string
-}
-
-variable "domain_name" {
-  description = "The domain name for Azure Active Directory Domain Services"
-  type        = string
-}
-
-variable "user_principal_name" {
-  description = "The user principal name for the authentication member"
+variable "log_analytics_workspace_id" {
+  description = "The ID of the Log Analytics Workspace"
   type        = string
 }
