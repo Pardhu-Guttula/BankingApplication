@@ -30,6 +30,7 @@ jobs:
 
     env:
       vm_password: anmol1234
+      vm_username: akhilkumar
 
     steps:
     - name: Checkout code
