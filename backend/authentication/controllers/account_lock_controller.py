@@ -1,4 +1,4 @@
-# Epic Title: Implement Account Lockout Mechanism
+# Epic Title: User Authentication and Authorization
 
 from flask import Blueprint, request, jsonify
 from backend.authentication.services.account_lock_service import AccountLockService
