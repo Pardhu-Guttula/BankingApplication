@@ -1,14 +1,11 @@
-variable "tenant_id" {
-  description = "The tenant ID for the Azure subscription"
+variable "resource_group_name" {
+  description = "The name of the resource group"
   type        = string
+  default     = "example-resources"
 }
 
-variable "object_id" {
-  description = "The object ID of the application or user"
+variable "location" {
+  description = "The location of the resources"
   type        = string
-}
-
-variable "log_analytics_workspace_id" {
-  description = "The ID of the Log Analytics Workspace"
-  type        = string
+  default     = "East US"
 }
