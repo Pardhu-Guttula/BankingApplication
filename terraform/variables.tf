@@ -1,39 +1,29 @@
 variable "resource_group_name" {
+  description = "The name of the resource group"
   type        = string
-  description = "Name of the resource group"
 }
 
 variable "location" {
+  description = "The Azure location to deploy the resources"
   type        = string
-  description = "Location for all resources"
 }
 
-variable "sql_server_name" {
+variable "sql_admin_username" {
+  description = "The administrator username for SQL Server"
   type        = string
-  description = "SQL Server Name"
-}
-
-variable "sql_admin_login" {
-  type        = string
-  description = "SQL Admin Login"
 }
 
 variable "sql_admin_password" {
+  description = "The administrator password for SQL Server"
   type        = string
-  description = "SQL Admin Password"
 }
 
-variable "sql_db_name" {
+variable "domain_name" {
+  description = "The domain name for Azure Active Directory Domain Services"
   type        = string
-  description = "SQL Database Name"
 }
 
-variable "storage_account_name" {
+variable "user_principal_name" {
+  description = "The user principal name for the authentication member"
   type        = string
-  description = "Storage Account Name"
-}
-
-variable "b2c_name" {
-  type        = string
-  description = "B2C Tenant Name"
 }
