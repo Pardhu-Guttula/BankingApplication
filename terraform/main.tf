@@ -1,80 +1,96 @@
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 4.56.0"
+    }
+  }
+}
+
 provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "example" {
-  name     = var.resource_group_name
-  location = var.location
+resource "azurerm_resource_group" "rg" {
+  name     = "example-resources"
+  location = "East US"
 }
 
-resource "azurerm_app_service_plan" "example" {
-  name                = "backend-app-service-plan"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+resource "azurerm_app_service_plan" "frontend_plan" {
+  name                = "frontend-app-service-plan"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
   sku {
     tier = "Standard"
     size = "S1"
   }
 }
 
-resource "azurerm_app_service" "example" {
-  name                = "backend-app-service"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  app_service_plan_id = azurerm_app_service_plan.example.id
+resource "azurerm_app_service" "frontend" {
+  name                = "frontend-app-service"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  app_service_plan_id = azurerm_app_service_plan.frontend_plan.id
 }
 
-resource "azurerm_function_app" "example" {
-  name                = "backend-function-app"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  storage_account_name = azurerm_storage_account.example.name
-  storage_account_access_key = azurerm_storage_account.example.primary_access_key
-  app_service_plan_id = azurerm_app_service_plan.example.id
+resource "azurerm_static_site" "frontend_static" {
+  name                = "frontend-static-web"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
 }
 
-resource "azurerm_sql_server" "example" {
-  name                         = "backend-sql-server"
-  location                     = azurerm_resource_group.example.location
-  resource_group_name          = azurerm_resource_group.example.name
-  version                      = "12.0"
-  administrator_login          = var.sql_admin_username
-  administrator_login_password = var.sql_admin_password
+resource "azurerm_api_management" "api_management" {
+  name                = "api-management"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  publisher_name      = "Example Publisher"
+  publisher_email     = "publisher@example.com"
+  sku_name            = "Developer"
 }
 
-resource "azurerm_sql_database" "example" {
-  name                = "backend-sql-db"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  server_name         = azurerm_sql_server.example.name
-  edition             = "Standard"
-  requested_service_objective_name = "S1"
+resource "azurerm_app_service" "api_app" {
+  name                = "api-app-service"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  app_service_plan_id = azurerm_app_service_plan.frontend_plan.id
 }
 
-resource "azurerm_storage_account" "example" {
-  name                     = "backendstorage"
-  resource_group_name      = azurerm_resource_group.example.name
-  location                 = azurerm_resource_group.example.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
+resource "azurerm_key_vault" "keyvault" {
+  name                = "example-keyvault"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  tenant_id           = var.tenant_id
+  sku_name            = "standard"
 }
 
-resource "azurerm_storage_container" "example" {
-  name                  = "backend-container"
-  storage_account_name  = azurerm_storage_account.example.name
-  container_access_type = "private"
+resource "azurerm_key_vault_access_policy" "keyvault_access" {
+  key_vault_id = azurerm_key_vault.keyvault.id
+  tenant_id    = var.tenant_id
+  object_id    = var.object_id
+  secret_permissions = [
+    "get",
+    "list",
+  ]
 }
 
-resource "azurerm_active_directory_domain_service" "example" {
-  name                = "backend-adds"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
-  domain_name         = var.domain_name
-  sku                 = "Standard"
-  initial_replication_delay_hours = 1
+resource "azurerm_b2c_directory" "b2c" {
+  name     = "exampleb2c"
+  location = "Global"
+  sku {
+    tier = "Standard"
+  }
 }
 
-resource "azurerm_active_directory_domain_service_member" "example" {
-  domain_service_id = azurerm_active_directory_domain_service.example.id
-  user_upn          = var.user_principal_name
+resource "azurerm_monitor_diagnostic_setting" "monitor" {
+  name               = "example-diagnostic"
+  target_resource_id = azurerm_api_management.api_management.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
+  enabled_log {
+    category = "GatewayLogs"
+    enabled  = true
+  }
+  metric {
+    category = "AllMetrics"
+    enabled  = true
+  }
 }
