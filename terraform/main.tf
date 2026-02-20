@@ -2,90 +2,82 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "rg" {
+resource "azurerm_resource_group" "example" {
   name     = "example-resources"
-  location = "East US"
+  location = "West Europe"
 }
 
-resource "azurerm_app_service_plan" "asp" {
-  name                = "example-app-service-plan"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  kind                = "App"
+resource "azurerm_app_service_plan" "example" {
+  name                = "example-appservice-plan"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+
   sku {
     tier = "Standard"
     size = "S1"
   }
 }
 
-resource "azurerm_app_service" "app" {
-  name                = "example-app-service"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  app_service_plan_id = azurerm_app_service_plan.asp.id
-  site_config {
-    always_on = true
-    linux_fx_version = "PYTHON|3.9"
-  }
-  identity {
-    type = "SystemAssigned"
-  }
+resource "azurerm_app_service" "example" {
+  name                = "example-appservice"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  app_service_plan_id = azurerm_app_service_plan.example.id
 }
 
-resource "azurerm_sql_server" "sqlserver" {
-  name                = "mysqldbserver"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  administrator_login          = "sqladmin"
-  administrator_login_password = "Password123"
+resource "azurerm_api_management" "example" {
+  name                = "example-api"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  publisher_name      = "My Company"
+  publisher_email     = "company@example.com"
+  sku_name            = "Developer"
 }
 
-resource "azurerm_sql_database" "sqldb" {
-  name                = "mysqldb"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  server_name         = azurerm_sql_server.sqlserver.name
-  sku_name            = "Standard"
-  size                = "S1"
-  max_size_gb         = 10
+resource "azurerm_function_app" "account_service" {
+  name                = "account-service"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  app_service_plan_id = azurerm_app_service_plan.example.id
 }
 
-resource "azurerm_active_directory_domain_service" "addomain" {
-  name                = "example-aadds"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  sku {
-    tier = "Standard"
-  }
-  domain_name         = "example.com"
+resource "azurerm_function_app" "user_service" {
+  name                = "user-service"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  app_service_plan_id = azurerm_app_service_plan.example.id
 }
 
-resource "azurerm_monitor_diagnostic_setting" "diag" {
-  name               = "example-diagnostics"
-  target_resource_id = azurerm_app_service.app.id
-  enabled_log {
-    category = "AppServiceHTTPLogs"
-    enabled  = true
-    retention_policy {
-      enabled = false
-    }
-  }
+resource "azurerm_function_app" "request_service" {
+  name                = "request-service"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  app_service_plan_id = azurerm_app_service_plan.example.id
 }
 
-resource "azurerm_key_vault" "kv" {
-  name                = "examplekv"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+resource "azurerm_function_app" "notification_service" {
+  name                = "notification-service"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  app_service_plan_id = azurerm_app_service_plan.example.id
+}
+
+resource "azurerm_key_vault" "example" {
+  name                = "examplevault"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
   sku_name            = "standard"
-  tenant_id           = data.azurerm_client_config.current.tenant_id
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
-    secret_permissions = [
-      "get",
-      "list",
-      "set",
-      "delete"
-    ]
+  tenant_id           = "${data.azuread_client.current.tenant_id}"
+}
+
+resource "azurerm_monitor_diagnostic_setting" "example" {
+  name                      = "exampleDiagnostics"
+  target_resource_id        = azurerm_app_service.example.id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.example.id
+  enabled_log {
+    category = "AuditLogs"
+  }
+  metric {
+    category = "AllMetrics"
   }
 }
