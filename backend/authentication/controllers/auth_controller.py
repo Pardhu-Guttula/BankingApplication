@@ -1,4 +1,4 @@
-# Epic Title: Integrate Authentication with Bank Security Infrastructure
+# Epic Title: User Authentication and Authorization
 
 import logging
 from flask import Blueprint, request, jsonify
