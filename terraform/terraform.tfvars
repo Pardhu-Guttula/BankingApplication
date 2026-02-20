@@ -1,2 +1,6 @@
+location = "West Europe"
 resource_group_name = "example-resources"
-location = "East US"
+app_service_plan_name = "example-appservice-plan"
+app_service_name = "example-appservice"
+api_management_name = "example-api"
+key_vault_name = "examplevault"
