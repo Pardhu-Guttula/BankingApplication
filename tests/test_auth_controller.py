@@ -1,40 +1,50 @@
-import pytest
-from flask import Flask
-from backend.authentication.controllers.auth_controller import auth_controller
-from backend.authentication.controllers.account_lock_controller import account_lock_controller
-from backend.authentication.controllers.account_lockout_controller import account_lockout_controller
+# File: tests/test_auth_controller.py
 
+import unittest
+from unittest.mock import patch, MagicMock
+from flask import Flask, json
 
-@pytest.fixture
-def client():
-    app = Flask(__name__)
-    app.register_blueprint(auth_controller, url_prefix='/auth')
-    app.register_blueprint(account_lock_controller, url_prefix='/lock')
-    app.register_blueprint(account_lockout_controller, url_prefix='/lockout')
-    app.config['TESTING'] = True
-    with app.test_client() as client:
-        yield client
+from auth_controller import auth_controller
 
+class AuthControllerTests(unittest.TestCase):
 
-def test_auth_controller_login_success(client, mocker):
-    mock_auth_service = mocker.patch('backend.authentication.controllers.auth_controller.auth_service')
-    mock_auth_service.authenticate.return_value = True
-    response = client.post('/auth/login', json={'username': 'test', 'password': 'test'})
-    assert response.status_code == 200
-    assert response.json == {"message": "Login successful"}
+    def setUp(self):
+        self.app = Flask(__name__)
+        self.app.register_blueprint(auth_controller)
+        self.client = self.app.test_client()
 
+    def test_login_successful(self):
+        with patch('backend.authentication.services.auth_service.AuthService.authenticate', return_value=True):
+            response = self.client.post('/login', json={'username': 'test', 'password': 'test'})
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.json, {'message': 'Login successful'})
 
-def test_auth_controller_login_invalid_credentials(client, mocker):
-    mock_auth_service = mocker.patch('backend.authentication.controllers.auth_controller.auth_service')
-    mock_auth_service.authenticate.return_value = False
-    response = client.post('/auth/login', json={'username': 'test', 'password': 'wrong'})
-    assert response.status_code == 401
-    assert response.json == {"message": "Invalid credentials"}
+    def test_login_invalid_credentials(self):
+        with patch('backend.authentication.services.auth_service.AuthService.authenticate', return_value=False):
+            response = self.client.post('/login', json={'username': 'test', 'password': 'wrong'})
+            self.assertEqual(response.status_code, 401)
+            self.assertEqual(response.json, {'message': 'Invalid credentials'})
 
+    def test_login_missing_username(self):
+        response = self.client.post('/login', json={'password': 'test'})
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.json, {'message': 'Invalid credentials'})
 
-def test_auth_controller_login_exception(client, mocker):
-    mock_auth_service = mocker.patch('backend.authentication.controllers.auth_controller.auth_service')
-    mock_auth_service.authenticate.side_effect = Exception('Test Exception')
-    response = client.post('/auth/login', json={'username': 'test', 'password': 'test'})
-    assert response.status_code == 500
-    assert response.json == {"message": "Login failed"}
+    def test_login_missing_password(self):
+        response = self.client.post('/login', json={'username': 'test'})
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.json, {'message': 'Invalid credentials'})
+
+    def test_login_no_json_body(self):
+        response = self.client.post('/login')
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.json, {'message': 'Invalid credentials'})
+
+    def test_login_service_exception(self):
+        with patch('backend.authentication.services.auth_service.AuthService.authenticate', side_effect=Exception('Service failure')):
+            response = self.client.post('/login', json={'username': 'test', 'password': 'test'})
+            self.assertEqual(response.status_code, 500)
+            self.assertEqual(response.json, {'message': 'Login failed'})
+
+if __name__ == '__main__':
+    unittest.main()
