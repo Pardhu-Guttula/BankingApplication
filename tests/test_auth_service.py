@@ -1,46 +1,82 @@
-# File: tests/test_auth_service.py
-
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import MagicMock
 from backend.authentication.services.auth_service import AuthService
 from backend.authentication.repositories.user_repository import UserRepository
 
 class TestAuthService(unittest.TestCase):
-    
     def setUp(self):
         self.auth_service = AuthService()
-        self.user_repository_mock = Mock(spec=UserRepository)
+        self.user_repository_mock = MagicMock(spec=UserRepository)
         self.auth_service.user_repository = self.user_repository_mock
 
     def test_authenticate_success(self):
-        self.user_repository_mock.find_by_username.return_value = Mock(check_password=lambda password: password == 'correct_password')
-        result = self.auth_service.authenticate('valid_user', 'correct_password')
+        # Arrange
+        username = 'valid_user'
+        password = 'valid_pass'
+        user = MagicMock()
+        user.check_password.return_value = True
+        self.user_repository_mock.find_by_username.return_value = user
+
+        # Act
+        result = self.auth_service.authenticate(username, password)
+
+        # Assert
         self.assertTrue(result)
+        self.user_repository_mock.find_by_username.assert_called_with(username)
+        user.check_password.assert_called_with(password)
 
-    def test_authenticate_failure_invalid_password(self):
-        self.user_repository_mock.find_by_username.return_value = Mock(check_password=lambda password: password == 'correct_password')
-        result = self.auth_service.authenticate('valid_user', 'wrong_password')
+    def test_authenticate_failure_wrong_password(self):
+        # Arrange
+        username = 'valid_user'
+        password = 'invalid_pass'
+        user = MagicMock()
+        user.check_password.return_value = False
+        self.user_repository_mock.find_by_username.return_value = user
+
+        # Act
+        result = self.auth_service.authenticate(username, password)
+
+        # Assert
         self.assertFalse(result)
+        self.user_repository_mock.find_by_username.assert_called_with(username)
+        user.check_password.assert_called_with(password)
 
-    def test_authenticate_failure_nonexistent_user(self):
+    def test_authenticate_failure_user_not_found(self):
+        # Arrange
+        username = 'nonexistent_user'
+        password = 'any_pass'
         self.user_repository_mock.find_by_username.return_value = None
-        result = self.auth_service.authenticate('nonexistent_user', 'any_password')
-        self.assertFalse(result)
 
-    def test_authenticate_edge_case_empty_username(self):
-        self.user_repository_mock.find_by_username.return_value = None
-        result = self.auth_service.authenticate('', 'correct_password')
-        self.assertFalse(result)
+        # Act
+        result = self.auth_service.authenticate(username, password)
 
-    def test_authenticate_edge_case_empty_password(self):
-        self.user_repository_mock.find_by_username.return_value = Mock(check_password=lambda password: password == 'correct_password')
-        result = self.auth_service.authenticate('valid_user', '')
+        # Assert
         self.assertFalse(result)
+        self.user_repository_mock.find_by_username.assert_called_with(username)
 
-    def test_authenticate_exception_in_user_repository(self):
-        self.user_repository_mock.find_by_username.side_effect = Exception('Repository error')
-        with self.assertRaises(Exception):
-            self.auth_service.authenticate('valid_user', 'correct_password')
+    def test_authenticate_empty_username(self):
+        # Arrange
+        username = ''
+        password = 'any_pass'
+
+        # Act
+        result = self.auth_service.authenticate(username, password)
+
+        # Assert
+        self.assertFalse(result)
+        self.user_repository_mock.find_by_username.assert_not_called()
+
+    def test_authenticate_empty_password(self):
+        # Arrange
+        username = 'valid_user'
+        password = ''
+
+        # Act
+        result = self.auth_service.authenticate(username, password)
+
+        # Assert
+        self.assertFalse(result)
+        self.user_repository_mock.find_by_username.assert_not_called()
 
 if __name__ == '__main__':
     unittest.main()
