@@ -2,29 +2,22 @@ import React from "react";
 import { CreditCard, PiggyBank, TrendingUp } from "lucide-react";
 import { useIntl } from "react-intl";
 import SectionHeader from "./layout/SectionHeader";
-import ProductCardsGrid from "./ui/ProductCardsGrid";
+import ProductCard from "./ui/ProductCard";
 
-const imgIcon =
-  "https://www.figma.com/api/mcp/asset/bffbf5dd-411e-4a74-b982-ba209d6aab34";
-const imgVector =
-  "https://www.figma.com/api/mcp/asset/cad4723f-bd80-4d78-ab5c-afe437975a47";
-const imgVector1 =
-  "https://www.figma.com/api/mcp/asset/299eec6f-044a-4ce5-b46f-8bb1fe607c3c";
-const imgVector2 =
-  "https://www.figma.com/api/mcp/asset/ab6f769a-6084-4cc5-9a5e-810a5298657d";
-const imgVector3 =
-  "https://www.figma.com/api/mcp/asset/ab6f769a-6084-4cc5-9a5e-810a5298657d";
-const imgVector4 =
-  "https://www.figma.com/api/mcp/asset/f2f8c4ff-1f92-47fc-9d49-749dce9644e5";
-const imgVector5 =
-  "https://www.figma.com/api/mcp/asset/ea0a3d9e-400f-4689-a0e1-75aa974bd218";
-const imgVector6 =
-  "https://www.figma.com/api/mcp/asset/a0432b05-c92f-4469-ba09-3011398aaa63";
+const imgIcon = "https://www.figma.com/api/mcp/asset/f432089f-8190-48e2-b802-088fcd1c2651";
+const imgVector = "https://www.figma.com/api/mcp/asset/397df746-9c4e-458e-b61c-0403d8951785";
+const imgVector1 = "https://www.figma.com/api/mcp/asset/b7c3f6ba-ef8b-4b9a-a004-a92d2e5124cd";
+const imgVector2 = "https://www.figma.com/api/mcp/asset/c03112c1-3ce0-4f5e-afb4-0261592efa2f";
+const imgVector3 = "https://www.figma.com/api/mcp/asset/ed496eaa-b598-436d-945b-a760d3951267";
+const imgVector4 = "https://www.figma.com/api/mcp/asset/c30dfbc5-99e4-4ccb-a481-91fcd40adf6e";
+const imgVector5 = "https://www.figma.com/api/mcp/asset/2fa48c00-2211-40a5-a302-d3683614bd8e";
+const imgVector6 = "https://www.figma.com/api/mcp/asset/a65d2350-f88a-4908-a0f9-cf0e7282a59e";
 
 export default function ProductsForYou({
   title,
   products,
   onViewAll = () => {},
+  onApply = () => {},
 }) {
   const intl = useIntl();
 
@@ -35,69 +28,78 @@ export default function ProductsForYou({
     products ??
     [
       {
-        id: "premium-savings",
+        id: "savings",
         icon: PiggyBank,
-        iconTileBg: "#F0FDF4",
-        iconColor: "#16A34A",
-        badge: intl.formatMessage({ id: "productsForYou.badgeRecommended" }),
-        title: intl.formatMessage({ id: "productsForYou.premiumSavingsTitle" }),
+        iconBgClass: "bg-[#f0fdf4]",
+        iconColorClass: "text-[#16a34a]",
+        badgeText: intl.formatMessage({ id: "productsForYou.badgeRecommended" }),
+        title: intl.formatMessage({ id: "productsForYou.productSavingsTitle" }),
         description: intl.formatMessage({
-          id: "productsForYou.premiumSavingsDescription",
+          id: "productsForYou.productSavingsDescription",
         }),
         ctaLabel: intl.formatMessage({ id: "common.applyNow" }),
-        onCta: () => {},
       },
       {
-        id: "personal-loan",
+        id: "loan",
         icon: TrendingUp,
-        iconTileBg: "#EFF6FF",
-        iconColor: "#2563EB",
-        badge: intl.formatMessage({ id: "productsForYou.badgePreApproved" }),
-        title: intl.formatMessage({ id: "productsForYou.personalLoanTitle" }),
+        iconBgClass: "bg-[#eff6ff]",
+        iconColorClass: "text-[#2563eb]",
+        badgeText: intl.formatMessage({ id: "productsForYou.badgePreApproved" }),
+        title: intl.formatMessage({ id: "productsForYou.productLoanTitle" }),
         description: intl.formatMessage({
-          id: "productsForYou.personalLoanDescription",
+          id: "productsForYou.productLoanDescription",
         }),
         ctaLabel: intl.formatMessage({ id: "common.applyNow" }),
-        onCta: () => {},
       },
       {
-        id: "gold-card",
+        id: "card",
         icon: CreditCard,
-        iconTileBg: "#FAF5FF",
-        iconColor: "#7C3AED",
-        badge: intl.formatMessage({ id: "productsForYou.badgeLimitedOffer" }),
-        title: intl.formatMessage({ id: "productsForYou.goldCardTitle" }),
+        iconBgClass: "bg-[#faf5ff]",
+        iconColorClass: "text-[#9333ea]",
+        badgeText: intl.formatMessage({ id: "productsForYou.badgeLimitedOffer" }),
+        title: intl.formatMessage({ id: "productsForYou.productCardTitle" }),
         description: intl.formatMessage({
-          id: "productsForYou.goldCardDescription",
+          id: "productsForYou.productCardDescription",
         }),
         ctaLabel: intl.formatMessage({ id: "common.applyNow" }),
-        onCta: () => {},
       },
     ];
 
   return (
     <section className="w-full">
-      <div className="mx-auto w-full max-w-[1192px] px-0 py-0">
-        <div className="flex w-full flex-col gap-4">
-          <SectionHeader
-            title={resolvedTitle}
-            actionLabel={intl.formatMessage({ id: "common.viewAll" })}
-            onAction={onViewAll}
-          />
-          <ProductCardsGrid products={resolvedProducts} />
+      <div className="mx-auto flex w-full max-w-[1192px] flex-col gap-[16px]">
+        <SectionHeader
+          title={resolvedTitle}
+          actionLabel={intl.formatMessage({ id: "common.viewAll" })}
+          onAction={onViewAll}
+        />
+
+        <div className="grid w-full grid-cols-1 gap-[16px] md:grid-cols-2 lg:grid-cols-3">
+          {resolvedProducts.map((p) => (
+            <ProductCard
+              key={p.id}
+              icon={p.icon}
+              iconBgClass={p.iconBgClass}
+              iconColorClass={p.iconColorClass}
+              badgeText={p.badgeText}
+              title={p.title}
+              description={p.description}
+              ctaLabel={p.ctaLabel}
+              onCta={() => onApply(p.id)}
+            />
+          ))}
         </div>
       </div>
 
-      <div className="sr-only" aria-hidden="true">
-        <img alt="" src={imgIcon} />
-        <img alt="" src={imgVector} />
-        <img alt="" src={imgVector1} />
-        <img alt="" src={imgVector2} />
-        <img alt="" src={imgVector3} />
-        <img alt="" src={imgVector4} />
-        <img alt="" src={imgVector5} />
-        <img alt="" src={imgVector6} />
-      </div>
+      {/* Asset constants preserved from input (not used after icon conversion) */}
+      <img src={imgIcon} alt="" className="hidden" />
+      <img src={imgVector} alt="" className="hidden" />
+      <img src={imgVector1} alt="" className="hidden" />
+      <img src={imgVector2} alt="" className="hidden" />
+      <img src={imgVector3} alt="" className="hidden" />
+      <img src={imgVector4} alt="" className="hidden" />
+      <img src={imgVector5} alt="" className="hidden" />
+      <img src={imgVector6} alt="" className="hidden" />
     </section>
   );
 }
