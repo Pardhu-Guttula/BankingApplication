@@ -1,53 +1,46 @@
-# Updated Unit Test Code for User Authentication and Security
-import unittest
-from flask import Flask, json
-from backend.authentication.services.auth_service import AuthService
+# File: tests/test_auth_controller.py
+
+import json
+from flask import Flask, Blueprint, jsonify
+import pytest
 from backend.authentication.controllers.auth_controller import auth_controller
+from backend.authentication.services.auth_service import AuthService
 
-class AuthControllerTestCase(unittest.TestCase):
-    def setUp(self):
-        self.app = Flask(__name__)
-        self.app.register_blueprint(auth_controller)
-        self.client = self.app.test_client()
+app = Flask(__name__)
+app.register_blueprint(auth_controller)
 
-    def test_login_success(self):
-        AuthService.authenticate = lambda self, u, p: True
-        response = self.client.post('/login', data=json.dumps({
-            "username": "valid_user",
-            "password": "valid_pass"
-        }), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json, {"message": "Login successful"})
+auth_service = AuthService()
 
-    def test_login_invalid_credentials(self):
-        AuthService.authenticate = lambda self, u, p: False
-        response = self.client.post('/login', data=json.dumps({
-            "username": "invalid_user",
-            "password": "invalid_pass"
-        }), content_type='application/json')
-        self.assertEqual(response.status_code, 401)
-        self.assertEqual(response.json, {"message": "Invalid credentials"})
+def setup_module(module):
+    auth_service.authenticate = lambda username, password: username == 'valid_user' and password == 'valid_pass'
 
-    def test_login_missing_username(self):
-        data = {"password": "valid_pass"}
-        response = self.client.post('/login', data=json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json, {"message": "Username required"})
+@pytest.fixture
 
-    def test_login_missing_password(self):
-        data = {"username": "valid_user"}
-        response = self.client.post('/login', data=json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json, {"message": "Password required"})
+def client():
+    with app.test_client() as client:
+        yield client
 
-    def test_login_exception_handling(self):
-        AuthService.authenticate = lambda self, u, p: (_ for _ in ()).throw(Exception('Test Exception'))
-        response = self.client.post('/login', data=json.dumps({
-            "username": "valid_user",
-            "password": "valid_pass"
-        }), content_type='application/json')
-        self.assertEqual(response.status_code, 500)
-        self.assertEqual(response.json, {"message": "Login failed"})
+def test_login_success(client):
+    response = client.post('/login', json={'username': 'valid_user', 'password': 'valid_pass'})
+    assert response.status_code == 200
+    assert response.get_json() == {'message': 'Login successful'}
 
-if __name__ == '__main__':
-    unittest.main()
+def test_login_invalid_credentials(client):
+    response = client.post('/login', json={'username': 'invalid_user', 'password': 'invalid_pass'})
+    assert response.status_code == 401
+    assert response.get_json() == {'message': 'Invalid credentials'}
+
+def test_login_missing_username(client):
+    response = client.post('/login', json={'password': 'no_username'})
+    assert response.status_code == 401
+    assert response.get_json() == {'message': 'Invalid credentials'}
+
+def test_login_missing_password(client):
+    response = client.post('/login', json={'username': 'no_password'})
+    assert response.status_code == 401
+    assert response.get_json() == {'message': 'Invalid credentials'}
+
+def test_login_invalid_json(client):
+    response = client.post('/login', data='invalid_json')
+    assert response.status_code == 500
+    assert response.get_json() == {'message': 'Login failed'}
