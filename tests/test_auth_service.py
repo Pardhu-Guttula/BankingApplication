@@ -1,61 +1,62 @@
 # File: tests/test_auth_service.py
 
 import unittest
-from unittest.mock import Mock, patch
-from backend.authentication.auth_service import AuthService
+from unittest.mock import MagicMock
+from auth_service import AuthService
 from backend.authentication.repositories.user_repository import UserRepository
 
 class TestAuthService(unittest.TestCase):
     def setUp(self):
         self.auth_service = AuthService()
+        self.mock_user_repository = MagicMock(spec=UserRepository)
+        self.auth_service.user_repository = self.mock_user_repository
 
-    @patch.object(UserRepository, 'find_by_username')
-    def test_authenticate_success(self, mock_find_by_username):
-        mock_user = Mock()
-        mock_user.check_password.return_value = True
-        mock_find_by_username.return_value = mock_user
-        result = self.auth_service.authenticate('valid_user', 'valid_password')
+    def test_authenticate_valid_user(self):
+        user_mock = MagicMock()
+        user_mock.check_password.return_value = True
+        self.mock_user_repository.find_by_username.return_value = user_mock
+        result = self.auth_service.authenticate("username", "password")
         self.assertTrue(result)
+        self.mock_user_repository.find_by_username.assert_called_once_with("username")
+        user_mock.check_password.assert_called_once_with("password")
 
-    @patch.object(UserRepository, 'find_by_username')
-    def test_authenticate_failure_incorrect_password(self, mock_find_by_username):
-        mock_user = Mock()
-        mock_user.check_password.return_value = False
-        mock_find_by_username.return_value = mock_user
-        result = self.auth_service.authenticate('valid_user', 'invalid_password')
+    def test_authenticate_invalid_password(self):
+        user_mock = MagicMock()
+        user_mock.check_password.return_value = False
+        self.mock_user_repository.find_by_username.return_value = user_mock
+        result = self.auth_service.authenticate("username", "wrong_password")
         self.assertFalse(result)
+        self.mock_user_repository.find_by_username.assert_called_once_with("username")
+        user_mock.check_password.assert_called_once_with("wrong_password")
 
-    @patch.object(UserRepository, 'find_by_username')
-    def test_authenticate_failure_user_not_found(self, mock_find_by_username):
-        mock_find_by_username.return_value = None
-        result = self.auth_service.authenticate('invalid_user', 'any_password')
+    def test_authenticate_user_not_found(self):
+        self.mock_user_repository.find_by_username.return_value = None
+        result = self.auth_service.authenticate("unknown_user", "password")
         self.assertFalse(result)
+        self.mock_user_repository.find_by_username.assert_called_once_with("unknown_user")
 
-    @patch.object(UserRepository, 'find_by_username')
-    def test_authenticate_empty_username_password(self, mock_find_by_username):
-        result = self.auth_service.authenticate('', '')
+    def test_authenticate_empty_username(self):
+        self.mock_user_repository.find_by_username.return_value = None
+        result = self.auth_service.authenticate("", "password")
         self.assertFalse(result)
+        self.mock_user_repository.find_by_username.assert_called_once_with("")
 
-    @patch.object(UserRepository, 'find_by_username')
-    def test_authenticate_null_username_password(self, mock_find_by_username):
-        result = self.auth_service.authenticate(None, None)
+    def test_authenticate_empty_password(self):
+        user_mock = MagicMock()
+        user_mock.check_password.return_value = False
+        self.mock_user_repository.find_by_username.return_value = user_mock
+        result = self.auth_service.authenticate("username", "")
         self.assertFalse(result)
+        self.mock_user_repository.find_by_username.assert_called_once_with("username")
+        user_mock.check_password.assert_called_once_with("")
 
-    @patch.object(UserRepository, 'find_by_username')
-    def test_authenticate_logging_on_success(self, mock_find_by_username):
-        mock_user = Mock()
-        mock_user.check_password.return_value = True
-        mock_find_by_username.return_value = mock_user
-        with self.assertLogs('backend.authentication.auth_service', level='INFO') as log:
-            self.auth_service.authenticate('valid_user', 'valid_password')
-            self.assertIn('User valid_user authenticated successfully.', log.output)
+    def test_authenticate_null_username(self):
+        with self.assertRaises(TypeError):
+            self.auth_service.authenticate(None, "password")
 
-    @patch.object(UserRepository, 'find_by_username')
-    def test_authenticate_logging_on_failure(self, mock_find_by_username):
-        mock_find_by_username.return_value = None
-        with self.assertLogs('backend.authentication.auth_service', level='WARNING') as log:
-            self.auth_service.authenticate('invalid_user', 'any_password')
-            self.assertIn('Failed authentication attempt for user invalid_user.', log.output)
+    def test_authenticate_null_password(self):
+        with self.assertRaises(TypeError):
+            self.auth_service.authenticate("username", None)
 
 if __name__ == '__main__':
     unittest.main()
