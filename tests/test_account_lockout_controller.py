@@ -1,35 +1,67 @@
+# File: tests/test_account_lockout_controller.py
+
 import unittest
-from flask import Flask, json
+from flask import json
 from flask.testing import FlaskClient
-from main import account_lockout_controller
+from account_lockout_controller import account_lockout_controller
+from backend.authentication.services.account_lockout_service import AccountLockoutService
 
-class AccountLockoutTestCase(unittest.TestCase):
-
+class TestAccountLockoutController(unittest.TestCase):
     def setUp(self):
-        self.app = Flask(__name__)
-        self.app.register_blueprint(account_lockout_controller)
-        self.client = self.app.test_client()
+        self.app = account_lockout_controller.test_client()
+        self.app.testing = True
+
+    def mock_record_attempt_and_check_lockout(self, user_id, success):
+        if user_id == 'locked_user':
+            return True, 'User account is locked'
+        elif success:
+            return False, 'Login successful'
+        else:
+            return False, 'Invalid credentials'
 
     def test_login_success(self):
-        response = self.client.post('/login', data=json.dumps({'user_id': 'valid_user', 'password': 'valid_pass'}), content_type='application/json')
+        AccountLockoutService.record_attempt_and_check_lockout = self.mock_record_attempt_and_check_lockout
+        response = self.app.post('/login', data=json.dumps({'user_id': 'user1', 'password': 'password1'}), content_type='application/json')
+        data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
-        self.assertIn('message', json.loads(response.data))
+        self.assertEqual(data['message'], 'Login successful')
+
+    def test_login_failure_locked(self):
+        AccountLockoutService.record_attempt_and_check_lockout = self.mock_record_attempt_and_check_lockout
+        response = self.app.post('/login', data=json.dumps({'user_id': 'locked_user', 'password': 'password1'}), content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 423)
+        self.assertEqual(data['error'], 'User account is locked')
+
+    def test_login_failure_invalid_credentials(self):
+        AccountLockoutService.record_attempt_and_check_lockout = self.mock_record_attempt_and_check_lockout
+        response = self.app.post('/login', data=json.dumps({'user_id': 'user1', 'password': 'wrong_password'}), content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(data['error'], 'Invalid credentials')
 
     def test_login_invalid_data(self):
-        response = self.client.post('/login', data=json.dumps({'user_id': None, 'password': 'pass'}), content_type='application/json')
+        # Test with missing user_id
+        response = self.app.post('/login', data=json.dumps({'password': 'password1'}), content_type='application/json')
         self.assertEqual(response.status_code, 400)
-        self.assertIn('error', json.loads(response.data))
+        self.assertEqual(json.loads(response.data), {'error': 'Invalid data'})
 
-    def test_account_lockout(self):
-        # Simulating account lockout scenario
-        response = self.client.post('/login', data=json.dumps({'user_id': 'locked_user', 'password': 'wrong_pass'}), content_type='application/json')
-        self.assertEqual(response.status_code, 423)
-        self.assertIn('error', json.loads(response.data))
+        # Test with missing password
+        response = self.app.post('/login', data=json.dumps({'user_id': 'user1'}), content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(json.loads(response.data), {'error': 'Invalid data'})
 
-    def test_login_unauthorized(self):
-        response = self.client.post('/login', data=json.dumps({'user_id': 'valid_user', 'password': 'invalid_pass'}), content_type='application/json')
-        self.assertEqual(response.status_code, 401)
-        self.assertIn('error', json.loads(response.data))
+    def test_login_no_data(self):
+        # Test with empty request body
+        response = self.app.post('/login', data=json.dumps({}), content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(json.loads(response.data), {'error': 'Invalid data'})
+
+    def test_login_none_data(self):
+        # Test with None values for user_id and password
+        response = self.app.post('/login', data=json.dumps({'user_id': None, 'password': None}), content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(json.loads(response.data), {'error': 'Invalid data'})
 
 if __name__ == '__main__':
     unittest.main()
