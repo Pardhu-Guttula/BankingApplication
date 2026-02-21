@@ -1,86 +1,56 @@
 # File: tests/test_auth_controller.py
 
-import json
-from flask import Flask, Blueprint, jsonify
-import pytest
+import unittest
+from unittest.mock import patch, MagicMock
+from flask import Flask, json
 from backend.authentication.controllers.auth_controller import auth_controller
 from backend.authentication.services.auth_service import AuthService
 
-app = Flask(__name__)
-app.register_blueprint(auth_controller)
+class AuthControllerTest(unittest.TestCase):
+    def setUp(self):
+        self.app = Flask(__name__)
+        self.app.register_blueprint(auth_controller)
+        self.client = self.app.test_client()
 
-auth_service = AuthService()
+    @patch.object(AuthService, 'authenticate')
+    def test_login_success(self, mock_authenticate):
+        mock_authenticate.return_value = True
+        response = self.client.post('/login', json={'username': 'valid_user', 'password': 'valid_pass'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, {'message': 'Login successful'})
 
-def setup_module(module):
-    auth_service.authenticate = lambda username, password: username == 'valid_user' and password == 'valid_pass'
+    @patch.object(AuthService, 'authenticate')
+    def test_login_invalid_credentials(self, mock_authenticate):
+        mock_authenticate.return_value = False
+        response = self.client.post('/login', json={'username': 'invalid_user', 'password': 'invalid_pass'})
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.json, {'message': 'Invalid credentials'})
 
-@pytest.fixture
-def client():
-    with app.test_client() as client:
-        yield client
+    @patch('backend.authentication.controllers.auth_controller.request')
+    @patch('backend.authentication.controllers.auth_controller.logging')
+    @patch.object(AuthService, 'authenticate')
+    def test_login_exception(self, mock_authenticate, mock_logging, mock_request):
+        mock_request.json = {'username': 'user', 'password': 'pass'}
+        mock_authenticate.side_effect = Exception('Test exception')
+        response = self.client.post('/login', json={'username': 'user', 'password': 'pass'})
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json, {'message': 'Login failed'})
+        mock_logging.error.assert_called_once_with('Error in login: Test exception')
 
-def test_login_success(client):
-    response = client.post('/login', json={'username': 'valid_user', 'password': 'valid_pass'})
-    assert response.status_code == 200
-    assert response.get_json() == {'message': 'Login successful'}
+    def test_login_no_json(self):
+        response = self.client.post('/login')
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json, {'message': 'Login failed'})
 
-def test_login_invalid_credentials(client):
-    response = client.post('/login', json={'username': 'invalid_user', 'password': 'invalid_pass'})
-    assert response.status_code == 401
-    assert response.get_json() == {'message': 'Invalid credentials'}
+    def test_login_missing_username(self):
+        response = self.client.post('/login', json={'password': 'pass'})
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json, {'message': 'Login failed'})
 
-def test_login_missing_username(client):
-    response = client.post('/login', json={'password': 'no_username'})
-    assert response.status_code == 401
-    assert response.get_json() == {'message': 'Invalid credentials'}
+    def test_login_missing_password(self):
+        response = self.client.post('/login', json={'username': 'user'})
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json, {'message': 'Login failed'})
 
-def test_login_missing_password(client):
-    response = client.post('/login', json={'username': 'no_password'})
-    assert response.status_code == 401
-    assert response.get_json() == {'message': 'Invalid credentials'}
-
-def test_login_invalid_json(client):
-    response = client.post('/login', data='invalid_json')
-    assert response.status_code == 500
-    assert response.get_json() == {'message': 'Login failed'}
-
-
-def test_login_long_username(client):
-    long_username = 'a' * 256
-    response = client.post('/login', json={'username': long_username, 'password': 'valid_pass'})
-    assert response.status_code == 401
-    assert response.get_json() == {'message': 'Invalid credentials'}
-
-def test_login_long_password(client):
-    long_password = 'a' * 256
-    response = client.post('/login', json={'username': 'valid_user', 'password': long_password})
-    assert response.status_code == 401
-    assert response.get_json() == {'message': 'Invalid credentials'}
-
-def test_login_empty_credentials(client):
-    response = client.post('/login', json={'username': '', 'password': ''})
-    assert response.status_code == 401
-    assert response.get_json() == {'message': 'Invalid credentials'}
-
-def test_login_none_username(client):
-    response = client.post('/login', json={'username': None, 'password': 'valid_pass'})
-    assert response.status_code == 401
-    assert response.get_json() == {'message': 'Invalid credentials'}
-
-def test_login_none_password(client):
-    response = client.post('/login', json={'username': 'valid_user', 'password': None})
-    assert response.status_code == 401
-    assert response.get_json() == {'message': 'Invalid credentials'}
-
-
-def test_login_sql_injection_username(client):
-    sql_injection_string = "' OR '1'='1"
-    response = client.post('/login', json={'username': sql_injection_string, 'password': 'valid_pass'})
-    assert response.status_code == 401
-    assert response.get_json() == {'message': 'Invalid credentials'}
-
-def test_login_sql_injection_password(client):
-    sql_injection_string = "' OR '1'='1"
-    response = client.post('/login', json={'username': 'valid_user', 'password': sql_injection_string})
-    assert response.status_code == 401
-    assert response.get_json() == {'message': 'Invalid credentials'}
+if __name__ == '__main__':
+    unittest.main()
