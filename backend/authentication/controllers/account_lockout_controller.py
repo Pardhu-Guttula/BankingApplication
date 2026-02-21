@@ -1,4 +1,4 @@
-# Epic Title: User Authentication and Authorization
+# Epic Title: User Authentication and Security
 
 from flask import Blueprint, request, jsonify
 from backend.authentication.services.account_lockout_service import AccountLockoutService
