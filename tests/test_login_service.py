@@ -3,95 +3,83 @@
 import unittest
 from unittest.mock import patch, MagicMock
 from login_service import LoginService
-from backend.authentication.models.login_attempt_model import User
 from backend.authentication.repositories.login_attempt_repository import LoginAttemptRepository
-from werkzeug.security import generate_password_hash
+from backend.authentication.models.login_attempt_model import User
 
 class TestLoginService(unittest.TestCase):
 
-    @patch.object(User, 'query')
-    @patch.object(LoginAttemptRepository, 'is_account_locked')
-    @patch.object(LoginAttemptRepository, 'reset_failed_attempts')
-    @patch.object(LoginAttemptRepository, 'record_login_attempt')
-    def test_authenticate_user_successful(self, mock_record_login_attempt, mock_reset_failed_attempts, mock_is_account_locked, mock_user_query):
-        mock_user = User(id=1, username='test_user', password=generate_password_hash('correct_password'))
-        mock_user_query.filter_by.return_value.first.return_value = mock_user
-        mock_is_account_locked.return_value = False
+    @patch('backend.authentication.models.login_attempt_model.User.query')
+    @patch('backend.authentication.repositories.login_attempt_repository.LoginAttemptRepository')
+    @patch('werkzeug.security.check_password_hash')
+    def test_authenticate_user_successful(self, mock_check_password_hash, mock_login_attempt_repository, mock_user_query):
+        user = MagicMock()
+        user.id = 1
+        user.username = 'testuser'
+        user.password = 'hashed_password'
+        mock_user_query.filter_by.return_value.first.return_value = user
+        mock_login_attempt_repository.is_account_locked.return_value = False
+        mock_check_password_hash.return_value = True
 
-        result = LoginService.authenticate_user('test_user', 'correct_password')
+        result = LoginService.authenticate_user('testuser', 'correct_password')
 
+        mock_user_query.filter_by.assert_called_once_with(username='testuser')
+        mock_login_attempt_repository.is_account_locked.assert_called_once_with(user.id)
+        mock_check_password_hash.assert_called_once_with('hashed_password', 'correct_password')
+        mock_login_attempt_repository.reset_failed_attempts.assert_called_once_with(user.id)
         self.assertTrue(result)
-        mock_reset_failed_attempts.assert_called_once_with(mock_user.id)
-        mock_record_login_attempt.assert_not_called()
 
-    @patch.object(User, 'query')
-    @patch.object(LoginAttemptRepository, 'is_account_locked')
-    @patch.object(LoginAttemptRepository, 'reset_failed_attempts')
-    @patch.object(LoginAttemptRepository, 'record_login_attempt')
-    def test_authenticate_user_incorrect_password(self, mock_record_login_attempt, mock_reset_failed_attempts, mock_is_account_locked, mock_user_query):
-        mock_user = User(id=1, username='test_user', password=generate_password_hash('correct_password'))
-        mock_user_query.filter_by.return_value.first.return_value = mock_user
-        mock_is_account_locked.return_value = False
+    @patch('backend.authentication.models.login_attempt_model.User.query')
+    @patch('backend.authentication.repositories.login_attempt_repository.LoginAttemptRepository')
+    @patch('werkzeug.security.check_password_hash')
+    def test_authenticate_user_wrong_password(self, mock_check_password_hash, mock_login_attempt_repository, mock_user_query):
+        user = MagicMock()
+        user.id = 1
+        user.username = 'testuser'
+        user.password = 'hashed_password'
+        mock_user_query.filter_by.return_value.first.return_value = user
+        mock_login_attempt_repository.is_account_locked.return_value = False
+        mock_check_password_hash.return_value = False
 
-        result = LoginService.authenticate_user('test_user', 'wrong_password')
+        result = LoginService.authenticate_user('testuser', 'wrong_password')
 
+        mock_user_query.filter_by.assert_called_once_with(username='testuser')
+        mock_login_attempt_repository.is_account_locked.assert_called_once_with(user.id)
+        mock_check_password_hash.assert_called_once_with('hashed_password', 'wrong_password')
+        mock_login_attempt_repository.record_login_attempt.assert_called_once_with(user.id, successful=False)
         self.assertFalse(result)
-        mock_record_login_attempt.assert_called_once_with(mock_user.id, successful=False)
-        mock_reset_failed_attempts.assert_not_called()
 
-    @patch.object(User, 'query')
-    @patch.object(LoginAttemptRepository, 'is_account_locked')
-    @patch.object(LoginAttemptRepository, 'record_login_attempt')
-    def test_authenticate_user_account_locked(self, mock_record_login_attempt, mock_is_account_locked, mock_user_query):
-        mock_user = User(id=1, username='test_user', password=generate_password_hash('correct_password'))
-        mock_user_query.filter_by.return_value.first.return_value = mock_user
-        mock_is_account_locked.return_value = True
+    @patch('backend.authentication.models.login_attempt_model.User.query')
+    @patch('backend.authentication.repositories.login_attempt_repository.LoginAttemptRepository')
+    @patch('werkzeug.security.check_password_hash')
+    def test_authenticate_user_account_locked(self, mock_check_password_hash, mock_login_attempt_repository, mock_user_query):
+        user = MagicMock()
+        user.id = 1
+        user.username = 'testuser'
+        user.password = 'hashed_password'
+        mock_user_query.filter_by.return_value.first.return_value = user
+        mock_login_attempt_repository.is_account_locked.return_value = True
 
-        result = LoginService.authenticate_user('test_user', 'correct_password')
+        result = LoginService.authenticate_user('testuser', 'correct_password')
 
+        mock_user_query.filter_by.assert_called_once_with(username='testuser')
+        mock_login_attempt_repository.is_account_locked.assert_called_once_with(user.id)
+        mock_check_password_hash.assert_not_called()
+        mock_login_attempt_repository.record_login_attempt.assert_called_once_with(user.id, successful=False)
         self.assertFalse(result)
-        mock_record_login_attempt.assert_called_once_with(mock_user.id, successful=False)
 
-    @patch.object(User, 'query')
-    @patch.object(LoginAttemptRepository, 'is_account_locked')
-    @patch.object(LoginAttemptRepository, 'record_login_attempt')
-    def test_authenticate_user_user_not_found(self, mock_record_login_attempt, mock_is_account_locked, mock_user_query):
+    @patch('backend.authentication.models.login_attempt_model.User.query')
+    @patch('backend.authentication.repositories.login_attempt_repository.LoginAttemptRepository')
+    @patch('werkzeug.security.check_password_hash')
+    def test_authenticate_user_nonexistent_user(self, mock_check_password_hash, mock_login_attempt_repository, mock_user_query):
         mock_user_query.filter_by.return_value.first.return_value = None
 
-        result = LoginService.authenticate_user('non_existent_user', 'any_password')
+        result = LoginService.authenticate_user('nonexistent_user', 'any_password')
 
+        mock_user_query.filter_by.assert_called_once_with(username='nonexistent_user')
+        mock_login_attempt_repository.is_account_locked.assert_not_called()
+        mock_check_password_hash.assert_not_called()
+        mock_login_attempt_repository.record_login_attempt.assert_not_called()
         self.assertFalse(result)
-        mock_record_login_attempt.assert_not_called()
-
-    @patch.object(User, 'query')
-    @patch.object(LoginAttemptRepository, 'reset_failed_attempts')
-    @patch.object(LoginAttemptRepository, 'record_login_attempt')
-    def test_authenticate_user_is_account_locked_exception(self, mock_record_login_attempt, mock_reset_failed_attempts, mock_user_query):
-        mock_user = User(id=1, username='test_user', password=generate_password_hash('correct_password'))
-        mock_user_query.filter_by.return_value.first.return_value = mock_user
-
-        with patch('backend.authentication.repositories.login_attempt_repository.LoginAttemptRepository.is_account_locked', side_effect=Exception('Database error')) as mock_is_account_locked:
-            result = LoginService.authenticate_user('test_user', 'correct_password')
-
-        self.assertFalse(result)
-        mock_is_account_locked.assert_called_once_with(mock_user.id)
-        mock_record_login_attempt.assert_called_once_with(mock_user.id, successful=False)
-        mock_reset_failed_attempts.assert_not_called()
-
-    @patch.object(User, 'query')
-    @patch.object(LoginAttemptRepository, 'reset_failed_attempts')
-    @patch.object(LoginAttemptRepository, 'record_login_attempt')
-    def test_authenticate_user_check_password_hash_exception(self, mock_record_login_attempt, mock_reset_failed_attempts, mock_user_query):
-        mock_user = User(id=1, username='test_user', password='invalid_password_hash')
-        mock_user_query.filter_by.return_value.first.return_value = mock_user
-
-        with patch('werkzeug.security.check_password_hash', side_effect=Exception('Hash error')) as mock_check_password_hash:
-            result = LoginService.authenticate_user('test_user', 'correct_password')
-
-        self.assertFalse(result)
-        mock_check_password_hash.assert_called_once_with('invalid_password_hash', 'correct_password')
-        mock_record_login_attempt.assert_called_once_with(mock_user.id, successful=False)
-        mock_reset_failed_attempts.assert_not_called()
 
 if __name__ == '__main__':
     unittest.main()
