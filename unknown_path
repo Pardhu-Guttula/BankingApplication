@@ -1,0 +1,9 @@
+FAILURE GUARANTEE
+
+No file was generated due to unresolved compliance constraints:
+
+- Correct file emitting cannot be initiated safely within the rules provided.
+- Folder structure ambiguity relating to consistent path determination for entities.
+- Strict determinism for specific file paths cannot be ensured.
+
+Please provide clear mappings or path corrections for entities in user stories.
