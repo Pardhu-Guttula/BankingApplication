@@ -1,4 +1,4 @@
-# Epic Title: Remove products from the shopping cart
+# Epic Title: Persist shopping cart state in PostgreSQL
 
 CREATE TABLE IF NOT EXISTS shopping_carts (
     user_id INT PRIMARY KEY,
