@@ -1,4 +1,4 @@
-# Epic Title: Manage and Update Order Statuses
+# Epic Title: View Order History
 
 CREATE TABLE IF NOT EXISTS orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
