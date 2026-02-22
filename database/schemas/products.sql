@@ -1,4 +1,4 @@
-# Epic Title: Update product quantities in the shopping cart
+# Epic Title: Remove products from the shopping cart
 
 CREATE TABLE IF NOT EXISTS products (
     id INT PRIMARY KEY AUTO_INCREMENT,
