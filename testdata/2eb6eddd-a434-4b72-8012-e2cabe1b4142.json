@@ -1,0 +1,46 @@
+```json
+{
+    "test_login_success": [
+        {"user_id": "user1", "password": "password123"},
+        {"user_id": "johndoe", "password": "welcome1"},
+        {"user_id": "alice", "password": "qwertypassword"},
+        {"user_id": "test_user", "password": "test_password"}
+    ],
+    "test_login_failure_invalid_credentials": [
+        {"user_id": "user1", "password": "wrongpass"},
+        {"user_id": "johndoe", "password": "incorrect"},
+        {"user_id": "alice", "password": "badpassword"},
+        {"user_id": "test_user", "password": "wrong_password"}
+    ],
+    "test_login_missing_user_id": [
+        {"password": "password123"},
+        {"password": "welcome1"},
+        {"password": "qwertypassword"},
+        {"password": "test_password"}
+    ],
+    "test_login_missing_password": [
+        {"user_id": "user1"},
+        {"user_id": "johndoe"},
+        {"user_id": "alice"},
+        {"user_id": "test_user"}
+    ],
+    "test_login_missing_user_id_and_password": [
+        {},
+        {},
+        {},
+        {}
+    ],
+    "test_login_account_locked": [
+        {"user_id": "lockeduser1", "password": "anyPassword1"},
+        {"user_id": "locked_safe", "password": "password2"},
+        {"user_id": "suspended", "password": "example_pass"},
+        {"user_id": "locked_user", "password": "any_password"}
+    ],
+    "test_login_mfa_required": [
+        {"user_id": "fa_required_user", "password": "securepassword"},
+        {"user_id": "jane_doe_mfa", "password": "anotherpass"},
+        {"user_id": "mfa_user_124", "password": "pass1234"},
+        {"user_id": "mfa_user", "password": "correct_password"}
+    ]
+}
+```
