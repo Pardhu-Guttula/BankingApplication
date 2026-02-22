@@ -1,0 +1,38 @@
+{
+    "test_login_success": [
+        {"username": "user1", "password": "pass1"},
+        {"username": "john_doe", "password": "secure_pass123"},
+        {"username": "jane_smith", "password": "1234abcd"},
+        {"username": "test_user", "password": "test_pass"},
+        {"username": "alpha_beta", "password": "alpaBeta2021"},
+        {"username": "user_xyz", "password": "Pa$$word!"},
+        {"username": "emma_watson", "password": "watson_pass1"},
+        {"username": "admin_user", "password": "Admin#2022"},
+        {"username": "guest_user", "password": "guest1234"},
+        {"username": "sample_user", "password": "sample#pass"}
+    ],
+    "test_login_invalid_credentials": [
+        {"username": "user1", "password": "wrong_pass"},
+        {"username": "alpha_beta", "password": "wrong_password"},
+        {"username": "john_doe", "password": "incorrectpwd"},
+        {"username": "jane_smith", "password": "wrong_passwd"},
+        {"username": "test_user", "password": "pass1_wrong"},
+        {"username": "guest_user", "password": "wrong1234"},
+        {"username": "sample_user", "password": "incorrectsample"},
+        {"username": "user_xyz", "password": "wrong$word"},
+        {"username": "admin_user", "password": "wrong_Admin"},
+        {"username": "emma_watson", "password": "watson@123"}
+    ],
+    "test_login_exception": [
+        {"username": "user3", "password": "password3"},
+        {"username": "test_user3", "password": "pass_user3"},
+        {"username": "john3", "password": "doepass123"},
+        {"username": "jane3", "password": "smithpassword"},
+        {"username": "guest_user3", "password": "guest3"},
+        {"username": "admin3", "password": "Admin1234"},
+        {"username": "random_user3", "password": "password_xyz"},
+        {"username": "test_sample3", "password": "samplesample#"},
+        {"username": "user_omega3", "password": "omega*777"},
+        {"username": "charlie3", "password": "charlie!charlie"}
+    ]
+}
