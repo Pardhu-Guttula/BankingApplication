@@ -1,16 +1,16 @@
-# Epic Title: Persist shopping cart state in PostgreSQL
+# Epic Title: Display reviews on product detail pages
 
 import logging
 from flask import Flask
-from backend.shopping_cart.routes import app as shopping_cart_app
+from backend.reviews.routes import app as reviews_app
 
 def create_app():
     app = Flask(__name__)
-    app.register_blueprint(shopping_cart_app)
+    app.register_blueprint(reviews_app)
     
     @app.route('/')
     def home():
-        return 'Welcome to the Shopping Cart!'
+        return 'Welcome to the Product Review Display System!'
     
     return app
 
