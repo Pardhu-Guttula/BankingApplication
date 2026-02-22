@@ -1,53 +1,54 @@
 # File: tests/test_auth_controller.py
 import unittest
 from unittest.mock import patch, MagicMock
-from flask import json
+from flask import Flask, jsonify
 from auth_controller import auth_controller
-from backend.authentication.services.auth_service import AuthService
 
-class AuthControllerTest(unittest.TestCase):
+class AuthControllerTestCase(unittest.TestCase):
 
-    def setUp(self):
-        self.app = auth_controller.test_client()
-        self.app.testing = True
-        self.auth_service_patcher = patch('auth_controller.auth_service', autospec=True)
-        self.mock_auth_service = self.auth_service_patcher.start()
-
-    def tearDown(self):
-        self.auth_service_patcher.stop()
+    @patch('auth_controller.auth_service.authenticate')
+    def setUp(self, mock_auth_service):
+        self.app = Flask(__name__)
+        self.app.register_blueprint(auth_controller)
+        self.client = self.app.test_client()
+        self.mock_auth_service = mock_auth_service
 
     def test_login_successful(self):
         self.mock_auth_service.authenticate.return_value = True
-        response = self.app.post('/login', data=json.dumps({'username': 'test', 'password': 'pass'}), content_type='application/json')
+        response = self.client.post('/login', json={"username": "admin", "password": "admin"})
         self.assertEqual(response.status_code, 200)
-        self.assertDictEqual(response.get_json(), {'message': 'Login successful'})
+        self.assertEqual(response.json, {"message": "Login successful"})
 
-    def test_login_invalid_credentials(self):
+    def test_invalid_credentials(self):
         self.mock_auth_service.authenticate.return_value = False
-        response = self.app.post('/login', data=json.dumps({'username': 'test', 'password': 'wrongpass'}), content_type='application/json')
+        response = self.client.post('/login', json={"username": "admin", "password": "wrongpassword"})
         self.assertEqual(response.status_code, 401)
-        self.assertDictEqual(response.get_json(), {'message': 'Invalid credentials'})
+        self.assertEqual(response.json, {"message": "Invalid credentials"})
 
     def test_login_missing_username(self):
-        response = self.app.post('/login', data=json.dumps({'password': 'pass'}), content_type='application/json')
+        response = self.client.post('/login', json={"password": "admin"})
         self.assertEqual(response.status_code, 500)
-        self.assertDictEqual(response.get_json(), {'message': 'Login failed'})
+        self.assertEqual(response.json, {"message": "Login failed"})
 
     def test_login_missing_password(self):
-        response = self.app.post('/login', data=json.dumps({'username': 'test'}), content_type='application/json')
+        response = self.client.post('/login', json={"username": "admin"})
         self.assertEqual(response.status_code, 500)
-        self.assertDictEqual(response.get_json(), {'message': 'Login failed'})
+        self.assertEqual(response.json, {"message": "Login failed"})
 
-    def test_login_with_invalid_json(self):
-        response = self.app.post('/login', data='Invalid JSON', content_type='application/json')
+    @patch('auth_controller.request')
+    def test_login_json_error(self, mock_request):
+        mock_request.json = None
+        response = self.client.post('/login')
         self.assertEqual(response.status_code, 500)
-        self.assertDictEqual(response.get_json(), {'message': 'Login failed'})
+        self.assertEqual(response.json, {"message": "Login failed"})
 
-    def test_login_service_throws_exception(self):
-        self.mock_auth_service.authenticate.side_effect = Exception('Test Exception')
-        response = self.app.post('/login', data=json.dumps({'username': 'test', 'password': 'pass'}), content_type='application/json')
+    @patch('auth_controller.logging.error')
+    @patch('auth_controller.request.json', side_effect=Exception('Test Exception'))
+    def test_login_general_exception(self, mock_request_json, mock_logging_error):
+        response = self.client.post('/login')
         self.assertEqual(response.status_code, 500)
-        self.assertDictEqual(response.get_json(), {'message': 'Login failed'})
+        self.assertEqual(response.json, {"message": "Login failed"})
+        mock_logging_error.assert_called_with('Error in login: Test Exception')
 
 if __name__ == '__main__':
     unittest.main()
