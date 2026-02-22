@@ -1,0 +1,135 @@
+{
+  "Epic_id": "EPIC-1",
+  "TestCases": [
+    {
+      "name": "test_login_successful",
+      "data": {
+        "user_id": "example_user_1",
+        "password": "example_correct_password_1"
+      },
+      "expected_status_code": 200,
+      "expected_response": {
+        "message": "Login successful"
+      }
+    },
+    {
+      "name": "test_login_invalid_data_missing_user_id",
+      "data": {
+        "password": "example_password_2"
+      },
+      "expected_status_code": 400,
+      "expected_response": {
+        "error": "Invalid data"
+      }
+    },
+    {
+      "name": "test_login_invalid_data_missing_password",
+      "data": {
+        "user_id": "example_user_3"
+      },
+      "expected_status_code": 400,
+      "expected_response": {
+        "error": "Invalid data"
+      }
+    },
+    {
+      "name": "test_login_unsuccessful",
+      "data": {
+        "user_id": "example_user_1",
+        "password": "example_wrong_password_1"
+      },
+      "expected_status_code": 401,
+      "expected_response": {
+        "error": "Invalid credentials"
+      }
+    },
+    {
+      "name": "test_login_account_locked",
+      "data": {
+        "user_id": "locked_user_1",
+        "password": "example_correct_password_2"
+      },
+      "expected_status_code": 423,
+      "expected_response": {
+        "error": "Account locked due to too many failed login attempts."
+      }
+    }
+  ],
+
+  "subsequent_failed_attempts_data": [
+    {
+      "user_id": "locked_user_1",
+      "password": "example_wrong_password_2"
+    },
+    {
+      "user_id": "locked_user_2",
+      "password": "example_wrong_password_3"
+    },
+    {
+      "user_id": "locked_user_2",
+      "password": "example_wrong_password_4"
+    },
+    {
+      "user_id": "locked_user_1",
+      "password": "example_wrong_password_5"
+    }
+  ],
+
+  "additional_edge_cases": [
+    {
+      "name": "test_empty_user_id",
+      "data": {
+        "user_id": "",
+        "password": "example_password_3"
+      },
+      "expected_status_code": 400,
+      "expected_response": {
+        "error": "Invalid data"
+      }
+    },
+    {
+      "name": "test_empty_password",
+      "data": {
+        "user_id": "example_user_4",
+        "password": ""
+      },
+      "expected_status_code": 400,
+      "expected_response": {
+        "error": "Invalid data"
+      }
+    },
+    {
+      "name": "test_non_existent_user",
+      "data": {
+        "user_id": "non_existent_user",
+        "password": "example_password_4"
+      },
+      "expected_status_code": 401,
+      "expected_response": {
+        "error": "Invalid credentials"
+      }
+    },
+    {
+      "name": "test_sql_injection",
+      "data": {
+        "user_id": "example_user_5 OR 1=1",
+        "password": "password"
+      },
+      "expected_status_code": 401,
+      "expected_response": {
+        "error": "Invalid credentials"
+      }
+    },
+    {
+      "name": "test_long_user_id_and_password",
+      "data": {
+        "user_id": "super_long_user_id_1234567890qwertyuiopasdfghjklzxcvbnm",
+        "password": "super_long_password_1234567890qwertyuiopasdfghjklzxcvbnm"
+      },
+      "expected_status_code": 400,
+      "expected_response": {
+        "error": "Invalid data"
+      }
+    }
+  ]
+}
