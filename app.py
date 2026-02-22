@@ -1,20 +1,10 @@
-# Epic Title: Display Product Details
+# Epic Title: Implement user authentication and authorization features
 
-import logging
-from flask import Flask
-from backend.product_catalog.routes import app as product_app
+from backend.authentication.controllers.login_controller import app as login_app
+from backend.authentication.controllers.logout_controller import app as logout_app
+from backend.access_control.controllers.role_controller import app as role_app
 
-def create_app():
-    app = Flask(__name__)
-    app.register_blueprint(product_app)
-    
-    @app.route('/')
-    def home():
-        return 'Welcome to the Product Catalog!'
-    
-    return app
-
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
-    app = create_app()
-    app.run(debug=True)
+if __name__ == "__main__":
+    login_app.run(debug=True)
+    logout_app.run(debug=True)
+    role_app.run(debug=True)
