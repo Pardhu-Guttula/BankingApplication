@@ -35,7 +35,7 @@ jobs:
       SECRET_KEY: dummy_secret_key_123
       HOST: '0.0.0.0'
       PORT: '5000'
-      DEPLOYMENT_TARGET: azure
+      DEPLOYMENT_TARGET: aws
       DB_HOST: localhost
       DB_PORT: '3306'
       DB_NAME: dummy_db
