@@ -1,0 +1,96 @@
+```json
+{
+  "test_authenticate_user_success": [
+    {
+      "username": "john_doe",
+      "password": "securePassword123",
+      "hashed_password": "hashedPasswordJDoe",
+      "user_id": 101,
+      "is_account_locked": false,
+      "password_check": true
+    },
+    {
+      "username": "samantha_smith",
+      "password": "Password!23",
+      "hashed_password": "hashedPasswordSSmith",
+      "user_id": 202,
+      "is_account_locked": false,
+      "password_check": true
+    },
+    {
+      "username": "michael_brown",
+      "password": "Pa551word",
+      "hashed_password": "hashedPasswordMBrown",
+      "user_id": 303,
+      "is_account_locked": false,
+      "password_check": true
+    }
+  ],
+  "test_authenticate_user_wrong_password": [
+    {
+      "username": "laura_jones",
+      "password": "wrongPassword1",
+      "hashed_password": "hashedPasswordLJones",
+      "user_id": 404,
+      "is_account_locked": false,
+      "password_check": false
+    },
+    {
+      "username": "kevin_white",
+      "password": "incorrectPassword",
+      "hashed_password": "hashedPasswordKWhite",
+      "user_id": 505,
+      "is_account_locked": false,
+      "password_check": false
+    },
+    {
+      "username": "emma_wilson",
+      "password": "1234Wrong!",
+      "hashed_password": "hashedPasswordEWilson",
+      "user_id": 606,
+      "is_account_locked": false,
+      "password_check": false
+    }
+  ],
+  "test_authenticate_user_account_locked": [
+    {
+      "username": "nathan_green",
+      "password": "anyPassword",
+      "hashed_password": "hashedPasswordNGreen",
+      "user_id": 707,
+      "is_account_locked": true,
+      "password_check": null
+    },
+    {
+      "username": "olivia_king",
+      "password": "password123!",
+      "hashed_password": "hashedPasswordOKing",
+      "user_id": 808,
+      "is_account_locked": true,
+      "password_check": null
+    },
+    {
+      "username": "liam_williams",
+      "password": "LiamPass!2",
+      "hashed_password": "hashedPasswordLWilliams",
+      "user_id": 909,
+      "is_account_locked": true,
+      "password_check": null
+    }
+  ],
+  "test_authenticate_user_no_such_user": [
+    {
+      "username": "no_such_user_1",
+      "password": "no_such_password_1"
+    },
+    {
+      "username": "non_existent_user",
+      "password": "nonExistentPass"
+    },
+    {
+      "username": "unknown_user",
+      "password": "randomPassword"
+    }
+  ]
+}
+```
