@@ -1,4 +1,4 @@
-# Epic Title: Display Product Details
+# Epic Title: Sort Products by Price
 
 from dataclasses import dataclass
 
