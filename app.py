@@ -1,15 +1,15 @@
-# Epic Title: Update Personal Information
+# Epic Title: Manage and Update Order Statuses
 
 import logging
 from flask import Flask
 from flask_login import LoginManager
-from backend.user_profile.routes import app as user_profile_app
+from backend.order_management.routes import app as order_management_app
 
 login_manager = LoginManager()
 
 def create_app():
     app = Flask(__name__)
-    app.register_blueprint(user_profile_app)
+    app.register_blueprint(order_management_app)
     
     login_manager.init_app(app)
     
@@ -20,7 +20,7 @@ def create_app():
     
     @app.route('/')
     def home():
-        return 'Welcome to the User Profile Management System!'
+        return 'Welcome to the Order Management System!'
     
     return app
 
