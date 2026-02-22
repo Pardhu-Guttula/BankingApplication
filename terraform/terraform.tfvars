@@ -1,2 +1,5 @@
-sql_admin_username = "selfserviceadmin"
-sql_admin_password = "P@ssword123"
+resource_group_name = "self-service-rg"
+location = "West Europe"
+tenant_id = "your-tenant-id"
+sql_admin_username = "your-sql-admin-username"
+sql_admin_password = "your-sql-admin-password"
