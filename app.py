@@ -1,4 +1,4 @@
-# Epic Title: Change Password
+# Epic Title: Update Personal Information
 
 import logging
 from flask import Flask
