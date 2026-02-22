@@ -1,16 +1,26 @@
-# Epic Title: Track sales performance metrics
+# Epic Title: Implement review submission form
 
 import logging
 from flask import Flask
-from backend.analytics.routes import app as analytics_app
+from flask_login import LoginManager
+from backend.reviews.routes import app as reviews_app
+
+login_manager = LoginManager()
 
 def create_app():
     app = Flask(__name__)
-    app.register_blueprint(analytics_app)
+    app.register_blueprint(reviews_app)
+    
+    login_manager.init_app(app)
+    
+    @login_manager.user_loader
+    def load_user(user_id):
+        # The actual loading of user should be implemented 
+        pass
     
     @app.route('/')
     def home():
-        return 'Welcome to the Sales Analytics System!'
+        return 'Welcome to the Product Review System!'
     
     return app
 
