@@ -1,3 +1,2 @@
 Flask==2.0.2
 mysql-connector-python==8.0.26
-stripe==2.60.0
