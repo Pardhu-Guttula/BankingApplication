@@ -2,8 +2,8 @@ FAILURE GUARANTEE
 
 No file was generated due to unresolved compliance constraints:
 
-- User-story specified front-end development, yet the folder structure provided does not include explicitly defined UI or front-end directories.
-- Missing alignment between user stories for front-end elements and server-oriented framework (Flask) usage.
+- User-story specified front-end development using Next.js, while the tech stack listed is Flask.
+- Folder structure provided does not include explicitly defined UI or front-end directories aligning with Next.js.
 - Strict determinism and path mapping conflicts prevent correct emitting.
 
-Please provide clear mappings or resolve ambiguities for specified user stories and corresponding folder paths, ensuring coherence between front-end and back-end development related to tech stack.
+Please provide clear mappings or resolve ambiguities for specified user stories and corresponding folder paths, ensuring coherence between the declared tech stack and required front-end framework.
