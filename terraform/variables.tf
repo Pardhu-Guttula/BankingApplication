@@ -1,35 +1,16 @@
-variable "location" {
-  description = "Azure Region"
+variable "aws_region" {
+  description = "The AWS region to deploy in"
   type        = string
-  default     = "West Europe"
+  default     = "us-east-1"
 }
 
-variable "resource_group_name" {
-  description = "Resource group name"
+variable "db_username" {
+  description = "Database username"
   type        = string
-  default     = "example-resources"
 }
 
-variable "app_service_plan_name" {
-  description = "App service plan name"
+variable "db_password" {
+  description = "Database password"
   type        = string
-  default     = "example-appservice-plan"
-}
-
-variable "app_service_name" {
-  description = "App service name"
-  type        = string
-  default     = "example-appservice"
-}
-
-variable "api_management_name" {
-  description = "API management name"
-  type        = string
-  default     = "example-api"
-}
-
-variable "key_vault_name" {
-  description = "Key vault name"
-  type        = string
-  default     = "examplevault"
+  sensitive   = true
 }
