@@ -1,0 +1,40 @@
+```json
+{
+    "test_login_success": [
+        {"username": "user1", "password": "pass1"},
+        {"username": "test_user", "password": "test_pass"},
+        {"username": "example_user", "password": "example_pass"},
+        {"username": "admin", "password": "admin_pass"},
+        {"username": "john_doe", "password": "john_pass"},
+        {"username": "jane_doe", "password": "jane_password"},
+        {"username": "userRandom", "password": "randomPass123"},
+        {"username": "smith", "password": "smith123"},
+        {"username": "alex", "password": "alex_pass"},
+        {"username": "charlie", "password": "charlie_pass"}
+    ],
+    "test_login_invalid_credentials": [
+        {"username": "user1", "password": "wrongpass1"},
+        {"username": "test_user", "password": "wrong_pass"},
+        {"username": "example_user", "password": "incorrect_pass"},
+        {"username": "admin", "password": "wrong_admin_pass"},
+        {"username": "john_doe", "password": "incorrect_pass"},
+        {"username": "jane_doe", "password": "wrong_password"},
+        {"username": "userRandom", "password": "wrongPass"},
+        {"username": "smith", "password": "incorrect123"},
+        {"username": "alex", "password": "wrong_alex_pass"},
+        {"username": "charlie", "password": "wrong_charlie_pass"}
+    ],
+    "test_login_exception": [
+        {"username": "user1", "password": "exception_pass1"},
+        {"username": "test_user", "password": "exception_pass"},
+        {"username": "example_user", "password": "example_pass123"},
+        {"username": "admin", "password": "admin_exception"},
+        {"username": "john_doe", "password": "john_exception"},
+        {"username": "jane_doe", "password": "jane_exception"},
+        {"username": "userRandom", "password": "randomException123"},
+        {"username": "smith", "password": "exception_smith"},
+        {"username": "alex", "password": "alex_exception"},
+        {"username": "charlie", "password": "charlie_exception"}
+    ]
+}
+```
