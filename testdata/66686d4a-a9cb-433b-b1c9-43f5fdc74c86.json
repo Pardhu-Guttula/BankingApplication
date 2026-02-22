@@ -1,0 +1,23 @@
+{
+    "login_success": [
+        {"username": "validUser1", "password": "correctPass1"},
+        {"username": "john_doe", "password": "john1234"},
+        {"username": "alice_wonderland", "password": "wonderland123"},
+        {"username": "loginTester", "password": "testPass123"},
+        {"username": "michael_scott", "password": "dunderMifflin"}
+    ],
+    "login_invalid_credentials": [
+        {"username": "unknownUser", "password": "anyPass"},
+        {"username": "john_doe", "password": "incorrectPass"},
+        {"username": "alice_wonderland", "password": "wrongPassword"},
+        {"username": "michael_scott", "password": "wrongPass"},
+        {"username": "validUser1", "password": "wrongPass1"}
+    ],
+    "login_exception": [
+        {"username": "exceptionTestUser", "password": "anyPass"},
+        {"username": "triggerException", "password": "exceptionPass"},
+        {"username": "testUser", "password": "passwordTriggeringException"},
+        {"username": "failLogin", "password": "exceptionCase"},
+        {"username": "crashTestUser", "password": "exception123"}
+    ]
+}
