@@ -1,7 +1,7 @@
-# Epic Title: Track sales performance metrics
+# Epic Title: Monitor user behavior metrics
 
 from flask import Flask
-from backend.analytics.controllers.sales_controller import sales_bp
+from backend.analytics.controllers.user_behavior_controller import behavior_bp
 
 app = Flask(__name__)
-app.register_blueprint(sales_bp)
+app.register_blueprint(behavior_bp)
