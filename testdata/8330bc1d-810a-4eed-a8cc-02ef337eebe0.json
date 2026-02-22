@@ -1,0 +1,66 @@
+[
+    {
+        "username": "validUser",
+        "password": "validPass"
+    },
+    {
+        "username": "user123",
+        "password": "securePassword"
+    },
+    {
+        "username": "exampleUser",
+        "password": "examplePass"
+    },
+    {
+        "username": "newUser",
+        "password": "newUserPass"
+    },
+    {
+        "username": "special!User",
+        "password": "special@Password"
+    },
+    {
+        "username": "user",
+        "password": "pass"
+    },
+    {
+        "username": "user",
+        "password": "wrongpass"
+    },
+    {
+        "username": "userWithLongUsername1234567890",
+        "password": "longPassword1234567890"
+    },
+    {
+        "username": "123456",
+        "password": "123456"
+    },
+    {
+        "username": "emptyUser",
+        "password": ""
+    },
+    {
+        "username": "",
+        "password": "emptyPassword"
+    },
+    {
+        "username": "userWithSpaces ",
+        "password": " passwordWithSpaces"
+    },
+    {
+        "username": "userWithSpecialChars@#!",
+        "password": "passwordWithSpecialChars@$"
+    },
+    {
+        "username": "<username>",
+        "password": "<password>"
+    },
+    {
+        "username": "userWithSQLInjection' OR '1'='1",
+        "password": "passwordWithSQLInjection' OR '1'='1"
+    },
+    {
+        "username": "multiWordUser OneTwo",
+        "password": "multiWordPassword PassOneTwo"
+    }
+]
