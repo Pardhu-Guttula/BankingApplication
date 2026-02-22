@@ -1,4 +1,4 @@
-# Epic Title: Update product quantities in the shopping cart
+# Epic Title: Remove products from the shopping cart
 
 from backend.shopping_cart.models.shopping_cart import ShoppingCart
 from backend.shopping_cart.models.cart_item import CartItem
@@ -34,23 +34,14 @@ class ShoppingCartRepository:
             cursor.close()
             connection.close()
 
-    def update_item_quantity(self, user_id: int, product_id: int, quantity: int) -> bool:
+    def remove_item_from_cart(self, user_id: int, product_id: int) -> bool:
         connection = mysql.connector.connect(**self.db_config)
         cursor = connection.cursor()
-        
-        try:
-            # Fetch available product quantity
-            cursor.execute("SELECT available FROM products WHERE id = %s", (product_id,))
-            available_quantity = cursor.fetchone()[0]
-            
-            if quantity > available_quantity:
-                return False
 
-            if quantity == 0:
-                cursor.execute("DELETE FROM cart_items WHERE cart_user_id = %s AND product_id = %s", (user_id, product_id))
-            else:
-                cursor.execute("UPDATE cart_items SET quantity = %s WHERE cart_user_id = %s AND product_id = %s", (quantity, user_id, product_id))
-            
+        try:
+            cursor.execute("DELETE FROM cart_items WHERE cart_user_id = %s AND product_id = %s", (user_id, product_id))
+            if cursor.rowcount == 0:
+                return False
             connection.commit()
             return True
         finally:
