@@ -1,4 +1,4 @@
-# Epic Title: Implement review submission form
+# Epic Title: Display reviews on product detail pages
 
 from dataclasses import dataclass
 import datetime
@@ -11,4 +11,5 @@ class Review:
     rating: int
     title: str
     review_text: str
+    moderated: bool
     created_at: datetime.datetime
