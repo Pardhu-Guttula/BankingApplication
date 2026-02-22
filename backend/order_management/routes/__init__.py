@@ -1,4 +1,4 @@
-# Epic Title: Manage and Update Order Statuses
+# Epic Title: View Order History
 
 from flask import Flask
 from backend.order_management.controllers.order_controller import order_bp
