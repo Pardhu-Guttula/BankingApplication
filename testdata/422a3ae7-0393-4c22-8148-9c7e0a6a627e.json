@@ -1,0 +1,50 @@
+{
+  "test_login_success": [
+    {"user_id": "user1", "password": "pass1"},
+    {"user_id": "user2", "password": "pass2"},
+    {"user_id": "user3", "password": "pass3"},
+    {"user_id": "user4", "password": "pass4"},
+    {"user_id": "user5", "password": "pass5"},
+    {"user_id": "user6", "password": "pass6"},
+    {"user_id": "user7", "password": "pass7"},
+    {"user_id": "user8", "password": "pass8"},
+    {"user_id": "user9", "password": "pass9"},
+    {"user_id": "user10", "password": "pass10"}
+  ],
+  "test_login_invalid_data": [
+    {"user_id": "user_only"},
+    {"password": "pass_only"},
+    {},
+    {"user_id": 1234, "password": ["list_pass"]},
+    {"user_id": None, "password": None},
+    {"user_id": "", "password": ""},
+    {"user_id": "valid_user_invalid_password", "password": ""},
+    {"user_id": "", "password": "valid_pass_invalid_user"},
+    {"user_id": "spaces user", "password": "spaces pass"},
+    {"user_id": "maxlengthuser12345678901234567890123456789012345678901234567890", "password": "maxpass1234"}
+  ],
+  "test_login_failure": [
+    {"user_id": "invalid_user1", "password": "invalid_pass1"},
+    {"user_id": "invalid_user2", "password": "invalid_pass2"},
+    {"user_id": "invalid_user3", "password": "invalid_pass3"},
+    {"user_id": "invalid_user4", "password": "invalid_pass4"},
+    {"user_id": "invalid_user5", "password": "invalid_pass5"},
+    {"user_id": "invalid_user6", "password": "invalid_pass6"},
+    {"user_id": "invalid_user7", "password": "invalid_pass7"},
+    {"user_id": "invalid_user8", "password": "invalid_pass8"},
+    {"user_id": "invalid_user9", "password": "invalid_pass9"},
+    {"user_id": "invalid_user10", "password": "invalid_pass10"}
+  ],
+  "test_login_service_exception": [
+    {"user_id": "exception_user1", "password": "exception_pass1"},
+    {"user_id": "exception_user2", "password": "exception_pass2"},
+    {"user_id": "exception_user3", "password": "exception_pass3"},
+    {"user_id": "exception_user4", "password": "exception_pass4"},
+    {"user_id": "exception_user5", "password": "exception_pass5"},
+    {"user_id": "exception_user6", "password": "exception_pass6"},
+    {"user_id": "exception_user7", "password": "exception_pass7"},
+    {"user_id": "exception_user8", "password": "exception_pass8"},
+    {"user_id": "exception_user9", "password": "exception_pass9"},
+    {"user_id": "exception_user10", "password": "exception_pass10"}
+  ]
+}
