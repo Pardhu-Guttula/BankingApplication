@@ -2,8 +2,8 @@ FAILURE GUARANTEE
 
 No file was generated due to unresolved compliance constraints:
 
-- Correct file emitting cannot be initiated safely within the rules provided.
-- Folder structure ambiguity relating to consistent path determination for entities.
-- Strict determinism for specific file paths cannot be ensured.
+- PostgreSQL was specified for table creation while MySQL was listed as the chosen tech stack in user stories.
+- Folder mappings were ambiguous and could not be deterministically derived for "User" as per constraints.
+- Strict determinism and path mapping conflicts prevent correct emitting.
 
-Please provide clear mappings or path corrections for entities in user stories.
+Please provide clear mappings or resolve ambiguities for specified database and folder paths.
