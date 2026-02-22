@@ -1,4 +1,4 @@
-# Epic Title: Filter Products by Category
+# Epic Title: Display Product Details
 
 import logging
 from flask import Flask
