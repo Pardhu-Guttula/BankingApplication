@@ -1,4 +1,4 @@
-# Epic Title: Remove products from the shopping cart
+# Epic Title: Persist shopping cart state in PostgreSQL
 
 from dataclasses import dataclass
 
