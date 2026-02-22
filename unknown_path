@@ -3,7 +3,7 @@ FAILURE GUARANTEE
 No file was generated due to unresolved compliance constraints:
 
 - PostgreSQL was specified for table creation while MySQL was listed as the chosen tech stack in user stories.
-- Folder mappings were ambiguous and could not be deterministically derived for "Product" as per constraints.
+- Folder mappings were ambiguous and could not be deterministically derived for "Category" as per constraints.
 - Strict determinism and path mapping conflicts prevent correct emitting.
 
 Please provide clear mappings or resolve ambiguities for specified database and folder paths.
