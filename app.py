@@ -1,4 +1,4 @@
-# Epic Title: Manage and Update Order Statuses
+# Epic Title: View Order History
 
 import logging
 from flask import Flask
