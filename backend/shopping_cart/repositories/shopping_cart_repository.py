@@ -1,17 +1,17 @@
-# Epic Title: Remove products from the shopping cart
+# Epic Title: Persist shopping cart state in PostgreSQL
 
 from backend.shopping_cart.models.shopping_cart import ShoppingCart
 from backend.shopping_cart.models.cart_item import CartItem
 from backend.user_profile.models.user import User
 from typing import Optional
-import mysql.connector
+import psycopg2
 
 class ShoppingCartRepository:
     def __init__(self, db_config: dict):
         self.db_config = db_config
     
     def get_cart_by_user_id(self, user_id: int) -> Optional[ShoppingCart]:
-        connection = mysql.connector.connect(**self.db_config)
+        connection = psycopg2.connect(**self.db_config)
         cursor = connection.cursor()
         
         try:
@@ -34,8 +34,26 @@ class ShoppingCartRepository:
             cursor.close()
             connection.close()
 
+    def add_or_update_item_in_cart(self, user_id: int, product_id: int, quantity: int) -> bool:
+        connection = psycopg2.connect(**self.db_config)
+        cursor = connection.cursor()
+
+        try:
+            cursor.execute("""
+                INSERT INTO cart_items (cart_user_id, product_id, quantity)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (cart_user_id, product_id)
+                DO UPDATE SET quantity = EXCLUDED.quantity
+                WHERE cart_items.cart_user_id = %s AND cart_items.product_id = %s
+            """, (user_id, product_id, quantity, user_id, product_id))
+            connection.commit()
+            return True
+        finally:
+            cursor.close()
+            connection.close()
+
     def remove_item_from_cart(self, user_id: int, product_id: int) -> bool:
-        connection = mysql.connector.connect(**self.db_config)
+        connection = psycopg2.connect(**self.db_config)
         cursor = connection.cursor()
 
         try:
