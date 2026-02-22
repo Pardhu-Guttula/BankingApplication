@@ -1,15 +1,15 @@
-# Epic Title: Remove products from the shopping cart
+# Epic Title: Persist shopping cart state in PostgreSQL
 
 from backend.shopping_cart.models.product import Product
 from typing import List, Optional
-import mysql.connector
+import psycopg2
 
 class ProductRepository:
     def __init__(self, db_config: dict):
         self.db_config = db_config
     
     def get_product_by_id(self, product_id: int) -> Optional[Product]:
-        connection = mysql.connector.connect(**self.db_config)
+        connection = psycopg2.connect(**self.db_config)
         cursor = connection.cursor()
         
         try:
