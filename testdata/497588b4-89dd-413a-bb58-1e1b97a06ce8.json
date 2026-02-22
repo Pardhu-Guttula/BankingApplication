@@ -1,0 +1,66 @@
+{
+  "EPIC-1": {
+    "test_authenticate_user_success": [
+      {
+        "username": "user1",
+        "password": "password1",
+        "hashed_password": "hashed_password1"
+      },
+      {
+        "username": "john_doe",
+        "password": "john_password",
+        "hashed_password": "hashed_john_password"
+      },
+      {
+        "username": "jane_smith",
+        "password": "jane_password",
+        "hashed_password": "hashed_jane_password"
+      }
+    ],
+    "test_authenticate_user_wrong_password": [
+      {
+        "username": "user1",
+        "password": "wrong_password1",
+        "expected_hashed_password": "hashed_password1"
+      },
+      {
+        "username": "john_doe",
+        "password": "wrong_password",
+        "expected_hashed_password": "hashed_john_password"
+      },
+      {
+        "username": "jane_smith",
+        "password": "incorrect_password",
+        "expected_hashed_password": "hashed_jane_password"
+      }
+    ],
+    "test_authenticate_user_account_locked": [
+      {
+        "username": "user1",
+        "password": "password1"
+      },
+      {
+        "username": "john_doe",
+        "password": "john_password"
+      },
+      {
+        "username": "jane_smith",
+        "password": "jane_password"
+      }
+    ],
+    "test_authenticate_user_no_such_user": [
+      {
+        "username": "non_existing_user",
+        "password": "does_not_matter"
+      },
+      {
+        "username": "unknown",
+        "password": "unknown_password"
+      },
+      {
+        "username": "ghost_user",
+        "password": "ghost_password"
+      }
+    ]
+  }
+}
