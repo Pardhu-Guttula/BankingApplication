@@ -1,16 +1,16 @@
-# Epic Title: Sort Products by Price
+# Epic Title: Update product quantities in the shopping cart
 
 import logging
 from flask import Flask
-from backend.product_catalog.routes import app as product_app
+from backend.shopping_cart.routes import app as shopping_cart_app
 
 def create_app():
     app = Flask(__name__)
-    app.register_blueprint(product_app)
+    app.register_blueprint(shopping_cart_app)
     
     @app.route('/')
     def home():
-        return 'Welcome to the Product Catalog!'
+        return 'Welcome to the Shopping Cart!'
     
     return app
 
