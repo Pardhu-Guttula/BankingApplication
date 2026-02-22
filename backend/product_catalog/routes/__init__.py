@@ -1,4 +1,4 @@
-# Epic Title: Display Product Details
+# Epic Title: Sort Products by Price
 
 from flask import Flask
 from backend.product_catalog.controllers.product_controller import product_bp
