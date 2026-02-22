@@ -1,4 +1,4 @@
-# Epic Title: Manage and Update Order Statuses
+# Epic Title: View Order History
 
 from dataclasses import dataclass
 from typing import List
@@ -17,10 +17,3 @@ class Order:
     items: List<OrderItem]
     total_amount: float
     status: str
-
-@dataclass
-class OrderStatus:
-    order_id: int
-    status: str
-    updated_at: datetime.datetime
-    updated_by: int  # administrator ID
