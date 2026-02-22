@@ -1,0 +1,81 @@
+{
+    "TestLoginService": {
+        "test_authenticate_user_success": [
+            {
+                "username": "user123",
+                "password": "passwordCorrect",
+                "user_id": 101,
+                "hashed_password": "hashed_password1"
+            },
+            {
+                "username": "janedoe",
+                "password": "mySecretPassword",
+                "user_id": 202,
+                "hashed_password": "hashed_password2"
+            },
+            {
+                "username": "johnsmith",
+                "password": "johnsSecurePwd",
+                "user_id": 303,
+                "hashed_password": "hashed_password3"
+            }
+        ],
+        "test_authenticate_user_wrong_password": [
+            {
+                "username": "user456",
+                "password": "wrongPwd",
+                "user_id": 404,
+                "hashed_password": "another_hashed_password1"
+            },
+            {
+                "username": "testuser",
+                "password": "incorrectPassword123",
+                "user_id": 505,
+                "hashed_password": "another_hashed_password2"
+            },
+            {
+                "username": "example",
+                "password": "notRightPassword!",
+                "user_id": 606,
+                "hashed_password": "another_hashed_password3"
+            }
+        ],
+        "test_authenticate_user_account_locked": [
+            {
+                "username": "lockeduser",
+                "password": "anyPassword",
+                "user_id": 707,
+                "account_locked": true
+            },
+            {
+                "username": "timeoutperson",
+                "password": "tryEverything!",
+                "user_id": 808,
+                "account_locked": true
+            },
+            {
+                "username": "disableman",
+                "password": "whateverPassword",
+                "user_id": 909,
+                "account_locked": true
+            }
+        ],
+        "test_authenticate_user_no_such_user": [
+            {
+                "username": "ghost_user",
+                "password": "unknownPassword",
+                "user_not_exists": true
+            },
+            {
+                "username": "nonexistent",
+                "password": "noRecord",
+                "user_not_exists": true
+            },
+            {
+                "username": "missingperson",
+                "password": "notHere",
+                "user_not_exists": true
+            }
+        ]
+    }
+}
