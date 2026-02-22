@@ -1,0 +1,75 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "test_user",
+      "password": "hashed_password",
+      "account_locked": false,
+      "failed_login_attempts": 0
+    },
+    {
+      "id": 2,
+      "username": "wrong_password_user",
+      "password": "hashed_password2",
+      "account_locked": false,
+      "failed_login_attempts": 0
+    },
+    {
+      "id": 3,
+      "username": "locked_user",
+      "password": "hashed_password3",
+      "account_locked": true,
+      "failed_login_attempts": 5
+    },
+    {
+      "id": 4,
+      "username": "non_existing_user",
+      "password": "",
+      "account_locked": false,
+      "failed_login_attempts": 0
+    }
+  ],
+  "login_attempts": [
+    {
+      "user_id": 1,
+      "timestamp": "2023-10-01T10:00:00Z",
+      "successful": true
+    },
+    {
+      "user_id": 2,
+      "timestamp": "2023-10-01T11:00:00Z",
+      "successful": false
+    },
+    {
+      "user_id": 3,
+      "timestamp": "2023-10-01T12:00:00Z",
+      "successful": false
+    }
+  ],
+  "test_scenarios": [
+    {
+      "description": "Valid username and password",
+      "username": "test_user",
+      "password": "test_password",
+      "expected_result": true
+    },
+    {
+      "description": "Valid username but wrong password",
+      "username": "wrong_password_user",
+      "password": "wrong_test_password",
+      "expected_result": false
+    },
+    {
+      "description": "Account is locked",
+      "username": "locked_user",
+      "password": "test_password3",
+      "expected_result": false
+    },
+    {
+      "description": "Non-existent username",
+      "username": "non_existing_user",
+      "password": "test_password",
+      "expected_result": false
+    }
+  ]
+}
