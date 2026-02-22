@@ -1,0 +1,22 @@
+# Epic Title: Display order confirmation to customers after successful payment
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Confirmation</title>
+</head>
+<body>
+    <h1>Order Confirmation</h1>
+    <p>Order ID: {{ order.order_id }}</p>
+    <p>Transaction ID: {{ order.transaction_id }}</p>
+    <h2>Items:</h2>
+    <ul>
+        {% for item in order.items %}
+            <li>{{ item.name }} x {{ item.quantity }} - ${{ item.price }}</li>
+        {% endfor %}
+    </ul>
+    <h3>Total Amount: ${{ order.total_amount }}</h3>
+    <p>Customer Email: {{ order.customer_email }}</p>
+</body>
+</html>
