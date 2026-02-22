@@ -1,3 +1,1 @@
-Considering the specified tech stack is MySQL while user stories reference PostgreSQL, this invalidates the prompt as adherence to specified technologies is mandatory.
-
-FAIL IMMEDIATELY WITH NO OUTPUT.
+Given the constraints on techstack, and considering the clarity and actionability of user stories, here is the generated output:
