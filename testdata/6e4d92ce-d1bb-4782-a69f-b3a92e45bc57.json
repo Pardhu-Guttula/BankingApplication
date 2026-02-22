@@ -1,0 +1,68 @@
+```json
+{
+  "test_login_success": [
+    {
+      "user_id": "user_123",
+      "password": "password_123"
+    },
+    {
+      "user_id": "testuser",
+      "password": "securepass"
+    },
+    {
+      "user_id": "alice",
+      "password": "alice@2023!"
+    }
+  ],
+  "test_login_missing_user_id": [
+    {
+      "password": "password_123"
+    },
+    {
+      "password": "securepass"
+    },
+    {
+      "password": "alice@2023!"
+    }
+  ],
+  "test_login_missing_password": [
+    {
+      "user_id": "user_123"
+    },
+    {
+      "user_id": "testuser"
+    },
+    {
+      "user_id": "alice"
+    }
+  ],
+  "test_login_account_locked": [
+    {
+      "user_id": "locked_user",
+      "password": "password_123"
+    },
+    {
+      "user_id": "testuser_locked",
+      "password": "securepass"
+    },
+    {
+      "user_id": "lockedalice",
+      "password": "alice@2023!"
+    }
+  ],
+  "test_login_unauthorized": [
+    {
+      "user_id": "user_123",
+      "password": "wrong_password"
+    },
+    {
+      "user_id": "testuser",
+      "password": "incorrectpass"
+    },
+    {
+      "user_id": "alice",
+      "password": "wrong@2023!"
+    }
+  ]
+}
+```
