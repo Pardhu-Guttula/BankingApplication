@@ -1,0 +1,68 @@
+Sure, here is the generated test data for each test case in JSON format:
+
+```json
+{
+  "test_login_success_data": [
+    {
+      "user_id": "john_doe",
+      "password": "johndoe@123"
+    },
+    {
+      "user_id": "mary_jane",
+      "password": "maryjane@456"
+    }
+  ],
+  "test_login_failure_invalid_credentials_data": [
+    {
+      "user_id": "invalid_user1",
+      "password": "wrongPass1"
+    },
+    {
+      "user_id": "user_no_exists",
+      "password": "incorrectPass99"
+    }
+  ],
+  "test_login_missing_user_id_data": [
+    {
+      "password": "somesecret123"
+    },
+    {
+      "password": "anothersecret456"
+    }
+  ],
+  "test_login_missing_password_data": [
+    {
+      "user_id": "user_missing_password"
+    },
+    {
+      "user_id": "another_user_missing_password"
+    }
+  ],
+  "test_login_missing_user_id_and_password_data": [
+    {},
+    {}
+  ],
+  "test_login_account_locked_data": [
+    {
+      "user_id": "lockeduser1",
+      "password": "irrelevantpassword"
+    },
+    {
+      "user_id": "user_locked_out",
+      "password": "anypassword123"
+    }
+  ],
+  "test_login_mfa_required_data": [
+    {
+      "user_id": "mfa_required_user",
+      "password": "password_need_mfa"
+    },
+    {
+      "user_id": "mfa_user_123",
+      "password": "need_mfa_check"
+    }
+  ]
+}
+```
+
+This JSON represents varying test data for each of the test cases within your provided test code file, each having multiple entries to randomize the data.
