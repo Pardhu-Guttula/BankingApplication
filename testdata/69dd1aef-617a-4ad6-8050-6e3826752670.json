@@ -1,0 +1,109 @@
+Here's the test data for the user authentication and authorization, segregated by each test case:
+
+```json
+{
+  "test_login_success": [
+    {
+      "user_id": "john_doe",
+      "password": "securePassword123"
+    },
+    {
+      "user_id": "jane.smith",
+      "password": "password123"
+    },
+    {
+      "user_id": "user123",
+      "password": "Pass1234"
+    },
+    {
+      "user_id": "test_user",
+      "password": "test_password"
+    }
+  ],
+  "test_login_failure_invalid_credentials": [
+    {
+      "user_id": "john_doe",
+      "password": "wrongPassword123"
+    },
+    {
+      "user_id": "jane.smith",
+      "password": "incorrect123"
+    },
+    {
+      "user_id": "user123",
+      "password": "Wrong1234"
+    },
+    {
+      "user_id": "test_user",
+      "password": "wrong_password"
+    }
+  ],
+  "test_login_missing_user_id": [
+    {
+      "password": "securePassword123"
+    },
+    {
+      "password": "password123"
+    },
+    {
+      "password": "Pass1234"
+    },
+    {
+      "password": "test_password"
+    }
+  ],
+  "test_login_missing_password": [
+    {
+      "user_id": "john_doe"
+    },
+    {
+      "user_id": "jane.smith"
+    },
+    {
+      "user_id": "user123"
+    },
+    {
+      "user_id": "test_user"
+    }
+  ],
+  "test_login_missing_user_id_and_password": [
+    {}
+  ],
+  "test_login_account_locked": [
+    {
+      "user_id": "locked_user_1",
+      "password": "anyPassword"
+    },
+    {
+      "user_id": "locked_user_2",
+      "password": "somePassword"
+    },
+    {
+      "user_id": "locked_user_3",
+      "password": "anyPassword123"
+    },
+    {
+      "user_id": "locked_user",
+      "password": "any_password"
+    }
+  ],
+  "test_login_mfa_required": [
+    {
+      "user_id": "mfa_user_1",
+      "password": "correctPassword"
+    },
+    {
+      "user_id": "mfa_user_2",
+      "password": "securePass123"
+    },
+    {
+      "user_id": "mfa_user_3",
+      "password": "rightPass123"
+    },
+    {
+      "user_id": "mfa_user",
+      "password": "correct_password"
+    }
+  ]
+}
+```
