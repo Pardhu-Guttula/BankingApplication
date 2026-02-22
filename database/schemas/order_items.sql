@@ -1,4 +1,4 @@
-# Epic Title: Display order confirmation to customers after successful payment
+# Epic Title: Manage and Update Order Statuses
 
 CREATE TABLE IF NOT EXISTS order_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
