@@ -1,0 +1,46 @@
+```json
+{
+  "test_authenticate_success": [
+    {
+      "username": "test_user1",
+      "password": "test_password1"
+    },
+    {
+      "username": "another_user",
+      "password": "another_password123"
+    },
+    {
+      "username": "user123",
+      "password": "secure!password"
+    }
+  ],
+  "test_authenticate_failure_invalid_password": [
+    {
+      "username": "test_user1",
+      "password": "wrong_password"
+    },
+    {
+      "username": "another_user",
+      "password": "invalidpassword321"
+    },
+    {
+      "username": "user123",
+      "password": "incorrect_password"
+    }
+  ],
+  "test_authenticate_failure_invalid_username": [
+    {
+      "username": "nonexistent_user",
+      "password": "some_password"
+    },
+    {
+      "username": "unknown_user",
+      "password": "another_password123"
+    },
+    {
+      "username": "not_in_db",
+      "password": "no_such_password"
+    }
+  ]
+}
+```
