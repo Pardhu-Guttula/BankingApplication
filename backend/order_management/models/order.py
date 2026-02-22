@@ -1,4 +1,4 @@
-# Epic Title: Display order confirmation to customers after successful payment
+# Epic Title: Manage and Update Order Statuses
 
 from dataclasses import dataclass
 from typing import List
@@ -13,7 +13,14 @@ class OrderItem:
 @dataclass
 class Order:
     order_id: int
-    transaction_id: str
-    items: List[OrderItem]
+    user_id: int
+    items: List<OrderItem]
     total_amount: float
-    customer_email: str
+    status: str
+
+@dataclass
+class OrderStatus:
+    order_id: int
+    status: str
+    updated_at: datetime.datetime
+    updated_by: int  # administrator ID
