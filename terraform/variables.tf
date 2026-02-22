@@ -1,16 +1,9 @@
-variable "aws_region" {
-  description = "The AWS region to deploy in"
-  type        = string
-  default     = "us-east-1"
-}
-
-variable "db_username" {
-  description = "Database username"
+variable "sql_administrator_login" {
+  description = "The administrator login name for the SQL Server."
   type        = string
 }
 
-variable "db_password" {
-  description = "Database password"
+variable "sql_administrator_password" {
+  description = "The password associated with the sql_admin_login"
   type        = string
-  sensitive   = true
 }
