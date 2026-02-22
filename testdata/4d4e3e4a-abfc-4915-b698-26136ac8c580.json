@@ -1,0 +1,72 @@
+[
+    {
+        "test_case": "test_login_success",
+        "test_data": [
+            {"user_id": "test_user1", "password": "test_password1"},
+            {"user_id": "user_1234", "password": "password_1234"},
+            {"user_id": "sampleUser", "password": "samplePass!"},
+            {"user_id": "abc_xyz", "password": "password_XYZ"},
+            {"user_id": "valid_user", "password": "valid_pass!"}
+        ]
+    },
+    {
+        "test_case": "test_login_failure_invalid_credentials",
+        "test_data": [
+            {"user_id": "test_user1", "password": "wrong_password1"},
+            {"user_id": "user_1234", "password": "incorrect_1234"},
+            {"user_id": "sampleUser", "password": "wrong!Pass"},
+            {"user_id": "abc_xyz", "password": "incorrect_XYZ"},
+            {"user_id": "valid_user", "password": "wrong_pass!"}
+        ]
+    },
+    {
+        "test_case": "test_login_missing_user_id",
+        "test_data": [
+            {"password": "test_password1"},
+            {"password": "password_1234"},
+            {"password": "samplePass!"},
+            {"password": "password_XYZ"},
+            {"password": "valid_pass!"}
+        ]
+    },
+    {
+        "test_case": "test_login_missing_password",
+        "test_data": [
+            {"user_id": "test_user1"},
+            {"user_id": "user_1234"},
+            {"user_id": "sampleUser"},
+            {"user_id": "abc_xyz"},
+            {"user_id": "valid_user"}
+        ]
+    },
+    {
+        "test_case": "test_login_missing_user_id_and_password",
+        "test_data": [
+            {},
+            {},
+            {},
+            {},
+            {}
+        ]
+    },
+    {
+        "test_case": "test_login_account_locked",
+        "test_data": [
+            {"user_id": "locked_user1", "password": "any_password1"},
+            {"user_id": "locked_user123", "password": "password_123"},
+            {"user_id": "accountLocked", "password": "lockedPass!"},
+            {"user_id": "user_locked", "password": "password_LOCK"},
+            {"user_id": "locked_account", "password": "password123!"}
+        ]
+    },
+    {
+        "test_case": "test_login_mfa_required",
+        "test_data": [
+            {"user_id": "mfa_user1", "password": "correct_password1"},
+            {"user_id": "multi_factor123", "password": "password_factor123"},
+            {"user_id": "secureUser", "password": "securePass!"},
+            {"user_id": "user_mfa", "password": "password_MFA"},
+            {"user_id": "mfa_required", "password": "mfa_pass123!"}
+        ]
+    }
+]
