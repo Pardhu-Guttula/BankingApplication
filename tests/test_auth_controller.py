@@ -1,47 +1,56 @@
 # File: tests/test_auth_controller.py
+import json
 import unittest
-from unittest.mock import patch, MagicMock
-from flask import json
+from unittest.mock import patch
+from flask import Flask
 from auth_controller import auth_controller
-from backend.authentication.services.auth_service import AuthService
 
-class AuthControllerTests(unittest.TestCase):
+class AuthControllerTest(unittest.TestCase):
     def setUp(self):
-        self.app = auth_controller.test_client()
-        self.app.testing = True
+        self.app = Flask(__name__)
+        self.app.register_blueprint(auth_controller)
+        self.client = self.app.test_client()
 
-    @patch.object(AuthService, 'authenticate')
-    def test_login_success(self, mock_authenticate):
-        mock_authenticate.return_value = True
-        response = self.app.post('/login', data=json.dumps({'username': 'user1', 'password': 'pass1'}), content_type='application/json')
+    @patch('auth_controller.auth_service')
+    def test_login_successful(self, mock_auth_service):
+        mock_auth_service.authenticate.return_value = True
+        response = self.client.post('/login', json={'username': 'test_user', 'password': 'test_pass'})
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json['message'], 'Login successful')
+        self.assertEqual(response.json, {'message': 'Login successful'})
 
-    @patch.object(AuthService, 'authenticate')
-    def test_login_invalid_credentials(self, mock_authenticate):
-        mock_authenticate.return_value = False
-        response = self.app.post('/login', data=json.dumps({'username': 'user1', 'password': 'wrongpass'}), content_type='application/json')
+    @patch('auth_controller.auth_service')
+    def test_login_invalid_credentials(self, mock_auth_service):
+        mock_auth_service.authenticate.return_value = False
+        response = self.client.post('/login', json={'username': 'test_user', 'password': 'invalid_pass'})
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response.json['message'], 'Invalid credentials')
+        self.assertEqual(response.json, {'message': 'Invalid credentials'})
 
-    @patch.object(AuthService, 'authenticate')
-    def test_login_missing_username(self, mock_authenticate):
-        response = self.app.post('/login', data=json.dumps({'password': 'pass1'}), content_type='application/json')
+    @patch('auth_controller.auth_service')
+    def test_login_missing_username(self, mock_auth_service):
+        response = self.client.post('/login', json={'password': 'test_pass'})
         self.assertEqual(response.status_code, 500)
-        self.assertEqual(response.json['message'], 'Login failed')
+        self.assertEqual(response.json, {'message': 'Login failed'})
 
-    @patch.object(AuthService, 'authenticate')
-    def test_login_missing_password(self, mock_authenticate):
-        response = self.app.post('/login', data=json.dumps({'username': 'user1'}), content_type='application/json')
+    @patch('auth_controller.auth_service')
+    def test_login_missing_password(self, mock_auth_service):
+        response = self.client.post('/login', json={'username': 'test_user'})
         self.assertEqual(response.status_code, 500)
-        self.assertEqual(response.json['message'], 'Login failed')
+        self.assertEqual(response.json, {'message': 'Login failed'})
 
-    @patch.object(AuthService, 'authenticate')
-    def test_login_exception(self, mock_authenticate):
-        mock_authenticate.side_effect = Exception('Simulated error')
-        response = self.app.post('/login', data=json.dumps({'username': 'user1', 'password': 'pass1'}), content_type='application/json')
+    @patch('auth_controller.auth_service')
+    def test_login_internal_server_error(self, mock_auth_service):
+        mock_auth_service.authenticate.side_effect = Exception('Some error')
+        response = self.client.post('/login', json={'username': 'test_user', 'password': 'test_pass'})
         self.assertEqual(response.status_code, 500)
-        self.assertEqual(response.json['message'], 'Login failed')
+        self.assertEqual(response.json, {'message': 'Login failed'})
+
+    @patch('auth_controller.request')
+    @patch('auth_controller.auth_service')
+    def test_login_with_unexpected_exception(self, mock_auth_service, mock_request):
+        mock_request.json = None
+        response = self.client.post('/login')
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json, {'message': 'Login failed'})
 
 if __name__ == '__main__':
     unittest.main()
