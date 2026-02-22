@@ -1,4 +1,4 @@
-# Epic Title: Monitor user behavior metrics
+# Epic Title: Track sales performance metrics
 
 import logging
 from flask import Flask
@@ -10,7 +10,7 @@ def create_app():
     
     @app.route('/')
     def home():
-        return 'Welcome to the User Behavior Analytics System!'
+        return 'Welcome to the Sales Analytics System!'
     
     return app
 
