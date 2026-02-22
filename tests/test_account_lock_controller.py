@@ -1,21 +1,25 @@
 # File: tests/test_account_lock_controller.py
 import unittest
-from unittest.mock import patch
-from backend.authentication.controllers.account_lock_controller import account_lock_controller
+from unittest.mock import patch, MagicMock
+from flask import Flask
+from account_lock_controller import account_lock_controller
 
-class TestAccountLockController(unittest.TestCase):
+class AccountLockControllerTest(unittest.TestCase):
+
     def setUp(self):
-        self.client = account_lock_controller.test_client()
+        self.app = Flask(__name__)
+        self.app.register_blueprint(account_lock_controller)
+        self.client = self.app.test_client()
 
-    @patch('backend.authentication.controllers.account_lock_controller.AccountLockService.process_login')
+    @patch('account_lock_controller.AccountLockService.process_login')
     def test_login_success(self, mock_process_login):
         mock_process_login.return_value = (True, 'Login successful')
         response = self.client.post('/login', json={'user_id': 'user1', 'password': 'pass123'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json, {'message': 'Login successful'})
 
-    @patch('backend.authentication.controllers.account_lock_controller.AccountLockService.process_login')
-    def test_login_failure(self, mock_process_login):
+    @patch('account_lock_controller.AccountLockService.process_login')
+    def test_login_invalid_credentials(self, mock_process_login):
         mock_process_login.return_value = (False, 'Invalid credentials')
         response = self.client.post('/login', json={'user_id': 'user1', 'password': 'wrongpass'})
         self.assertEqual(response.status_code, 400)
@@ -31,12 +35,15 @@ class TestAccountLockController(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json, {'error': 'Invalid data'})
 
-    def test_login_empty_request(self):
+    def test_login_empty_request_body(self):
         response = self.client.post('/login', data={})
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json, {'error': 'Invalid data'})
 
     def test_login_invalid_json(self):
-        response = self.client.post('/login', data='Invalid JSON', content_type='application/json')
+        response = self.client.post('/login', data='invalid json', content_type='application/json')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json, {'error': 'Invalid data'})
+
+if __name__ == '__main__':
+    unittest.main()
