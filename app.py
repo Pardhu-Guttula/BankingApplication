@@ -1,16 +1,16 @@
-# Epic Title: Integrate payment gateway (Stripe) for processing payments
+# Epic Title: Add products to the shopping cart
 
 import logging
 from flask import Flask
-from backend.payment.routes import app as payment_app
+from backend.shopping_cart.routes import app as shopping_cart_app
 
 def create_app():
     app = Flask(__name__)
-    app.register_blueprint(payment_app)
+    app.register_blueprint(shopping_cart_app)
     
     @app.route('/')
     def home():
-        return 'Welcome to the Payment Gateway!'
+        return 'Welcome to the Shopping Cart!'
     
     return app
 
