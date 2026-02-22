@@ -1,0 +1,117 @@
+[
+    {
+        "test_case": "test_login_success",
+        "test_data": [
+            {
+                "user_id": "john_doe",
+                "password": "password123"
+            },
+            {
+                "user_id": "jane_smith",
+                "password": "MySecurePwd!"
+            },
+            {
+                "user_id": "admin_user",
+                "password": "admin2023"
+            },
+            {
+                "user_id": "guest_account",
+                "password": "guest1234"
+            },
+            {
+                "user_id": "test_user",
+                "password": "test_password"
+            }
+        ]
+    },
+    {
+        "test_case": "test_login_missing_user_id",
+        "test_data": [
+            {
+                "password": "password123"
+            },
+            {
+                "password": "MySecurePwd!"
+            },
+            {
+                "password": "admin2023"
+            },
+            {
+                "password": "guest1234"
+            },
+            {
+                "password": "test_password"
+            }
+        ]
+    },
+    {
+        "test_case": "test_login_missing_password",
+        "test_data": [
+            {
+                "user_id": "john_doe"
+            },
+            {
+                "user_id": "jane_smith"
+            },
+            {
+                "user_id": "admin_user"
+            },
+            {
+                "user_id": "guest_account"
+            },
+            {
+                "user_id": "test_user"
+            }
+        ]
+    },
+    {
+        "test_case": "test_login_account_locked",
+        "test_data": [
+            {
+                "user_id": "locked_user1",
+                "password": "any_password"
+            },
+            {
+                "user_id": "locked_user2",
+                "password": "any_password"
+            },
+            {
+                "user_id": "locked_user3",
+                "password": "any_password"
+            },
+            {
+                "user_id": "blocked_user",
+                "password": "any_password"
+            },
+            {
+                "user_id": "restricted_user",
+                "password": "any_password"
+            }
+        ]
+    },
+    {
+        "test_case": "test_login_unauthorized",
+        "test_data": [
+            {
+                "user_id": "john_doe",
+                "password": "wrong_password"
+            },
+            {
+                "user_id": "jane_smith",
+                "password": "incorrect"
+            },
+            {
+                "user_id": "admin_user",
+                "password": "wrong_admin"
+            },
+            {
+                "user_id": "guest_account",
+                "password": "guest_wrong"
+            },
+            {
+                "user_id": "test_user",
+                "password": "test_wrong_password"
+            }
+        ]
+    }
+]
