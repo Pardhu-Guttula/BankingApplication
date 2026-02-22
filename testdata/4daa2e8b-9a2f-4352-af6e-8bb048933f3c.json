@@ -1,0 +1,70 @@
+```json
+{
+  "test_authenticate_success": [
+    {
+      "username": "user1",
+      "password": "password1"
+    },
+    {
+      "username": "username123",
+      "password": "complexPassword123"
+    },
+    {
+      "username": "test_user",
+      "password": "Test@12345"
+    },
+    {
+      "username": "alpha_beta",
+      "password": "alphaBeta@123"
+    },
+    {
+      "username": "randomuser",
+      "password": "rand0mPass!"
+    }
+  ],
+  "test_authenticate_failure_invalid_password": [
+    {
+      "username": "user1",
+      "password": "wrongpassword"
+    },
+    {
+      "username": "username123",
+      "password": "123WrongPassword"
+    },
+    {
+      "username": "test_user",
+      "password": "InvalidPassword1"
+    },
+    {
+      "username": "alpha_beta",
+      "password": "betaAlphaWrong@123"
+    },
+    {
+      "username": "randomuser",
+      "password": "incorrectPass!"
+    }
+  ],
+  "test_authenticate_failure_invalid_username": [
+    {
+      "username": "unknown_user",
+      "password": "password1"
+    },
+    {
+      "username": "random_user123",
+      "password": "complexPassword123"
+    },
+    {
+      "username": "does_not_exist",
+      "password": "Test@12345"
+    },
+    {
+      "username": "invalid_username",
+      "password": "alphaBeta@123"
+    },
+    {
+      "username": "nonexistentuser",
+      "password": "rand0mPass!"
+    }
+  ]
+}
+```
