@@ -1,0 +1,42 @@
+{
+  "test_login_success": [
+    { "user_id": "user_1", "password": "password1" },
+    { "user_id": "user_2", "password": "password2" },
+    { "user_id": "user_3", "password": "pa$$word3" },
+    { "user_id": "user_4", "password": "Passw0rd!" }
+  ],
+  "test_login_failure_invalid_credentials": [
+    { "user_id": "user_5", "password": "wrong_pass1" },
+    { "user_id": "user_6", "password": "incorrect_pass2" },
+    { "user_id": "user_7", "password": "WrongPassword" },
+    { "user_id": "user_8", "password": "n0tTh3Pass" }
+  ],
+  "test_login_missing_user_id": [
+    { "password": "no_user_pass1" },
+    { "password": "p@ssWithoutUser" },
+    { "password": "missingUser123" },
+    { "password": "anotherPassword" }
+  ],
+  "test_login_missing_password": [
+    { "user_id": "no_pass_user1" },
+    { "user_id": "missingPassUser2" },
+    { "user_id": "ThisUserNoPass" },
+    { "user_id": "yetAnotherUser" }
+  ],
+  "test_login_missing_user_id_and_password": [
+    {},
+    {},
+    {},
+    {}
+  ],
+  "test_login_account_locked": [
+    { "user_id": "locked_user_1", "password": "anyPass1" },
+    { "user_id": "user_locked_2", "password": "p4ssw0rd" },
+    { "user_id": "locked_account3", "password": "Secr3t!" }
+  ],
+  "test_login_mfa_required": [
+    { "user_id": "mfa_user_1", "password": "correct_pass1" },
+    { "user_id": "user_needs_mfa2", "password": "Passw0rdMFA" },
+    { "user_id": "mfaRequiredUser3", "password": "MyP@ssw0rd" }
+  ]
+}
