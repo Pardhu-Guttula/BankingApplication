@@ -1,28 +1,32 @@
-# Epic Title: View Order History
+# Epic Title: Manage and Update Order Statuses
 
 from flask import Blueprint, jsonify, request
 from backend.order_management.repositories.order_repository import OrderRepository
 from flask_login import login_required, current_user
+import datetime
 
 order_bp = Blueprint('order', __name__)
 order_repository = OrderRepository(db_config={'host': 'localhost', 'user': 'root', 'password': '', 'database': 'ecommerce'})
 
-@order_bp.route('/order/history', methods=['GET'])
+@order_bp.route('/order/<int:order_id>/status', methods=['POST'])
 @login_required
-def view_order_history():
-    user_id = current_user.id
-    orders = order_repository.get_orders_by_user_id(user_id)
+def update_order_status(order_id: int):
+    if not current_user.is_admin:
+        return jsonify({'error': 'Permission denied'}), 403
     
-    if not orders:
-        return jsonify({'message': 'You have no orders'}), 200
+    new_status = request.json.get('status')
+    if new_status not in ['Processing', 'Shipped', 'Delivered', 'Cancelled']:
+        return jsonify({'error': 'Invalid status'}), 400
     
-    order_history = []
-    for order in orders:
-        order_history.append({
-            'order_id': order.order_id,
-            'items': [{'item_id': item.id, 'name': item.name, 'price': item.price, 'quantity': item.quantity} for item in order.items],
-            'total_amount': order.total_amount,
-            'status': order.status
-        })
+    order_status = OrderStatus(
+        order_id=order_id,
+        status=new_status,
+        updated_at=datetime.datetime.now(),
+        updated_by=current_user.id
+    )
     
-    return jsonify({'orders': order_history}), 200
+    success = order_repository.update_order_status(order_status)
+    if success:
+        return jsonify({'message': 'Order status updated successfully'}), 200
+    else:
+        return jsonify({'error': 'Failed to update order status'}), 500
