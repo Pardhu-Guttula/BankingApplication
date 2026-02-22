@@ -1,4 +1,4 @@
-# Epic Title: Add products to the shopping cart
+# Epic Title: Update product quantities in the shopping cart
 
 from dataclasses import dataclass
 
