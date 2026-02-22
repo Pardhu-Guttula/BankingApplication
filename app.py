@@ -1,21 +1,20 @@
-# Epic Title: Implement Multi-Factor Authentication (MFA)
+# Epic Title: Sort Products by Price
 
 import logging
 from flask import Flask
-from backend.database import db
-from backend.user_authentication.controllers.mfa_controller import mfa_controller
+from backend.product_catalog.routes import app as product_app
 
-def create_app() -> Flask:
+def create_app():
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://user:password@localhost/dbname'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-    db.init_app(app)
-    app.register_blueprint(mfa_controller, url_prefix='/mfa')
-
+    app.register_blueprint(product_app)
+    
+    @app.route('/')
+    def home():
+        return 'Welcome to the Product Catalog!'
+    
     return app
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     app = create_app()
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=True)
