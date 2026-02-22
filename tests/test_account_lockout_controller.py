@@ -5,46 +5,50 @@ from unittest.mock import patch, MagicMock
 from flask import Flask
 from account_lockout_controller import account_lockout_controller
 
-class TestAccountLockoutController(unittest.TestCase):
+class AccountLockoutControllerTest(unittest.TestCase):
 
     def setUp(self):
         self.app = Flask(__name__)
         self.app.register_blueprint(account_lockout_controller)
         self.client = self.app.test_client()
 
-    @patch('backend.authentication.services.account_lockout_service.AccountLockoutService.record_attempt_and_check_lockout')
-    def test_login_success(self, mock_record):
-        mock_record.return_value = (False, 'Login successful')
-        response = self.client.post('/login', json={'user_id': 'user123', 'password': 'correct_password'})
+    @patch('account_lockout_controller.AccountLockoutService.record_attempt_and_check_lockout', return_value=(False, 'Authenticated'))
+    def test_login_success(self, mock_record_attempt):
+        response = self.client.post('/login', json={'user_id': 'test_user', 'password': 'test_pass'})
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.get_json(), {'message': 'Login successful'})
+        self.assertEqual(response.json, {'message': 'Authenticated'})
 
-    @patch('backend.authentication.services.account_lockout_service.AccountLockoutService.record_attempt_and_check_lockout')
-    def test_login_failure(self, mock_record):
-        mock_record.return_value = (False, 'Login failed')
-        response = self.client.post('/login', json={'user_id': 'user123', 'password': 'wrong_password'})
+    @patch('account_lockout_controller.AccountLockoutService.record_attempt_and_check_lockout', return_value=(False, 'Invalid credentials'))
+    def test_login_invalid_credentials(self, mock_record_attempt):
+        response = self.client.post('/login', json={'user_id': 'test_user2', 'password': 'wrong_pass'})
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response.get_json(), {'error': 'Login failed'})
+        self.assertEqual(response.json, {'error': 'Invalid credentials'})
 
-    @patch('backend.authentication.services.account_lockout_service.AccountLockoutService.record_attempt_and_check_lockout')
-    def test_login_user_locked(self, mock_record):
-        mock_record.return_value = (True, 'User account locked')
-        response = self.client.post('/login', json={'user_id': 'locked_user', 'password': 'any_password'})
+    @patch('account_lockout_controller.AccountLockoutService.record_attempt_and_check_lockout', return_value=(True, 'Account locked'))
+    def test_login_account_locked(self, mock_record_attempt):
+        response = self.client.post('/login', json={'user_id': 'locked_user', 'password': 'test_pass'})
         self.assertEqual(response.status_code, 423)
-        self.assertEqual(response.get_json(), {'error': 'User account locked'})
+        self.assertEqual(response.json, {'error': 'Account locked'})
 
-    def test_login_invalid_data(self):
-        response = self.client.post('/login', json={'user_id': 'user123'})
+    def test_login_missing_user_id(self):
+        response = self.client.post('/login', json={'password': 'test_pass'})
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.get_json(), {'error': 'Invalid data'})
-        
-        response = self.client.post('/login', json={'password': 'password'})
+        self.assertEqual(response.json, {'error': 'Invalid data'})
+
+    def test_login_missing_password(self):
+        response = self.client.post('/login', json={'user_id': 'test_user'})
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.get_json(), {'error': 'Invalid data'})
-        
+        self.assertEqual(response.json, {'error': 'Invalid data'})
+
+    def test_login_missing_data(self):
         response = self.client.post('/login', json={})
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.get_json(), {'error': 'Invalid data'})
+        self.assertEqual(response.json, {'error': 'Invalid data'})
+
+    def test_login_no_data(self):
+        response = self.client.post('/login')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json, {'error': 'Invalid data'})
 
 if __name__ == '__main__':
     unittest.main()
