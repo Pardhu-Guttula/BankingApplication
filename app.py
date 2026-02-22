@@ -1,15 +1,15 @@
-# Epic Title: Implement review submission form
+# Epic Title: Manage Account
 
 import logging
 from flask import Flask
 from flask_login import LoginManager
-from backend.reviews.routes import app as reviews_app
+from backend.account_management.routes import app as account_management_app
 
 login_manager = LoginManager()
 
 def create_app():
     app = Flask(__name__)
-    app.register_blueprint(reviews_app)
+    app.register_blueprint(account_management_app)
     
     login_manager.init_app(app)
     
@@ -20,7 +20,7 @@ def create_app():
     
     @app.route('/')
     def home():
-        return 'Welcome to the Product Review System!'
+        return 'Welcome to the Account Management System!'
     
     return app
 
