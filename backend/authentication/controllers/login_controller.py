@@ -1,21 +1,19 @@
-# Epic Title: Implement Account Lockout Mechanism
+# Epic Title: Implement user authentication and authorization features
 
-from flask import Blueprint, request, jsonify
-from backend.authentication.services.login_service import LoginService
+from flask import Flask, request, jsonify
+from backend.authentication.services.authentication_service import AuthenticationService
+from backend.authentication.repositories.user_repository import UserRepository
 
-login_controller = Blueprint('login_controller', __name__)
+app = Flask(__name__)
+user_repository = UserRepository()
+auth_service = AuthenticationService(user_repository)
 
-@login_controller.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST'])
 def login():
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-
-    if not username or not password:
-        return jsonify({'error': 'Username and password are required'}), 400
-
-    authenticated = LoginService.authenticate_user(username, password)
-    if authenticated:
-        return jsonify({'message': 'Login successful'}), 200
-    else:
-        return jsonify({'error': 'Invalid credentials or account locked'}), 401
+    data = request.json
+    email = data.get("email")
+    password = data.get("password")
+    session = auth_service.login(email, password)
+    if session:
+        return jsonify({"token": session.token}), 200
+    return jsonify({"error": "Invalid credentials"}), 401
