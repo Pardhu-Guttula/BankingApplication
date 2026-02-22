@@ -5,97 +5,73 @@ terraform {
       version = "~> 4.56.0"
     }
   }
-  required_version = ">= 1.2.0"
+  required_version = ">= 1.1.0"
 }
 
 provider "azurerm" {
   features {}
 }
 
-# Resource Group
-resource "azurerm_resource_group" "rg" {
-  name     = var.resource_group_name
-  location = var.location
+resource "azurerm_resource_group" "self_service_banking" {
+  name     = "self_service_banking_rg"
+  location = "East US"
 }
 
-# Azure Active Directory B2C
-resource "azurerm_b2c_directory" "b2c" {
-  name                = var.b2c_name
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+resource "azurerm_storage_account" "storage" {
+  name                     = "selfservicebank"
+  resource_group_name      = azurerm_resource_group.self_service_banking.name
+  location                 = azurerm_resource_group.self_service_banking.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
 }
 
-# Azure Key Vault
-resource "azurerm_key_vault" "kv" {
-  name                = var.key_vault_name
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  sku_name            = "standard"
-
-  tenant_id = var.tenant_id
-}
-
-# Azure App Service for Web and Mobile App
-resource "azurerm_app_service_plan" "asp" {
-  name                = "${var.project_name}-asp"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  sku {
-    tier = "Free"
-    size = "F1"
-  }
-}
-
-resource "azurerm_app_service" "web_app" {
-  name                = "${var.project_name}-web"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  app_service_plan_id = azurerm_app_service_plan.asp.id
-}
-
-resource "azurerm_app_service" "mobile_app" {
-  name                = "${var.project_name}-mobile"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  app_service_plan_id = azurerm_app_service_plan.asp.id
-}
-
-# Azure SQL Database
 resource "azurerm_sql_server" "sql" {
-  name                         = "${var.project_name}-sql-server"
-  resource_group_name          = azurerm_resource_group.rg.name
-  location                     = azurerm_resource_group.rg.location
+  name                         = "selfservicesqlserver"
+  resource_group_name          = azurerm_resource_group.self_service_banking.name
+  location                     = azurerm_resource_group.self_service_banking.location
   version                      = "12.0"
   administrator_login          = var.sql_admin_username
   administrator_login_password = var.sql_admin_password
 }
 
 resource "azurerm_sql_database" "sqldb" {
-  name                = "${var.project_name}-db"
-  resource_group_name = azurerm_resource_group.rg.name
+  name                = "selfservicesqldb"
+  resource_group_name = azurerm_resource_group.self_service_banking.name
+  location            = azurerm_resource_group.self_service_banking.location
   server_name         = azurerm_sql_server.sql.name
-  edition             = "Basic"
-  requested_service_objective_name = "Basic"
+  requested_service_objective_name = "S0"
 }
 
-# Azure Blob Storage
-resource "azurerm_storage_account" "storage" {
-  name                     = "${var.project_name}storage"
-  resource_group_name      = azurerm_resource_group.rg.name
-  location                 = azurerm_resource_group.rg.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
+resource "azurerm_app_service_plan" "appserviceplan" {
+  name                = "selfserviceappplan"
+  location            = azurerm_resource_group.self_service_banking.location
+  resource_group_name = azurerm_resource_group.self_service_banking.name
+  sku {
+    tier = "Standard"
+    size = "S1"
+  }
 }
 
-resource "azurerm_storage_container" "container" {
-  name                  = "content"
-  storage_account_name  = azurerm_storage_account.storage.name
-  container_access_type = "private"
+resource "azurerm_app_service" "appservice" {
+  name                = "selfserviceapp"
+  location            = azurerm_resource_group.self_service_banking.location
+  resource_group_name = azurerm_resource_group.self_service_banking.name
+  app_service_plan_id = azurerm_app_service_plan.appserviceplan.id
 }
 
-# Azure Logic Apps
-resource "azurerm_logic_app" "logic_app" {
-  name                = "${var.project_name}-logicapp"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+resource "azurerm_function_app" "functionapp" {
+  name                = "selfservicefunction"
+  location            = azurerm_resource_group.self_service_banking.location
+  resource_group_name = azurerm_resource_group.self_service_banking.name
+  app_service_plan_id = azurerm_app_service_plan.appserviceplan.id
+  storage_account_name       = azurerm_storage_account.storage.name
+  storage_account_access_key = azurerm_storage_account.storage.primary_access_key
+  version                    = "~3"
+}
+
+resource "azurerm_active_directory_domain_service" "ad_domain_service" {
+  name                = "selfservicead"
+  location            = azurerm_resource_group.self_service_banking.location
+  resource_group_name = azurerm_resource_group.self_service_banking.name
+  domain_controller_ip_addresses = ["192.168.0.1"]
 }
