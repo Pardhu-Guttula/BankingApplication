@@ -1,0 +1,84 @@
+```json
+{
+  "test_authenticate_user_success": [
+    {
+      "username": "user1",
+      "password": "password123",
+      "hashed_password": "hashed_password_123",
+      "user_id": 1,
+      "is_locked": false
+    },
+    {
+      "username": "john_doe",
+      "password": "johns_secure_password",
+      "hashed_password": "hashed_john_password",
+      "user_id": 2,
+      "is_locked": false
+    },
+    {
+      "username": "alice_wonder",
+      "password": "alice_secret",
+      "hashed_password": "alice_hashed_pwd",
+      "user_id": 3,
+      "is_locked": false
+    }
+  ],
+  "test_authenticate_user_wrong_password": [
+    {
+      "username": "user_wrong",
+      "password": "wrong_password",
+      "hashed_password": "right_password_hash",
+      "user_id": 4,
+      "is_locked": false
+    },
+    {
+      "username": "peter_piper",
+      "password": "pickled_peppers",
+      "hashed_password": "hashed_pepper_pwd",
+      "user_id": 5,
+      "is_locked": false
+    },
+    {
+      "username": "charlotte_web",
+      "password": "webs_password",
+      "hashed_password": "hashed_web_pwd",
+      "user_id": 6,
+      "is_locked": false
+    }
+  ],
+  "test_authenticate_user_account_locked": [
+    {
+      "username": "locked_user",
+      "password": "any_password",
+      "user_id": 7,
+      "is_locked": true
+    },
+    {
+      "username": "blocked_user",
+      "password": "blocked_secret",
+      "user_id": 8,
+      "is_locked": true
+    },
+    {
+      "username": "prohibited_user",
+      "password": "prohibited_password",
+      "user_id": 9,
+      "is_locked": true
+    }
+  ],
+  "test_authenticate_user_no_such_user": [
+    {
+      "username": "non_existent",
+      "password": "non_secret"
+    },
+    {
+      "username": "ghost_user",
+      "password": "after_life"
+    },
+    {
+      "username": "unknown_entity",
+      "password": "some_password"
+    }
+  ]
+}
+```
