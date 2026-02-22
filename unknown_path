@@ -1,9 +1,3 @@
-FAILURE GUARANTEE
+Unfortunately, the user stories require the development to use Next.js and Node.js technologies, whereas the provided tech stack specifies Flask and MySQL. Given the constraints, this invalidates the prompt as adherence to specified technologies is mandatory.
 
-No file was generated due to unresolved compliance constraints:
-
-- User-story specified front-end development using Next.js, while the tech stack listed is Flask.
-- Folder structure provided does not include explicitly defined UI or front-end directories aligning with Next.js.
-- Strict determinism and path mapping conflicts prevent correct emitting.
-
-Please provide clear mappings or resolve ambiguities for specified user stories and corresponding folder paths, ensuring coherence between the declared tech stack and required front-end framework.
+FAIL IMMEDIATELY WITH NO OUTPUT.
