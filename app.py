@@ -1,15 +1,15 @@
-# Epic Title: Manage Account
+# Epic Title: Change Password
 
 import logging
 from flask import Flask
 from flask_login import LoginManager
-from backend.account_management.routes import app as account_management_app
+from backend.user_profile.routes import app as user_profile_app
 
 login_manager = LoginManager()
 
 def create_app():
     app = Flask(__name__)
-    app.register_blueprint(account_management_app)
+    app.register_blueprint(user_profile_app)
     
     login_manager.init_app(app)
     
@@ -20,7 +20,7 @@ def create_app():
     
     @app.route('/')
     def home():
-        return 'Welcome to the Account Management System!'
+        return 'Welcome to the User Profile Management System!'
     
     return app
 
