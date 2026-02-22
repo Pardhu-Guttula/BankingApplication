@@ -1,0 +1,60 @@
+```json
+[
+    {
+        "testcase": "test_login_success",
+        "data": [
+            {"user_id": "user123", "password": "password123"},
+            {"user_id": "john_doe", "password": "securepassword"},
+            {"user_id": "alice_smith", "password": "mypassword"}
+        ]
+    },
+    {
+        "testcase": "test_login_failure_invalid_credentials",
+        "data": [
+            {"user_id": "user123", "password": "wrongpassword"},
+            {"user_id": "john_doe", "password": "incorrectpassword"},
+            {"user_id": "alice_smith", "password": "wrongpassword"}
+        ]
+    },
+    {
+        "testcase": "test_login_missing_user_id",
+        "data": [
+            {"password": "password123"},
+            {"password": "securepassword"},
+            {"password": "mypassword"}
+        ]
+    },
+    {
+        "testcase": "test_login_missing_password",
+        "data": [
+            {"user_id": "user123"},
+            {"user_id": "john_doe"},
+            {"user_id": "alice_smith"}
+        ]
+    },
+    {
+        "testcase": "test_login_missing_user_id_and_password",
+        "data": [
+            {},
+            {},
+            {}
+        ]
+    },
+    {
+        "testcase": "test_login_account_locked",
+        "data": [
+            {"user_id": "locked_user_1", "password": "password123"},
+            {"user_id": "locked_user_2", "password": "password456"},
+            {"user_id": "locked_user_3", "password": "password789"}
+        ]
+    },
+    {
+        "testcase": "test_login_mfa_required",
+        "data": [
+            {"user_id": "mfa_user_1", "password": "password123"},
+            {"user_id": "mfa_user_2", "password": "password456"},
+            {"user_id": "mfa_user_3", "password": "password789"}
+        ]
+    }
+]
+```
