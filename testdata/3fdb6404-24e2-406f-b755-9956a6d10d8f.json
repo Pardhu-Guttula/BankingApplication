@@ -1,0 +1,86 @@
+```json
+{
+  "test_login_success": [
+    {
+      "user_id": "test_user",
+      "password": "test_password"
+    },
+    {
+      "user_id": "user123",
+      "password": "password123"
+    },
+    {
+      "user_id": "john_doe",
+      "password": "johnspassword"
+    },
+    {
+      "user_id": "alice_wonder",
+      "password": "wonderland123"
+    }
+  ],
+  "test_login_missing_user_id": [
+    {
+      "password": "test_password"
+    },
+    {
+      "password": "password123"
+    },
+    {
+      "password": "secret_pass"
+    },
+    {
+      "password": "mypassword"
+    }
+  ],
+  "test_login_missing_password": [
+    {
+      "user_id": "test_user"
+    },
+    {
+      "user_id": "user123"
+    },
+    {
+      "user_id": "john_doe"
+    },
+    {
+      "user_id": "alice_wonder"
+    }
+  ],
+  "test_login_account_locked": [
+    {
+      "user_id": "test_user",
+      "password": "test_password"
+    },
+    {
+      "user_id": "locked_user",
+      "password": "lockedpassword"
+    },
+    {
+      "user_id": "john_doe",
+      "password": "doejohn"
+    },
+    {
+      "user_id": "alice_wonder",
+      "password": "wonder_pw"
+    }
+  ],
+  "test_login_unauthorized": [
+    {
+      "user_id": "test_user",
+      "password": "wrong_password"
+    },
+    {
+      "user_id": "user123",
+      "password": "incorrect_pw"
+    },
+    {
+      "user_id": "john_doe",
+      "password": "wrongdoe123"
+    },
+    {
+      "user_id": "alice_wonder",
+      "password": "notmypassword"
+    }
+  ]
+}
+```
