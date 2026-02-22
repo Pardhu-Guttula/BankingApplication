@@ -1,108 +1,113 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 4.56.0"
+provider "aws" {
+  region = var.aws_region
+}
+
+resource "aws_cloudfront_distribution" "cdn" {
+  origin {
+    domain_name = aws_s3_bucket.static_website.bucket_domain_name
+    origin_id   = "S3-static-website"
+  }
+
+  enabled             = true
+  is_ipv6_enabled     = true
+  default_root_object = "index.html"
+
+  default_cache_behavior {
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "S3-static-website"
+
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
     }
-  }
-  required_version = ">= 1.0.0"
-}
 
-provider "azurerm" {
-  features {}
-}
-
-resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "East US"
-}
-
-resource "azurerm_app_service" "example" {
-  name                = "example-app"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  app_service_plan_id = azurerm_app_service_plan.example.id
-
-  site_config {
-    cors {
-      allowed_origins = ["*"]
-    }
-  }
-}
-
-resource "azurerm_app_service_plan" "example" {
-  name                = "example-appserviceplan"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  sku {
-    tier = "Basic"
-    size = "B1"
-  }
-}
-
-resource "azurerm_application_gateway" "example" {
-  name                = "example-appgateway"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  sku {
-    name     = "Standard_v2"
-    tier     = "Standard_v2"
-    capacity = 2
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
   }
 
-  gateway_ip_configuration {
-    name      = "my-gateway-ip-configuration"
-    subnet_id = azurerm_subnet.example.id
-  }
-
-  frontend_port {
-    name = "frontendport"
-    port = 80
-  }
-
-  frontend_ip_configuration {
-    name                 = "frontendipconfiguration"
-    subnet_id            = azurerm_subnet.example.id
-    public_ip_address_id = azurerm_public_ip.example.id
-  }
-
-  backend_address_pool {
-    name = "example-backendaddresspool"
-  }
-
-  backend_http_settings {
-    name                  = "example-backendhttpsettings"
-    cookie_based_affinity = "Disabled"
-    port                  = 80
-    protocol              = "Http"
-    request_timeout       = 1
-  }
-
-  http_listener {
-    name                           = "example-httplistener"
-    frontend_ip_configuration_name = "frontendipconfiguration"
-    frontend_port_name             = "frontendport"
-    protocol                       = "Http"
-  }
-
-  url_path_map {
-    name                           = "example-pathmap"
-    default_backend_address_pool_name = "example-backendaddresspool"
-    default_backend_http_settings_name = "example-backendhttpsettings"
-
-    path_rule {
-      name                       = "example-pathrule"
-      paths                      = ["/*"]
-      backend_address_pool_name  = "example-backendaddresspool"
-      backend_http_settings_name = "example-backendhttpsettings"
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
     }
   }
 
-going_to_versions=[1],createdBy=assistant}\n}">
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+}
 
-resource "azurerm_public_ip" "example" {
-  name                = "example-publicip"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  allocation_method   = "Static"
+resource "aws_lb" "app" {
+  name               = "my-app-lb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.lb_sg.id]
+  subnets            = aws_subnet.public[*].id
+}
+
+resource "aws_cognito_user_pool" "user_pool" {
+  name = "user-pool"
+}
+
+resource "aws_iam_role" "lambda_exec" {
+  name = "lambda_exec_role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_lambda_function" "lambda" {
+  function_name = "my-function"
+  role          = aws_iam_role.lambda_exec.arn
+  handler       = "index.handler"
+  runtime       = "nodejs14.x"
+
+  # Your Lambda function code here
+}
+
+resource "aws_api_gateway_rest_api" "api" {
+  name        = "MyApi"
+}
+
+resource "aws_rds_instance" "db" {
+  allocated_storage    = 20
+  engine               = "mysql"
+  engine_version       = "5.7"
+  instance_class       = "db.t2.micro"
+  name                 = "mydb"
+  username             = var.db_username
+  password             = var.db_password
+  parameter_group_name = "default.mysql5.7"
+  skip_final_snapshot  = true
+}
+
+resource "aws_s3_bucket" "static_website" {
+  bucket = "my-static-website-bucket"
+  acl    = "public-read"
+
+  website {
+    index_document = "index.html"
+  }
+}
+
+resource "aws_codepipeline" "pipeline" {
+  name = "my-codepipeline"
+}
+
+resource "aws_cloudwatch_log_group" "log_group" {
+  name              = "/aws/lambda/my-function"
+  retention_in_days = 14
 }
