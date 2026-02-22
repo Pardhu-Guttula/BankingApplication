@@ -1,0 +1,68 @@
+{
+  "test_login_success": [
+    {
+      "user_id": "user_01",
+      "password": "pass123"
+    },
+    {
+      "user_id": "user_02",
+      "password": "securePass987"
+    },
+    {
+      "user_id": "alice",
+      "password": "alice_password"
+    },
+    {
+      "user_id": "bob",
+      "password": "bob_password!@#"
+    }
+  ],
+  "test_login_invalid_data": [
+    {
+      "user_id": "user_03"
+    },
+    {
+      "password": "password_only"
+    },
+    {
+      "userdata": "invalid_key"
+    },
+    {}
+  ],
+  "test_login_failure": [
+    {
+      "user_id": "invalid_user",
+      "password": "wrong_pass"
+    },
+    {
+      "user_id": "hacker",
+      "password": "notsecure"
+    },
+    {
+      "user_id": "user_01",
+      "password": "wrongpassword"
+    },
+    {
+      "user_id": "charlie",
+      "password": "charlie_password_xyz"
+    }
+  ],
+  "test_login_service_exception": [
+    {
+      "user_id": "exception_user",
+      "password": "test_pass"
+    },
+    {
+      "user_id": "service_fail",
+      "password": "fail_pass"
+    },
+    {
+      "user_id": "db_error",
+      "password": "error_pass"
+    },
+    {
+      "user_id": "crash_test",
+      "password": "crash_pass"
+    }
+  ]
+}
