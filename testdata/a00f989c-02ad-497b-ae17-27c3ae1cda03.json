@@ -1,0 +1,58 @@
+```json
+{
+  "test_authenticate_success": [
+    {
+      "username": "john_doe",
+      "password": "password123"
+    },
+    {
+      "username": "jane_doe",
+      "password": "securePa$$w0rd"
+    },
+    {
+      "username": "alice",
+      "password": "passAlice2021"
+    },
+    {
+      "username": "bob",
+      "password": "letmein123"
+    }
+  ],
+  "test_authenticate_failure_invalid_password": [
+    {
+      "username": "valid_user",
+      "password": "wrong_password"
+    },
+    {
+      "username": "jane_doe",
+      "password": "incorrectPassword"
+    },
+    {
+      "username": "alice",
+      "password": "wrongPassAlice"
+    },
+    {
+      "username": "bob",
+      "password": "invalidPass"
+    }
+  ],
+  "test_authenticate_failure_invalid_username": [
+    {
+      "username": "nonexistent_user",
+      "password": "any_password"
+    },
+    {
+      "username": "unknown_user",
+      "password": "somepassword"
+    },
+    {
+      "username": "fake_user_123",
+      "password": "password123"
+    },
+    {
+      "username": "ghost_user",
+      "password": "mypassword"
+    }
+  ]
+}
+```
