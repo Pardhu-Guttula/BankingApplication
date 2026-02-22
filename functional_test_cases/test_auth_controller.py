@@ -2,38 +2,50 @@ import pytest
 from flask import Flask
 from flask.testing import FlaskClient
 from backend.authentication.controllers.auth_controller import auth_controller
-from backend.authentication.controllers.account_lockout_controller import account_lockout_controller
+from backend.authentication.services.auth_service import AuthService
+
 
 @pytest.fixture
-def client() -> FlaskClient:
+def app() -> Flask:
     app = Flask(__name__)
-    app.register_blueprint(auth_controller, url_prefix='/auth')
-    app.register_blueprint(account_lockout_controller, url_prefix='/account_lockout')
-    app.config['TESTING'] = True
-    with app.test_client() as client:
-        yield client
+    app.register_blueprint(auth_controller)
+    return app
 
-def test_user_login_success(client: FlaskClient):
-    response = client.post('/auth/login', json={
-        'username': 'valid_user',
-        'password': 'valid_password'
-    })
+
+@pytest.fixture
+def client(app: Flask) -> FlaskClient:
+    return app.test_client()
+
+
+def test_login_success(client: FlaskClient, mocker):
+    mock_auth_service = mocker.patch.object(AuthService, 'authenticate', return_value=True)
+    response = client.post('/login', json={'username': 'testuser', 'password': 'testpass'})
     assert response.status_code == 200
-    assert response.get_json() == {"message": "Login successful"}
+    assert response.json == {"message": "Login successful"}
+    mock_auth_service.assert_called_once_with('testuser', 'testpass')
 
-def test_user_login_invalid_credentials(client: FlaskClient):
-    response = client.post('/auth/login', json={
-        'username': 'invalid_user',
-        'password': 'invalid_password'
-    })
+
+def test_login_invalid_credentials(client: FlaskClient, mocker):
+    mock_auth_service = mocker.patch.object(AuthService, 'authenticate', return_value=False)
+    response = client.post('/login', json={'username': 'testuser', 'password': 'wrongpass'})
     assert response.status_code == 401
-    assert response.get_json() == {"message": "Invalid credentials"}
+    assert response.json == {"message": "Invalid credentials"}
+    mock_auth_service.assert_called_once_with('testuser', 'wrongpass')
 
-def test_user_login_exception(client: FlaskClient, mocker):
-    mocker.patch('backend.authentication.services.auth_service.AuthService.authenticate', side_effect=Exception('Test exception'))
-    response = client.post('/auth/login', json={
-        'username': 'any_user',
-        'password': 'any_password'
-    })
+
+def test_login_missing_data(client: FlaskClient):
+    response = client.post('/login', json={'username': 'testuser'})
     assert response.status_code == 500
-    assert response.get_json() == {"message": "Login failed"}
+    assert response.json == {"message": "Login failed"}
+
+    response = client.post('/login', json={'password': 'testpass'})
+    assert response.status_code == 500
+    assert response.json == {"message": "Login failed"}
+
+
+def test_login_exception(client: FlaskClient, mocker):
+    mock_auth_service = mocker.patch.object(AuthService, 'authenticate', side_effect=Exception('Unexpected Error'))
+    response = client.post('/login', json={'username': 'testuser', 'password': 'testpass'})
+    assert response.status_code == 500
+    assert response.json == {"message": "Login failed"}
+    mock_auth_service.assert_called_once_with('testuser', 'testpass')
