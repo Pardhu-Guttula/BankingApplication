@@ -1,0 +1,71 @@
+```json
+[
+    {
+        "user_id": "test_user",
+        "password": "test_password"
+    },
+    {
+        "user_id": "test_user",
+        "password": "wrong_password"
+    },
+    {
+        "password": "test_password"
+    },
+    {
+        "user_id": "test_user"
+    },
+    {
+        "user_id": "locked_user",
+        "password": "any_password"
+    },
+    {
+        "user_id": "mfa_user",
+        "password": "correct_password"
+    },
+    {
+        "user_id": "user1",
+        "password": "password1"
+    },
+    {
+        "user_id": "user2",
+        "password": "password2"
+    },
+    {
+        "user_id": "user3",
+        "password": "wrong_password"
+    },
+    {
+        "user_id": "user4",
+        "password": "correct_password"
+    },
+    {
+        "user_id": "",
+        "password": "no_user_id"
+    },
+    {
+        "user_id": "no_password_user",
+        "password": ""
+    },
+    {
+        "user_id": "special_chars_user",
+        "password": "!@#$%^&*()_+"
+    },
+    {
+        "user_id": "long_user_id",
+        "password": "a"*256
+    },
+    {
+        "user_id": "long_password_user",
+        "password": "p"*256
+    },
+    {
+        "user_id": "sql_injection",
+        "password": "' OR '1'='1"
+    },
+    {
+        "user_id": "xss_user",
+        "password": "<script>alert('xss')</script>"
+    },
+    {}
+]
+```
