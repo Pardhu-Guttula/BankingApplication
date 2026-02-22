@@ -1,0 +1,57 @@
+{
+  "test_authenticate_user_success": {
+    "username": "successful_user",
+    "password": "correct_password",
+    "hashed_password": "$pbkdf2-sha256$29000$example$AqnIfTG1QKZ38Dj6UtmkQctBzgAkHxlUty$",
+    "user": {
+      "id": 101,
+      "username": "successful_user",
+      "password": "$pbkdf2-sha256$29000$example$AqnIfTG1QKZ38Dj6UtmkQctBzgAkHxlUty$"
+    },
+    "repository_response": {
+      "is_account_locked": false,
+      "reset_failed_attempts_called_with": 101,
+      "record_login_attempt_called": false
+    }
+  },
+  "test_authenticate_user_wrong_password": {
+    "username": "existing_user",
+    "password": "wrong_password",
+    "hashed_password": "$pbkdf2-sha256$29000$example$AqnIfTG1QKZ38Dj6UtmkQctBzgAkHxlUty$",
+    "user": {
+      "id": 102,
+      "username": "existing_user",
+      "password": "$pbkdf2-sha256$29000$example$AqnIfTG1QKZ38Dj6UtmkQctBzgAkHxlUty$"
+    },
+    "repository_response": {
+      "is_account_locked": false,
+      "record_login_attempt_called_with": {
+        "user_id": 102,
+        "successful": false
+      }
+    }
+  },
+  "test_authenticate_user_account_locked": {
+    "username": "locked_user",
+    "password": "any_password",
+    "user": {
+      "id": 103,
+      "username": "locked_user"
+    },
+    "repository_response": {
+      "is_account_locked": true,
+      "record_login_attempt_called_with": {
+        "user_id": 103,
+        "successful": false
+      }
+    }
+  },
+  "test_authenticate_user_no_such_user": {
+    "username": "nonexistent_user",
+    "password": "any_password",
+    "repository_response": {
+      "user_query_first_return_value": null,
+      "record_login_attempt_called": false
+    }
+  }
+}
