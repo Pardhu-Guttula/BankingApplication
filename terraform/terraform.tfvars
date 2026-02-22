@@ -1,3 +1,2 @@
-aws_region = "us-east-1"
-db_username = "admin"
-db_password = "password"
+sql_administrator_login = "adminUser"
+sql_administrator_password = "adminPassword123"
