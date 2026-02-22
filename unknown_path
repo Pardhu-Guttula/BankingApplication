@@ -2,8 +2,8 @@ FAILURE GUARANTEE
 
 No file was generated due to unresolved compliance constraints:
 
-- PostgreSQL was specified for table creation while MySQL was listed as the chosen tech stack in user stories.
-- Folder mappings were ambiguous and could not be deterministically derived for "Order" as per constraints.
+- User-story specified front-end development, yet the folder structure provided does not include explicitly defined UI or front-end directories.
+- Missing alignment between user stories for front-end elements and server-oriented framework (Flask) usage.
 - Strict determinism and path mapping conflicts prevent correct emitting.
 
-Please provide clear mappings or resolve ambiguities for specified database and folder paths.
+Please provide clear mappings or resolve ambiguities for specified user stories and corresponding folder paths, ensuring coherence between front-end and back-end development related to tech stack.
