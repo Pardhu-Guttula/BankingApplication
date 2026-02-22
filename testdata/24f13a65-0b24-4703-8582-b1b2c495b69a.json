@@ -1,0 +1,31 @@
+{
+    "EPIC-1": {
+        "test_login_success": [
+            {"username": "user1", "password": "password1"},
+            {"username": "user2", "password": "securePassword2"},
+            {"username": "admin", "password": "admin123"},
+            {"username": "testuser", "password": "testpass"},
+            {"username": "john_doe", "password": "doeSecret"},
+            {"username": "charlie", "password": "1234Password"},
+            {"username": "happyUser", "password": "happyPassw0rd"}
+        ],
+        "test_login_invalid_credentials": [
+            {"username": "user1", "password": "wrongpassword1"},
+            {"username": "user2", "password": "wrongPassword2"},
+            {"username": "admin", "password": "invalid123"},
+            {"username": "testuser", "password": "wrongtestpass"},
+            {"username": "john_doe", "password": "incorrectSecret"},
+            {"username": "charlie", "password": "wrong1234Password"},
+            {"username": "happyUser", "password": "incorrectPassw0rd"}
+        ],
+        "test_login_exception": [
+            {"username": "user1", "password": "exceptionPassword1"},
+            {"username": "user2", "password": "exceptionPassword2"},
+            {"username": "admin", "password": "exception123"},
+            {"username": "testuser", "password": "exceptiontestpass"},
+            {"username": "john_doe", "password": "exceptionSecret"},
+            {"username": "charlie", "password": "1234ExceptionPassword"},
+            {"username": "happyUser", "password": "exceptionalPassw0rd"}
+        ]
+    }
+}
