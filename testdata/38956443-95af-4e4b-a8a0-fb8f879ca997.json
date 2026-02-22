@@ -1,0 +1,46 @@
+```json
+{
+  "test_login_success": [
+    {
+      "username": "johndoe",
+      "password": "p@ssw0rd1"
+    },
+    {
+      "username": "janedoe",
+      "password": "S3cret123!"
+    },
+    {
+      "username": "fooUser",
+      "password": "barP4ssword!"
+    }
+  ],
+  "test_login_invalid_credentials": [
+    {
+      "username": "johndoe",
+      "password": "wrong_pass"
+    },
+    {
+      "username": "janedoe",
+      "password": "incorrect123"
+    },
+    {
+      "username": "fooUser",
+      "password": "notTheP@ss"
+    }
+  ],
+  "test_login_exception": [
+    {
+      "username": "exceptionUser",
+      "password": "will_fail"
+    },
+    {
+      "username": "errorCase1",
+      "password": "test@123"
+    },
+    {
+      "username": "errorCase2",
+      "password": "passw0rd"
+    }
+  ]
+}
+```
