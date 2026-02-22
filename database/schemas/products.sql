@@ -1,7 +1,7 @@
-# Epic Title: Remove products from the shopping cart
+# Epic Title: Persist shopping cart state in PostgreSQL
 
 CREATE TABLE IF NOT EXISTS products (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     price DECIMAL(10, 2) NOT NULL CHECK (price > 0),
     description TEXT,
