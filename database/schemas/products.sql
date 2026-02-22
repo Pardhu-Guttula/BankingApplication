@@ -1,4 +1,4 @@
-# Epic Title: Display Product Details
+# Epic Title: Sort Products by Price
 
 CREATE TABLE IF NOT EXISTS products (
     id INT PRIMARY KEY AUTO_INCREMENT,
