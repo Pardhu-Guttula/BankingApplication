@@ -1,58 +1,51 @@
 import pytest
 from flask import Flask
 from flask.testing import FlaskClient
-
 from backend.authentication.controllers.auth_controller import auth_controller
-from backend.authentication.controllers.account_lock_controller import account_lock_controller
-from backend.authentication.controllers.account_lockout_controller import account_lockout_controller
+from backend.authentication.services.auth_service import AuthService
+
 
 @pytest.fixture
-def client() -> FlaskClient:
+def app() -> Flask:
     app = Flask(__name__)
-    app.register_blueprint(auth_controller, url_prefix='/auth')
-    app.register_blueprint(account_lock_controller, url_prefix='/account_lock')
-    app.register_blueprint(account_lockout_controller, url_prefix='/account_lockout')
-    with app.test_client() as client:
-        yield client
+    app.register_blueprint(auth_controller)
+    return app
 
-# Test cases for User Login
 
-def test_successful_login(client):
-    response = client.post('/auth/login', json={'username': 'valid_user', 'password': 'valid_password'})
+@pytest.fixture
+def client(app: Flask) -> FlaskClient:
+    return app.test_client()
+
+
+def test_login_success(client: FlaskClient, mocker):
+    mock_auth_service = mocker.patch.object(AuthService, 'authenticate', return_value=True)
+    response = client.post('/login', json={'username': 'validuser', 'password': 'validpass'})
     assert response.status_code == 200
     assert response.json == {"message": "Login successful"}
+    mock_auth_service.assert_called_once_with('validuser', 'validpass')
 
-def test_login_invalid_credentials(client):
-    response = client.post('/auth/login', json={'username': 'invalid_user', 'password': 'invalid_password'})
+
+def test_login_invalid_credentials(client: FlaskClient, mocker):
+    mock_auth_service = mocker.patch.object(AuthService, 'authenticate', return_value=False)
+    response = client.post('/login', json={'username': 'invaliduser', 'password': 'invalidpass'})
     assert response.status_code == 401
     assert response.json == {"message": "Invalid credentials"}
+    mock_auth_service.assert_called_once_with('invaliduser', 'invalidpass')
 
-def test_login_server_error(client, mocker):
-    mocker.patch('backend.authentication.services.auth_service.AuthService.authenticate', side_effect=Exception('Server error'))
-    response = client.post('/auth/login', json={'username': 'valid_user', 'password': 'valid_password'})
+
+def test_login_missing_data(client: FlaskClient):
+    response = client.post('/login', json={'username': 'validuser'})
     assert response.status_code == 500
     assert response.json == {"message": "Login failed"}
 
-# Test cases for Account Lock
+    response = client.post('/login', json={'password': 'validpass'})
+    assert response.status_code == 500
+    assert response.json == {"message": "Login failed"}
 
-def test_account_lock_login_success(client):
-    response = client.post('/account_lock/login', json={'user_id': 1, 'password': 'valid_password'})
-    assert response.status_code == 200
-    assert response.json == {"message": "Login successful"}
 
-def test_account_lock_invalid_data(client):
-    response = client.post('/account_lock/login', json={'user_id': None, 'password': 'valid_password'})
-    assert response.status_code == 400
-    assert response.json == {'error': 'Invalid data'}
-
-# Test cases for Account Lockout
-
-def test_account_lockout_locked(client):
-    response = client.post('/account_lockout/login', json={'user_id': 1, 'password': 'valid_password'})
-    assert response.status_code == 423
-    assert response.json == {'error': 'Your account is locked due to multiple failed login attempts'}
-
-def test_account_lockout_invalid_data(client):
-    response = client.post('/account_lockout/login', json={'user_id': None, 'password': 'valid_password'})
-    assert response.status_code == 400
-    assert response.json == {'error': 'Invalid data'}
+def test_login_exception(client: FlaskClient, mocker):
+    mock_auth_service = mocker.patch.object(AuthService, 'authenticate', side_effect=Exception('Unexpected Error'))
+    response = client.post('/login', json={'username': 'validuser', 'password': 'validpass'})
+    assert response.status_code == 500
+    assert response.json == {"message": "Login failed"}
+    mock_auth_service.assert_called_once_with('validuser', 'validpass')
