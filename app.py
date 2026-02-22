@@ -1,8 +1,8 @@
-# Epic Title: Generate detailed e-commerce performance reports
+# Epic Title: Monitor user behavior metrics
 
 import logging
 from flask import Flask
-from backend.analytics_reporting.routes import app as analytics_app
+from backend.analytics.routes import app as analytics_app
 
 def create_app():
     app = Flask(__name__)
@@ -10,7 +10,7 @@ def create_app():
     
     @app.route('/')
     def home():
-        return 'Welcome to the E-commerce Performance Reporting System!'
+        return 'Welcome to the User Behavior Analytics System!'
     
     return app
 
