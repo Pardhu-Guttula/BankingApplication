@@ -1,16 +1,20 @@
-# Epic Title: Integrate Authentication with Bank Security Infrastructure
+# Epic Title: Implement user authentication and authorization features
 
-from werkzeug.security import generate_password_hash, check_password_hash
-from backend.database import db
+from typing import Optional
 
-class User(db.Model):
-    __tablename__ = 'users'
-    id: int = db.Column(db.Integer, primary_key=True)
-    username: str = db.Column(db.String(80), unique=True, nullable=False)
-    password_hash: str = db.Column(db.String(120), nullable=False)
+class User:
+    def __init__(self, user_id: int, name: str, email: str, hashed_password: str):
+        self.user_id = user_id
+        self.name = name
+        self.email = email
+        self.hashed_password = hashed_password
 
-    def set_password(self, password: str) -> None:
-        self.password_hash = generate_password_hash(password)
+    @staticmethod
+    def validate_email(email: str) -> bool:
+        # Email validation logic
+        return True
 
-    def check_password(self, password: str) -> bool:
-        return check_password_hash(self.password_hash, password)
+    @staticmethod
+    def hash_password(password: str) -> str:
+        # Password hashing logic
+        return "hashed_password"
