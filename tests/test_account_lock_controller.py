@@ -1,45 +1,57 @@
 # File: tests/test_account_lock_controller.py
 
 import unittest
-from unittest.mock import patch
-from flask import json
-from account_lock_controller import account_lock_controller, login
+from unittest.mock import patch, MagicMock
+from flask import Flask
+from account_lock_controller import account_lock_controller
 
-class AccountLockControllerTest(unittest.TestCase):
-
+class AccountLockControllerTestCase(unittest.TestCase):
     def setUp(self):
-        self.app = account_lock_controller.test_client()
-        self.app.testing = True
+        self.app = Flask(__name__)
+        self.app.register_blueprint(account_lock_controller)
+        self.client = self.app.test_client()
 
-    @patch('account_lock_controller.AccountLockService.process_login')
-    def test_login_success(self, mock_process_login):
-        mock_process_login.return_value = (True, 'Login successful')
-        response = self.app.post('/login', data=json.dumps({'user_id': 'user1', 'password': 'password1'}), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json, {'message': 'Login successful'})
+    def test_login_successful(self):
+        data = {'user_id': 'valid_user', 'password': 'valid_password'}
+        with patch('backend.authentication.services.account_lock_service.AccountLockService.process_login', return_value=(True, '')):
+            response = self.client.post('/login', json=data)
+            self.assertEqual(response.status_code, 200)
+            self.assertDictEqual(response.get_json(), {'message': 'Login successful'})
 
-    @patch('account_lock_controller.AccountLockService.process_login')
-    def test_login_invalid_data(self, mock_process_login):
-        response = self.app.post('/login', data=json.dumps({'user_id': 'user1'}), content_type='application/json')
+    def test_login_invalid_data(self):
+        data = {'user_id': None, 'password': 'valid_password'}
+        response = self.client.post('/login', json=data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json, {'error': 'Invalid data'})
+        self.assertDictEqual(response.get_json(), {'error': 'Invalid data'})
 
-        response = self.app.post('/login', data=json.dumps({'password': 'password1'}), content_type='application/json')
+        data = {'user_id': 'valid_user', 'password': None}
+        response = self.client.post('/login', json=data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json, {'error': 'Invalid data'})
+        self.assertDictEqual(response.get_json(), {'error': 'Invalid data'})
 
-    @patch('account_lock_controller.AccountLockService.process_login')
-    def test_login_failure(self, mock_process_login):
-        mock_process_login.return_value = (False, 'Invalid credentials')
-        response = self.app.post('/login', data=json.dumps({'user_id': 'user1', 'password': 'password1'}), content_type='application/json')
+        data = {'user_id': None, 'password': None}
+        response = self.client.post('/login', json=data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json, {'error': 'Invalid credentials'})
+        self.assertDictEqual(response.get_json(), {'error': 'Invalid data'})
 
-    @patch('account_lock_controller.AccountLockService.process_login')
-    def test_login_missing_payload(self, mock_process_login):
-        response = self.app.post('/login')
+    def test_login_unknown_user(self):
+        data = {'user_id': 'unknown_user', 'password': 'some_password'}
+        with patch('backend.authentication.services.account_lock_service.AccountLockService.process_login', return_value=(False, 'Invalid credentials')):
+            response = self.client.post('/login', json=data)
+            self.assertEqual(response.status_code, 400)
+            self.assertDictEqual(response.get_json(), {'error': 'Invalid credentials'})
+
+    def test_login_account_locked(self):
+        data = {'user_id': 'locked_user', 'password': 'some_password'}
+        with patch('backend.authentication.services.account_lock_service.AccountLockService.process_login', return_value=(False, 'Account locked')):
+            response = self.client.post('/login', json=data)
+            self.assertEqual(response.status_code, 400)
+            self.assertDictEqual(response.get_json(), {'error': 'Account locked'})
+
+    def test_login_empty_request_body(self):
+        response = self.client.post('/login', json={})
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json, {'error': 'Invalid data'})
-        
+        self.assertDictEqual(response.get_json(), {'error': 'Invalid data'})
+
 if __name__ == '__main__':
     unittest.main()
