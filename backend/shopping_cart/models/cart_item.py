@@ -1,9 +1,12 @@
-# Epic Title: Persist shopping cart state in PostgreSQL
+# Epic Title: Update Product Quantities in the Shopping Cart
 
-from dataclasses import dataclass
-from backend.shopping_cart.models.product import Product
+from sqlalchemy import Column, Integer, ForeignKey
+from backend.database.config import Base
 
-@dataclass
-class CartItem:
-    product: Product
-    quantity: int
+class CartItem(Base):
+    __tablename__ = 'cart_items'
+
+    id = Column(Integer, primary_key=True, index=True)
+    cart_id = Column(Integer, ForeignKey('carts.id'), nullable=False)
+    product_id = Column(Integer, ForeignKey('products.id'), nullable=False)
+    quantity = Column(Integer, nullable=False, default=1)
