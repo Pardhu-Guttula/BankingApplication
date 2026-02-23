@@ -1,4 +1,4 @@
-# Epic Title: Remove Products from the Shopping Cart
+# Epic Title: Persist Shopping Cart State in PostgreSQL
 
 from sqlalchemy import Column, Integer, ForeignKey
 from backend.database.config import Base
