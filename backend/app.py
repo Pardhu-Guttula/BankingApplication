@@ -1,12 +1,12 @@
-# Epic Title: Design and Implement Header for the E-commerce Platform
+# Epic Title: Develop Main Navigation for the E-commerce Platform
 
 from flask import Flask
-from backend.personalized_dashboard.controllers.header_controller import header_bp
+from backend.personalized_dashboard.controllers.navigation_controller import navigation_bp
 
 app = Flask(__name__)
 
 # Register blueprints
-app.register_blueprint(header_bp, url_prefix='/ui')
+app.register_blueprint(navigation_bp, url_prefix='/ui')
 
 @app.before_first_request
 def startup():
