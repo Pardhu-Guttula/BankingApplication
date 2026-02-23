@@ -1,19 +1,17 @@
-# Epic Title: View Order History
+# Epic Title: Manage and Update Order Statuses
 
-from dataclasses import dataclass
-from typing import List
+from sqlalchemy import Column, Integer, String, Float, DateTime
+from backend.database.config import Base
+from datetime import datetime
 
-@dataclass
-class OrderItem:
-    id: int
-    name: str
-    price: float
-    quantity: int
+class Order(Base):
+    __tablename__ = 'orders'
 
-@dataclass
-class Order:
-    order_id: int
-    user_id: int
-    items: List<OrderItem]
-    total_amount: float
-    status: str
+    id = Column(Integer, primary_key=True, index=True)
+    order_id = Column(String, nullable=False, unique=True)
+    user_id = Column(Integer, nullable=False)
+    total_amount = Column(Float, nullable=False)
+    transaction_id = Column(String, nullable=False, unique=True)
+    status = Column(String, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
