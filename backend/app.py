@@ -1,13 +1,15 @@
-# Epic Title: Add Products to the Shopping Cart
+# Epic Title: Filter Products by Category
 
 from flask import Flask
-from backend.shopping_cart.controllers.cart_controller import cart_bp
+from backend.product_catalog.controllers.product_controller import product_bp
+from backend.product_catalog.controllers.category_controller import category_bp
 from backend.database.config import Base, engine
 
 app = Flask(__name__)
 
 # Register blueprints
-app.register_blueprint(cart_bp, url_prefix='/api')
+app.register_blueprint(product_bp, url_prefix='/api')
+app.register_blueprint(category_bp, url_prefix='/api')
 
 @app.before_first_request
 def startup():
