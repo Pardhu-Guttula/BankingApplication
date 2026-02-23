@@ -1,4 +1,4 @@
-# Epic Title: Display Order Confirmation to Customers After Successful Payment
+# Epic Title: Store Order Information in PostgreSQL Database
 
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
