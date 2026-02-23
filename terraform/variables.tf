@@ -1,26 +1,25 @@
+variable "resource_group_name" {
+  description = "The name of the resource group"
+  type        = string
+}
+
 variable "location" {
-  description = "The location where resources will be created"
+  description = "The location of the resources"
   type        = string
-  default     = "West Europe"
+  default     = "East US"
 }
 
-variable "sql_admin_username" {
-  description = "The SQL admin username"
+variable "sql_admin" {
+  description = "The SQL administrator username"
   type        = string
 }
 
-variable "sql_admin_password" {
-  description = "The SQL admin password"
+variable "sql_password" {
+  description = "The SQL administrator password"
   type        = string
-  sensitive     = true
 }
 
 variable "tenant_id" {
-  description = "The tenant ID for Key Vault"
-  type        = string
-}
-
-variable "organization_name" {
-  description = "The name of the Azure DevOps organization"
+  description = "The tenant ID for the Azure subscription"
   type        = string
 }
