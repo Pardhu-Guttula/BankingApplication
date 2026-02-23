@@ -1,11 +1,11 @@
-# Epic Title: Develop User Logout Capability
+# Epic Title: Create User Table in PostgreSQL
 
 import logging
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URL = "mysql+pymysql://user:password@localhost/mydatabase"
+DATABASE_URL = "postgresql://user:password@localhost/mydatabase"
 
 engine = create_engine(DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -20,4 +20,4 @@ def get_db():
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-logger.info(f"Connected to MySQL database at {DATABASE_URL}")
+logger.info(f"Connected to PostgreSQL database at {DATABASE_URL}")
