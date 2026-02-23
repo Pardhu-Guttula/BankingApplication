@@ -1,4 +1,4 @@
-# Epic Title: Remove Products from the Shopping Cart
+# Epic Title: Persist Shopping Cart State in PostgreSQL
 
 from flask import Flask
 from backend.shopping_cart.controllers.cart_controller import cart_bp
