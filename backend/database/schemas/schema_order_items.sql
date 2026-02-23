@@ -1,4 +1,4 @@
-# Epic Title: Store Order Data in PostgreSQL
+# Epic Title: View Order History
 
 CREATE TABLE order_items (
     id SERIAL PRIMARY KEY,
