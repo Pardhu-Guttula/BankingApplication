@@ -1,13 +1,13 @@
-# Epic Title: Track Sales Performance Metrics
+# Epic Title: Review Submission
 
 from flask import Flask
-from backend.analytics.controllers.sales_controller import sales_bp
+from backend.product_reviews.controllers.review_controller import review_bp
 from backend.database.config import Base, engine
 
 app = Flask(__name__)
 
 # Register blueprints
-app.register_blueprint(sales_bp, url_prefix='/api')
+app.register_blueprint(review_bp, url_prefix='/api')
 
 @app.before_first_request
 def startup():
