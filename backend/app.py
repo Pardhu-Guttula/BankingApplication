@@ -1,13 +1,13 @@
-# Epic Title: Store Order Data in PostgreSQL
+# Epic Title: Ensure Secure Storage and Retrieval
 
 from flask import Flask
-from backend.order_management.controllers.orders_controller import order_bp
+from backend.user_profile.controllers.user_controller import user_bp
 from backend.database.config import Base, engine
 
 app = Flask(__name__)
 
 # Register blueprints
-app.register_blueprint(order_bp, url_prefix='/api')
+app.register_blueprint(user_bp, url_prefix='/api')
 
 @app.before_first_request
 def startup():
