@@ -1,12 +1,12 @@
-# Epic Title: Develop Footer for the E-commerce Platform
+# Epic Title: Design and Implement Header for the E-commerce Platform
 
 from flask import Flask
-from backend.personalized_dashboard.controllers.footer_controller import footer_bp
+from backend.personalized_dashboard.controllers.header_controller import header_bp
 
 app = Flask(__name__)
 
 # Register blueprints
-app.register_blueprint(footer_bp, url_prefix='/ui')
+app.register_blueprint(header_bp, url_prefix='/ui')
 
 @app.before_first_request
 def startup():
