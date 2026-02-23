@@ -1,21 +1,15 @@
 # Epic Title: Filter Products by Category
 
+from sqlalchemy.orm import Session
 from backend.product_catalog.models.category import Category
 from typing import List, Optional
-import mysql.connector
 
 class CategoryRepository:
-    def __init__(self, db_config: dict):
-        self.db_config = db_config
-    
+    def __init__(self, db: Session):
+        self.db = db
+
     def get_all_categories(self) -> List[Category]:
-        connection = mysql.connector.connect(**self.db_config)
-        cursor = connection.cursor()
-        
-        try:
-            cursor.execute("SELECT id, name FROM categories")
-            results = cursor.fetchall()
-            return [Category(id=row[0], name=row[1]) for row in results]
-        finally:
-            cursor.close()
-            connection.close()
+        return self.db.query(Category).all()
+
+    def get_category_by_id(self, category_id: int) -> Optional[Category]:
+        return self.db.query(Category).filter(Category.id == category_id).first()
