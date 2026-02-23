@@ -1,13 +1,13 @@
-# Epic Title: Update Personal Information
+# Epic Title: View Order History
 
 from flask import Flask
-from backend.user_profile.controllers.user_profile_controller import user_profile_bp
+from backend.order_management.controllers.orders_controller import order_bp
 from backend.database.config import Base, engine
 
 app = Flask(__name__)
 
 # Register blueprints
-app.register_blueprint(user_profile_bp, url_prefix='/api')
+app.register_blueprint(order_bp, url_prefix='/api')
 
 @app.before_first_request
 def startup():
