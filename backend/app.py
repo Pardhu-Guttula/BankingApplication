@@ -1,4 +1,4 @@
-# Epic Title: Update Product Quantities in the Shopping Cart
+# Epic Title: Remove Products from the Shopping Cart
 
 from flask import Flask
 from backend.shopping_cart.controllers.cart_controller import cart_bp
