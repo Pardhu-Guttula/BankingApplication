@@ -1,13 +1,13 @@
-# Epic Title: Store Order Information in PostgreSQL Database
+# Epic Title: Integrate Payment Gateway (Stripe) for Processing Payments
 
 from flask import Flask
-from backend.orders.controllers.order_controller import order_bp
+from backend.payment.controllers.payment_controller import payment_bp
 from backend.database.config import Base, engine
 
 app = Flask(__name__)
 
 # Register blueprints
-app.register_blueprint(order_bp, url_prefix='/api')
+app.register_blueprint(payment_bp, url_prefix='/api')
 
 @app.before_first_request
 def startup():
