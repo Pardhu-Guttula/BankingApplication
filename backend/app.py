@@ -1,12 +1,12 @@
-# Epic Title: Implement Overall Design Framework for the E-commerce Platform
+# Epic Title: Develop Footer for the E-commerce Platform
 
 from flask import Flask
-from backend.design.controllers.layout_controller import layout_bp
+from backend.personalized_dashboard.controllers.footer_controller import footer_bp
 
 app = Flask(__name__)
 
 # Register blueprints
-app.register_blueprint(layout_bp)
+app.register_blueprint(footer_bp, url_prefix='/ui')
 
 @app.before_first_request
 def startup():
