@@ -1,3 +1,4 @@
 Flask==2.0.2
 SQLAlchemy==1.4.25
 psycopg2==2.9.1
+smtplib==3.0
