@@ -1,20 +1,25 @@
-# Epic Title: Implement Account Lockout Mechanism
+# Epic Title: Develop User Logout Capability
 
+from sqlalchemy.orm import Session
 from werkzeug.security import check_password_hash
-from backend.authentication.repositories.login_attempt_repository import LoginAttemptRepository
-from backend.authentication.models.login_attempt_model import User
+from datetime import datetime, timedelta
+import jwt
+
+from backend.authentication.repositories.user_repository import UserRepository
+from backend.authentication.repositories.session_repository import SessionRepository
+from backend.authentication.models.user import User
+from backend.authentication.models.session import Session
 
 class LoginService:
+    def __init__(self, user_repository: UserRepository, session_repository: SessionRepository):
+        self.user_repository = user_repository
+        self.session_repository = session_repository
 
-    @staticmethod
-    def authenticate_user(username: str, password: str) -> bool:
-        user = User.query.filter_by(username=username).first()
-        if user and not LoginAttemptRepository.is_account_locked(user.id):
-            if check_password_hash(user.password, password):
-                LoginAttemptRepository.reset_failed_attempts(user.id)
-                return True
-            else:
-                LoginAttemptRepository.record_login_attempt(user.id, successful=False)
-        elif user:
-            LoginAttemptRepository.record_login_attempt(user.id, successful=False)        
-        return False
+    def authenticate_user(self, db: Session, email: str, password: str) -> Optional[str]:
+        user = self.user_repository.get_user_by_email(email)
+        if user and check_password_hash(user.password_hash, password):
+            token = jwt.encode({'user_id': user.id, 'exp': datetime.utcnow() + timedelta(hours=1)}, 'secret', algorithm='HS256')
+            session = self.session_repository.create_session(user.id, token, datetime.utcnow() + timedelta(hours=1))
+            return token
+        else:
+            return None
