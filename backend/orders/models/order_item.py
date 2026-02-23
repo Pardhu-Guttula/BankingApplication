@@ -1,4 +1,4 @@
-# Epic Title: Store Order Information in PostgreSQL Database
+# Epic Title: Display Order Confirmation to Customers After Successful Payment
 
 from sqlalchemy import Column, Integer, Float, ForeignKey
 from backend.database.config import Base
