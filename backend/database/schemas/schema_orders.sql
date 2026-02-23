@@ -1,4 +1,4 @@
-# Epic Title: Manage and Update Order Statuses
+# Epic Title: Store Order Data in PostgreSQL
 
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
