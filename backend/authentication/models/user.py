@@ -1,20 +1,16 @@
-# Epic Title: Implement user authentication and authorization features
+# Epic Title: Create User Table in PostgreSQL
 
-from typing import Optional
+from sqlalchemy import Column, Integer, String
+from backend.database.config import Base
+from werkzeug.security import generate_password_hash
 
-class User:
-    def __init__(self, user_id: int, name: str, email: str, hashed_password: str):
-        self.user_id = user_id
-        self.name = name
-        self.email = email
-        self.hashed_password = hashed_password
+class User(Base):
+    __tablename__ = 'users'
 
-    @staticmethod
-    def validate_email(email: str) -> bool:
-        # Email validation logic
-        return True
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(length=50), nullable=False)
+    email = Column(String(length=100), unique=True, nullable=False)
+    password_hash = Column(String(length=255), nullable=False)
 
-    @staticmethod
-    def hash_password(password: str) -> str:
-        # Password hashing logic
-        return "hashed_password"
+    def set_password(self, password: str):
+        self.password_hash = generate_password_hash(password)
