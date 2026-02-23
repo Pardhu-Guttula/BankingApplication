@@ -1,4 +1,4 @@
-# Epic Title: Persist Shopping Cart State in PostgreSQL
+# Epic Title: Add Products to the Shopping Cart
 
 from sqlalchemy import Column, Integer, ForeignKey
 from backend.database.config import Base
