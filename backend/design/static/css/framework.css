@@ -1,0 +1,46 @@
+# Epic Title: Implement Overall Design Framework for the E-commerce Platform
+
+/* Global styles and design framework implementation */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+/* Consistent header styling */
+header {
+    background-color: #4CAF50;
+    padding: 10px 20px;
+    color: white;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2em;
+}
+
+/* Consistent footer styling */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Responsive design principles */
+@media screen and (max-width: 600px) {
+    header h1 {
+        font-size: 1.5em;
+    }
+
+    footer {
+        padding: 15px;
+    }
+}
