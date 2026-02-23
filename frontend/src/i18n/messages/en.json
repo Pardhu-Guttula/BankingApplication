@@ -1,17 +1,17 @@
 {
-  "badgePill.text": "Badge",
   "common.applyNow": "Apply Now",
+  "common.viewAll": "View All",
+  "productCard.ctaAriaLabel": "{ctaLabel}: {title}",
+  "productsForYou.ariaLabel": "Products for you",
   "productsForYou.badgeLimitedOffer": "Limited Offer",
   "productsForYou.badgePreApproved": "Pre-approved",
   "productsForYou.badgeRecommended": "Recommended",
-  "productsForYou.productGoldCreditCardDescription": "0% APR for 12 months + 2% cashback",
-  "productsForYou.productGoldCreditCardTitle": "Gold Credit Card",
-  "productsForYou.productPersonalLoanDescription": "Pre-approved up to $50,000 at 6.9% APR",
-  "productsForYou.productPersonalLoanTitle": "Personal Loan",
-  "productsForYou.productPremiumSavingsDescription": "Earn up to 4.5% APY with no minimum balance",
-  "productsForYou.productPremiumSavingsTitle": "Premium Savings Account",
+  "productsForYou.goldCardDescription": "0% APR for 12 months + 2% cashback",
+  "productsForYou.goldCardTitle": "Gold Credit Card",
+  "productsForYou.personalLoanDescription": "Pre-approved up to $50,000 at 6.9% APR",
+  "productsForYou.personalLoanTitle": "Personal Loan",
+  "productsForYou.premiumSavingsDescription": "Earn up to 4.5% APY with no minimum balance",
+  "productsForYou.premiumSavingsTitle": "Premium Savings Account",
   "productsForYou.title": "Products for You",
-  "productsForYou.viewAll": "View All",
-  "sectionHeader.actionLabel": "View All",
-  "sectionHeader.title": "Products for You"
+  "sectionHeader.actionAriaLabel": "View all products"
 }

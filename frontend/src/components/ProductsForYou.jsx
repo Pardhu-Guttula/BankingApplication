@@ -1,85 +1,85 @@
 import React from "react";
 import { CreditCard, PiggyBank, TrendingUp } from "lucide-react";
 import { useIntl } from "react-intl";
-
 import SectionHeader from "./layout/SectionHeader";
-import ProductCardsGrid from "./ui/ProductCardsGrid";
+import ProductCardGrid from "./ui/ProductCardGrid";
 
-const imgIcon = "https://www.figma.com/api/mcp/asset/6c71ae0b-0bc0-45e2-a750-768337ceed57";
-const imgVector = "https://www.figma.com/api/mcp/asset/e2bcee18-ec55-433d-83ba-3e49b16d7859";
-const imgVector1 = "https://www.figma.com/api/mcp/asset/5f565565-e54e-456b-884f-148e5dd9c4ce";
-const imgVector2 = "https://www.figma.com/api/mcp/asset/78d3f356-1205-428a-9c1b-0ae7f86f1ce1";
-const imgVector3 = "https://www.figma.com/api/mcp/asset/5a9cfad1-82de-41da-b136-d74a834ca32d";
-const imgVector4 = "https://www.figma.com/api/mcp/asset/78b7ef2f-b7ef-4263-9af1-4d8ca2593b21";
-const imgVector5 = "https://www.figma.com/api/mcp/asset/febba8a0-86aa-423c-8a63-118f361a9869";
-const imgVector6 = "https://www.figma.com/api/mcp/asset/0ee92eb2-f0a6-4f8a-bd87-1ca29bd2c714";
+const imgIcon = "https://www.figma.com/api/mcp/asset/740c7a58-c0ca-4b93-bd24-87c936508180";
+const imgVector = "https://www.figma.com/api/mcp/asset/48986c8b-edca-4095-8d81-17ded5b6fb84";
+const imgVector1 = "https://www.figma.com/api/mcp/asset/f4de77b2-d4a2-4b53-b863-977982781547";
+const imgVector2 = "https://www.figma.com/api/mcp/asset/e3e35b79-4cfe-4266-8f5a-0ae714ae6b64";
+const imgVector3 = "https://www.figma.com/api/mcp/asset/5d4c7058-1a71-4f63-b3eb-902f173fb626";
+const imgVector4 = "https://www.figma.com/api/mcp/asset/7e5b4dd1-ec16-4511-8564-39d95595da84";
+const imgVector5 = "https://www.figma.com/api/mcp/asset/70b2dac5-aba5-4a47-a457-4a05d71baaed";
+const imgVector6 = "https://www.figma.com/api/mcp/asset/721c76be-628b-4759-a794-74a94399695d";
 
 export default function ProductsForYou({
   title,
-  actionLabel,
+  items,
   onViewAll = () => {},
-  products,
 }) {
   const intl = useIntl();
 
-  const resolvedTitle = title ?? intl.formatMessage({ id: "productsForYou.title" });
-  const resolvedActionLabel = actionLabel ?? intl.formatMessage({ id: "productsForYou.viewAll" });
+  const resolvedTitle =
+    title ?? intl.formatMessage({ id: "productsForYou.title" });
 
-  const resolvedProducts =
-    products ??
-    [
-      {
-        id: "premium-savings",
-        icon: PiggyBank,
-        iconBgColor: "#F0FDF4",
-        iconColor: "#16A34A",
-        badgeText: intl.formatMessage({ id: "productsForYou.badgeRecommended" }),
-        title: intl.formatMessage({ id: "productsForYou.productPremiumSavingsTitle" }),
-        description: intl.formatMessage({ id: "productsForYou.productPremiumSavingsDescription" }),
-        ctaLabel: intl.formatMessage({ id: "common.applyNow" }),
-        onCta: () => {},
-      },
-      {
-        id: "personal-loan",
-        icon: TrendingUp,
-        iconBgColor: "#EFF6FF",
-        iconColor: "#2563EB",
-        badgeText: intl.formatMessage({ id: "productsForYou.badgePreApproved" }),
-        title: intl.formatMessage({ id: "productsForYou.productPersonalLoanTitle" }),
-        description: intl.formatMessage({ id: "productsForYou.productPersonalLoanDescription" }),
-        ctaLabel: intl.formatMessage({ id: "common.applyNow" }),
-        onCta: () => {},
-      },
-      {
-        id: "gold-credit-card",
-        icon: CreditCard,
-        iconBgColor: "#FAF5FF",
-        iconColor: "#7C3AED",
-        badgeText: intl.formatMessage({ id: "productsForYou.badgeLimitedOffer" }),
-        title: intl.formatMessage({ id: "productsForYou.productGoldCreditCardTitle" }),
-        description: intl.formatMessage({ id: "productsForYou.productGoldCreditCardDescription" }),
-        ctaLabel: intl.formatMessage({ id: "common.applyNow" }),
-        onCta: () => {},
-      },
-    ];
+  const defaultItems = [
+    {
+      id: "premium-savings",
+      icon: PiggyBank,
+      iconBg: "#F0FDF4",
+      iconColor: "#16A34A",
+      badge: intl.formatMessage({ id: "productsForYou.badgeRecommended" }),
+      title: intl.formatMessage({ id: "productsForYou.premiumSavingsTitle" }),
+      description: intl.formatMessage({
+        id: "productsForYou.premiumSavingsDescription",
+      }),
+      ctaLabel: intl.formatMessage({ id: "common.applyNow" }),
+      onCta: () => {},
+    },
+    {
+      id: "personal-loan",
+      icon: TrendingUp,
+      iconBg: "#EFF6FF",
+      iconColor: "#2563EB",
+      badge: intl.formatMessage({ id: "productsForYou.badgePreApproved" }),
+      title: intl.formatMessage({ id: "productsForYou.personalLoanTitle" }),
+      description: intl.formatMessage({
+        id: "productsForYou.personalLoanDescription",
+      }),
+      ctaLabel: intl.formatMessage({ id: "common.applyNow" }),
+      onCta: () => {},
+    },
+    {
+      id: "gold-card",
+      icon: CreditCard,
+      iconBg: "#FAF5FF",
+      iconColor: "#7C3AED",
+      badge: intl.formatMessage({ id: "productsForYou.badgeLimitedOffer" }),
+      title: intl.formatMessage({ id: "productsForYou.goldCardTitle" }),
+      description: intl.formatMessage({
+        id: "productsForYou.goldCardDescription",
+      }),
+      ctaLabel: intl.formatMessage({ id: "common.applyNow" }),
+      onCta: () => {},
+    },
+  ];
+
+  const resolvedItems = items ?? defaultItems;
 
   return (
-    <section className="w-full bg-white py-0">
-      <div className="mx-auto w-full max-w-[1192px] px-0">
-        <div className="flex w-full flex-col gap-4">
-          <SectionHeader title={resolvedTitle} actionLabel={resolvedActionLabel} onAction={onViewAll} />
-          <ProductCardsGrid products={resolvedProducts} />
-        </div>
+    <section
+      aria-label={intl.formatMessage({ id: "productsForYou.ariaLabel" })}
+      className="w-full bg-white py-0"
+    >
+      <div className="mx-auto flex w-full max-w-[1192px] flex-col gap-[16px] px-4 sm:px-6 lg:px-0">
+        <SectionHeader
+          title={resolvedTitle}
+          actionLabel={intl.formatMessage({ id: "common.viewAll" })}
+          onAction={onViewAll}
+        />
+        <ProductCardGrid items={resolvedItems} />
       </div>
-
-      <img src={imgIcon} alt="" className="hidden" />
-      <img src={imgVector} alt="" className="hidden" />
-      <img src={imgVector1} alt="" className="hidden" />
-      <img src={imgVector2} alt="" className="hidden" />
-      <img src={imgVector3} alt="" className="hidden" />
-      <img src={imgVector4} alt="" className="hidden" />
-      <img src={imgVector5} alt="" className="hidden" />
-      <img src={imgVector6} alt="" className="hidden" />
     </section>
   );
 }
