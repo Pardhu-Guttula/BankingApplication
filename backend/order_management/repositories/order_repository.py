@@ -1,7 +1,8 @@
-# Epic Title: Store Order Data in PostgreSQL
+# Epic Title: View Order History
 
 from sqlalchemy.orm import Session
-from backend.order_management.models.order import Order, OrderItem
+from backend.order_management.models.order import Order
+from backend.order_management.models.order_item import OrderItem
 
 class OrderRepository:
     def __init__(self, db: Session):
@@ -32,17 +33,8 @@ class OrderRepository:
         self.db.refresh(order_item)
         return order_item
 
-    def get_order_by_id(self, order_id: str) -> Order:
-        return self.db.query(Order).filter(Order.order_id == order_id).first()
+    def get_order_by_id(self, order_id: int) -> Order:
+        return self.db.query(Order).filter(Order.id == order_id).first()
 
-    def update_order(self, order_id: str, total_amount: float, status: str) -> Order:
-        order = self.get_order_by_id(order_id)
-        if order:
-            order.total_amount = total_amount
-            order.status = status
-            self.db.commit()
-            self.db.refresh(order)
-        return order
-
-    def get_all_orders(self) -> list:
-        return self.db.query(Order).all()
+    def get_orders_by_user_id(self, user_id: int):
+        return self.db.query(Order).filter(Order.user_id == user_id).order_by(Order.created_at.desc()).all()
