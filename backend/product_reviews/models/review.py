@@ -1,6 +1,6 @@
-# Epic Title: Review Submission
+# Epic Title: Review Display
 
-from sqlalchemy import Column, Integer, String, Text, Float, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, Text, Float, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import relationship
 from backend.database.config import Base
 from datetime import datetime
@@ -14,6 +14,7 @@ class Review(Base):
     rating = Column(Float, nullable=False)
     title = Column(String, nullable=False)
     review_text = Column(Text, nullable=False)
+    approved = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
