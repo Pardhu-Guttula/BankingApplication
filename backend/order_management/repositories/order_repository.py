@@ -1,35 +1,32 @@
-# Epic Title: View Order History
+# Epic Title: Manage and Update Order Statuses
 
-from backend.order_management.models.order import Order, OrderItem
-from typing import Optional, List
-import mysql.connector
+from sqlalchemy.orm import Session
+from backend.order_management.models.order import Order
 
 class OrderRepository:
-    def __init__(self, db_config: dict):
-        self.db_config = db_config
-    
-    def get_orders_by_user_id(self, user_id: int) -> List[Order]:
-        connection = mysql.connector.connect(**self.db_config)
-        cursor = connection.cursor()
-        
-        try:
-            cursor.execute("""
-                SELECT order_id, user_id, total_amount, status
-                FROM orders 
-                WHERE user_id = %s
-                ORDER BY order_id DESC
-            """, (user_id,))
-            orders_results = cursor.fetchall()
-            
-            orders = []
-            for order_result in orders_results:
-                cursor.execute("SELECT item_id, name, price, quantity FROM order_items WHERE order_id = %s", (order_result[0],))
-                items_results = cursor.fetchall()
-                
-                items = [OrderItem(id=row[0], name=row[1], price=row[2], quantity=row[3]) for row in items_results]
-                order = Order(order_id=order_result[0], user_id=order_result[1], items=items, total_amount=order_result[2], status=order_result[3])
-                orders.append(order)
-            return orders
-        finally:
-            cursor.close()
-            connection.close()
+    def __init__(self, db: Session):
+        self.db = db
+
+    def create_order(self, order_id: str, user_id: int, total_amount: float, transaction_id: str, status: str) -> Order:
+        order = Order(
+            order_id=order_id,
+            user_id=user_id,
+            total_amount=total_amount,
+            transaction_id=transaction_id,
+            status=status,
+        )
+        self.db.add(order)
+        self.db.commit()
+        self.db.refresh(order)
+        return order
+
+    def get_order_by_id(self, order_id: str) -> Order:
+        return self.db.query(Order).filter(Order.order_id == order_id).first()
+
+    def update_order_status(self, order_id: str, new_status: str) -> Order:
+        order = self.get_order_by_id(order_id)
+        if order:
+            order.status = new_status
+            self.db.commit()
+            self.db.refresh(order)
+        return order
