@@ -1,4 +1,4 @@
-# Epic Title: View Order History
+# Epic Title: Display Order Confirmation to Customers After Successful Payment
 
 CREATE TABLE order_items (
     id SERIAL PRIMARY KEY,
