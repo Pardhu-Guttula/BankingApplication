@@ -1,4 +1,4 @@
-# Epic Title: Manage and Update Order Statuses
+# Epic Title: Store Order Data in PostgreSQL
 
 from flask import Flask
 from backend.order_management.controllers.orders_controller import order_bp
