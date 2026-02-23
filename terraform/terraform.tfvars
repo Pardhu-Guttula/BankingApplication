@@ -1,5 +1,2 @@
-resource_group_name = "self-service-rg"
+resource_group_name = "example-resources"
 location = "West Europe"
-tenant_id = "your-tenant-id"
-sql_admin_username = "your-sql-admin-username"
-sql_admin_password = "your-sql-admin-password"
