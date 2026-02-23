@@ -1,4 +1,4 @@
-# Epic Title: Update Product Quantities in the Shopping Cart
+# Epic Title: Remove Products from the Shopping Cart
 
 CREATE TABLE cart_items (
     id SERIAL PRIMARY KEY,
