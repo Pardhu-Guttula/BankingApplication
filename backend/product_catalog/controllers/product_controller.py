@@ -1,4 +1,4 @@
-# Epic Title: Sort Products by Price
+# Epic Title: Filter Products by Category
 
 from flask import Blueprint, request, jsonify
 from sqlalchemy.exc import SQLAlchemyError
@@ -13,10 +13,13 @@ def list_products():
     db = next(get_db())
     product_repository = ProductRepository(db)
     product_service = ProductService(product_repository)
-    sort_order = request.args.get('sort_order', default='', type=str)
+    category_id = request.args.get('category_id', type=int)
 
     try:
-        products = product_service.fetch_sorted_products(db, sort_order)
+        if category_id:
+            products = db.query(Product).filter(Product.category_id == category_id).all()
+        else:
+            products = db.query(Product).all()
         if products:
             return jsonify([{
                 "id": product.id,
@@ -24,6 +27,6 @@ def list_products():
                 "price": product.price,
                 "description": product.description
             } for product in products])
-        return jsonify({"message": "No products found"}), 404
+        return jsonify({"message": "No products found in this category"}), 404
     except SQLAlchemyError as se:
-        return jsonify({"error": "Unable to retrieve sorting options"}), 500
+        return jsonify({"error": "Unable to retrieve products"}), 500
