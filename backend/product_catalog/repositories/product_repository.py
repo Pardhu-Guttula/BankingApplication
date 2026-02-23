@@ -1,21 +1,17 @@
-# Epic Title: Filter Products by Category
+# Epic Title: Sort Products by Price
 
+from sqlalchemy.orm import Session
+from sqlalchemy import asc, desc
 from backend.product_catalog.models.product import Product
-from typing import List, Optional
-import mysql.connector
+from typing import List
 
 class ProductRepository:
-    def __init__(self, db_config: dict):
-        self.db_config = db_config
-    
-    def get_products_by_category(self, category_id: int) -> List[Product]:
-        connection = mysql.connector.connect(**self.db_config)
-        cursor = connection.cursor()
-        
-        try:
-            cursor.execute("SELECT id, name, price, description FROM products WHERE category_id = %s", (category_id,))
-            results = cursor.fetchall()
-            return [Product(id=row[0], name=row[1], price=row[2], description=row[3]) for row in results]
-        finally:
-            cursor.close()
-            connection.close()
+    def __init__(self, db: Session):
+        self.db = db
+
+    def get_products_sorted_by_price(self, sort_order: str) -> List[Product]:
+        if sort_order == 'asc':
+            return self.db.query(Product).order_by(asc(Product.price)).all()
+        elif sort_order == 'desc':
+            return self.db.query(Product).order_by(desc(Product.price)).all()
+        return self.db.query(Product).all()
