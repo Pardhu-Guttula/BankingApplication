@@ -1,18 +1,17 @@
-# Epic Title: Display Product Details
+# Epic Title: Implement Overall Design Framework for the E-commerce Platform
 
 from flask import Flask
-from backend.product_catalog.controllers.product_controller import product_bp
-from backend.database.config import Base, engine
+from backend.design.controllers.layout_controller import layout_bp
 
 app = Flask(__name__)
 
 # Register blueprints
-app.register_blueprint(product_bp, url_prefix='/api')
+app.register_blueprint(layout_bp)
 
 @app.before_first_request
 def startup():
-    # Create all tables in the database
-    Base.metadata.create_all(bind=engine)
+    # Code to run on startup, e.g., initializing loggers, checking preconditions
+    pass
 
 @app.teardown_appcontext
 def shutdown(exception):
