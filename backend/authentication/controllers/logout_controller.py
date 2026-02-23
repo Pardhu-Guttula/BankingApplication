@@ -1,15 +1,19 @@
-# Epic Title: Implement user authentication and authorization features
+# Epic Title: Develop User Logout Capability
 
-from flask import Flask, request, jsonify, redirect, url_for
-from backend.authentication.services.logout_service import LogoutService
+from flask import Blueprint, request, jsonify
+from backend.database.config import get_db
+from backend.authentication.repositories.session_repository import SessionRepository
 
-app = Flask(__name__)
-active_sessions = []  # This should be managed better in a real-world scenario
-logout_service = LogoutService(active_sessions)
+logout_bp = Blueprint('logout', __name__)
 
-@app.route('/logout', methods=['POST'])
-def logout():
-    token = request.headers.get("Authorization")
-    if token and logout_service.logout(token):
-        return redirect(url_for('login'))
-    return jsonify({"error": "Invalid token"}), 401
+@logout_bp.route('/logout', methods=['POST'])
+def logout_user():
+    db = next(get_db())
+    session_repository = SessionRepository(db)
+
+    try:
+        token = request.headers.get('Authorization').split(" ")[1]
+        session_repository.invalidate_session_by_token(token)
+        return jsonify({"message": "User logged out successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
