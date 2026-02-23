@@ -1,4 +1,4 @@
-# Epic Title: Change Password
+# Epic Title: Ensure Secure Storage and Retrieval
 
 from flask import Blueprint, request, jsonify
 from sqlalchemy.exc import SQLAlchemyError
