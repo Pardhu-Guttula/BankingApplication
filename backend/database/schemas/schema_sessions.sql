@@ -1,4 +1,4 @@
-# Epic Title: Develop User Login Capability
+# Epic Title: Develop User Logout Capability
 
 CREATE TABLE sessions (
     id INT AUTO_INCREMENT PRIMARY KEY,
