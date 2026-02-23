@@ -1,14 +1,13 @@
-# Epic Title: Implement user authentication and authorization features
+# Epic Title: Develop User Logout Capability
 
-from typing import Optional
-import datetime
+from sqlalchemy import Column, Integer, String, TIMESTAMP
+from backend.database.config import Base
 
-class Session:
-    def __init__(self, session_id: str, user_id: int, token: str, valid_until: datetime.datetime):
-        self.session_id = session_id
-        self.user_id = user_id
-        self.token = token
-        self.valid_until = valid_until
+class Session(Base):
+    __tablename__ = 'sessions'
 
-    def is_valid(self) -> bool:
-        return datetime.datetime.now() < self.valid_until
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, nullable=False)
+    token = Column(String(length=255), unique=True, nullable=False)
+    created_at = Column(TIMESTAMP, nullable=False)
+    expires_at = Column(TIMESTAMP, nullable=False)
