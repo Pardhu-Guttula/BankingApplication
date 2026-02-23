@@ -1,4 +1,4 @@
-# Epic Title: Add Products to the Shopping Cart
+# Epic Title: Update Product Quantities in the Shopping Cart
 
 from sqlalchemy.orm import Session
 from backend.shopping_cart.models.cart import Cart
@@ -16,6 +16,18 @@ class CartRepository:
         self.db.add(cart_item)
         self.db.commit()
         self.db.refresh(cart_item)
+
+    def update_cart_item_quantity(self, cart_id: int, product_id: int, quantity: int):
+        cart_item = self.db.query(CartItem).filter(CartItem.cart_id == cart_id, CartItem.product_id == product_id).first()
+        if cart_item:
+            if quantity == 0:
+                self.db.delete(cart_item)
+            else:
+                cart_item.quantity = quantity
+            self.db.commit()
+            self.db.refresh(cart_item)
+            return cart_item
+        return None
 
     def get_cart_items(self, cart_id: int):
         return self.db.query(CartItem).filter(CartItem.cart_id == cart_id).all()
