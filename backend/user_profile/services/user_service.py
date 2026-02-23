@@ -1,4 +1,4 @@
-# Epic Title: Change Password
+# Epic Title: Ensure Secure Storage and Retrieval
 
 from sqlalchemy.orm import Session
 from backend.user_profile.repositories.user_repository import UserRepository
