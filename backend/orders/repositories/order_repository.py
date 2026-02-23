@@ -1,4 +1,4 @@
-# Epic Title: Display Order Confirmation to Customers After Successful Payment
+# Epic Title: Store Order Information in PostgreSQL Database
 
 from sqlalchemy.orm import Session
 from backend.orders.models.order import Order
@@ -32,5 +32,5 @@ class OrderRepository:
         self.db.refresh(order_item)
         return order_item
 
-    def get_order_by_id(self, order_id: str) -> Order:
-        return self.db.query(Order).filter(Order.order_id == order_id).first()
+    def get_order_by_id(self, order_id: int) -> Order:
+        return self.db.query(Order).filter(Order.id == order_id).first()
