@@ -1,4 +1,4 @@
-# Epic Title: Review Submission
+# Epic Title: Review Display
 
 CREATE TABLE reviews (
     id SERIAL PRIMARY KEY,
@@ -7,6 +7,7 @@ CREATE TABLE reviews (
     rating FLOAT NOT NULL CHECK (rating >= 1 AND rating <= 5),
     title VARCHAR NOT NULL,
     review_text TEXT NOT NULL,
+    approved BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
