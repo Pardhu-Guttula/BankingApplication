@@ -1,10 +1,12 @@
-# Epic Title: Sort Products by Price
+# Epic Title: Display Product Details
 
-from dataclasses import dataclass
+from sqlalchemy import Column, Integer, String, Float
+from backend.database.config import Base
 
-@dataclass
-class Product:
-    id: int
-    name: str
-    price: float
-    description: str
+class Product(Base):
+    __tablename__ = 'products'
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    price = Column(Float, nullable=False)
+    description = Column(String, nullable=False)
