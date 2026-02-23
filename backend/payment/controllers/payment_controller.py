@@ -1,41 +1,51 @@
-# Epic Title: Integrate payment gateway (Stripe) for processing payments
+# Epic Title: Integrate Payment Gateway (Stripe) for Processing Payments
 
-from flask import Blueprint, jsonify, request
-import stripe
+from flask import Blueprint, request, jsonify
+from sqlalchemy.exc import SQLAlchemyError
+from backend.database.config import get_db
 from backend.payment.repositories.transaction_repository import TransactionRepository
-from backend.payment.models.transaction import Transaction
-import datetime
+from backend.payment.services.payment_service import PaymentService
 
 payment_bp = Blueprint('payment', __name__)
-stripe.api_key = 'your_stripe_api_key_here'
-transaction_repository = TransactionRepository(db_config={'host': 'localhost', 'user': 'root', 'password': '', 'database': 'ecommerce'})
 
-@payment_bp.route('/checkout', methods=['POST'])
+STRIPE_API_KEY = "your_stripe_api_key"  # Replace with your actual Stripe API key
+
+@payment_bp.route('/payment/process', methods=['POST'])
 def process_payment():
+    db = next(get_db())
+    data = request.get_json()
+    user_id = data.get('user_id')
+    amount = data.get('amount')
+    currency = data.get('currency', 'usd')
+
+    transaction_repository = TransactionRepository(db)
+    payment_service = PaymentService(transaction_repository, STRIPE_API_KEY)
+
     try:
-        amount = request.json.get('amount')
-        currency = request.json.get('currency', 'usd')
-        source = request.json.get('source')
-        
-        if not amount or not source:
-            return jsonify({'error': 'Invalid payment details'}), 400
-        
-        charge = stripe.Charge.create(
-            amount=int(amount * 100),  # Stripe expects amount in cents
-            currency=currency,
-            source=source,
-            description='E-commerce payment'
-        )
-        
-        transaction = Transaction(
-            id=charge.id,
-            amount=amount,
-            currency=currency,
-            status=charge.status,
-            created_at=datetime.datetime.now()
-        )
-        transaction_repository.save_transaction(transaction)
-        
-        return jsonify({'transaction_id': transaction.id, 'status': transaction.status}), 200
-    except stripe.error.CardError as e:
-        return jsonify({'error': str(e)}), 400
+        response = payment_service.process_payment(db, user_id, amount, currency)
+        if "error" in response:
+            return jsonify(response), 400
+        return jsonify(response)
+    except SQLAlchemyError as e:
+        return jsonify({"error": "Unable to process your request"}), 500
+    except KeyError:
+        return jsonify({"error": "Invalid input data"}), 400
+
+@payment_bp.route('/payment/confirm', methods=['POST'])
+def confirm_payment():
+    db = next(get_db())
+    data = request.get_json()
+    transaction_id = data.get('transaction_id')
+
+    transaction_repository = TransactionRepository(db)
+    payment_service = PaymentService(transaction_repository, STRIPE_API_KEY)
+
+    try:
+        response = payment_service.confirm_payment(db, transaction_id)
+        if "error" in response:
+            return jsonify(response), 400
+        return jsonify(response)
+    except SQLAlchemyError as e:
+        return jsonify({"error": "Unable to process your request"}), 500
+    except KeyError:
+        return jsonify({"error": "Invalid input data"}), 400
