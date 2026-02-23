@@ -1,8 +1,6 @@
-# Epic Title: Create Categories Table in PostgreSQL
+# Epic Title: Filter Products by Category
 
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    parent_category_id INT,
-    FOREIGN KEY (parent_category_id) REFERENCES categories(id)
+    name VARCHAR(255) NOT NULL
 );
