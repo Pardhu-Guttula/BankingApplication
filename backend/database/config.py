@@ -1,4 +1,4 @@
-# Epic Title: Develop User Registration Capability
+# Epic Title: Develop User Logout Capability
 
 import logging
 from sqlalchemy import create_engine
