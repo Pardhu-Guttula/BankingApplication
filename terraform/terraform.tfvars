@@ -1,2 +1,5 @@
-resource_group_name = "example-resources"
 location = "West Europe"
+sql_admin_username = "sqladmin"
+sql_admin_password = "P@ssw0rd123"
+tenant_id = "your-tenant-id"
+organization_name = "your-organization-name"
