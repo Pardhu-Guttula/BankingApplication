@@ -1,8 +1,9 @@
-# Epic Title: Create User Table in PostgreSQL
+# Epic Title: Ensure Secure Storage and Retrieval
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL
+    username VARCHAR NOT NULL UNIQUE,
+    hashed_password VARCHAR NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
