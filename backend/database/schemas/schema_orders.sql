@@ -1,4 +1,4 @@
-# Epic Title: Store Order Data in PostgreSQL
+# Epic Title: View Order History
 
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
@@ -7,6 +7,5 @@ CREATE TABLE orders (
     total_amount FLOAT NOT NULL,
     transaction_id VARCHAR NOT NULL UNIQUE,
     status VARCHAR NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
