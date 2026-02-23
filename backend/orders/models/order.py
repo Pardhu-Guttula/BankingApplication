@@ -1,11 +1,15 @@
-# Epic Title: Create Orders Table in PostgreSQL
+# Epic Title: Display Order Confirmation to Customers After Successful Payment
 
-from sqlalchemy import Column, Integer, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, DateTime
 from backend.database.config import Base
+from datetime import datetime
 
 class Order(Base):
     __tablename__ = 'orders'
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    order_id = Column(String, nullable=False, unique=True)
+    user_id = Column(Integer, nullable=False)
     total_amount = Column(Float, nullable=False)
+    transaction_id = Column(String, nullable=False, unique=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
