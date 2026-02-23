@@ -1,13 +1,13 @@
-# Epic Title: Generate Detailed E-commerce Performance Reports
+# Epic Title: Monitor User Behavior Metrics
 
 from flask import Flask
-from backend.analytics_reporting.controllers.performance_controller import performance_bp
+from backend.analytics.controllers.behavior_metric_controller import behavior_metric_bp
 from backend.database.config import Base, engine
 
 app = Flask(__name__)
 
 # Register blueprints
-app.register_blueprint(performance_bp, url_prefix='/api')
+app.register_blueprint(behavior_metric_bp, url_prefix='/api')
 
 @app.before_first_request
 def startup():
