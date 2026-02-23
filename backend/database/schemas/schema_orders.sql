@@ -1,4 +1,4 @@
-# Epic Title: View Order History
+# Epic Title: Display Order Confirmation to Customers After Successful Payment
 
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
@@ -6,6 +6,5 @@ CREATE TABLE orders (
     user_id INTEGER NOT NULL,
     total_amount FLOAT NOT NULL,
     transaction_id VARCHAR NOT NULL UNIQUE,
-    status VARCHAR NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
