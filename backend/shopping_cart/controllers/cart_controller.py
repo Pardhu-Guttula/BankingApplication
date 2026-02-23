@@ -1,4 +1,4 @@
-# Epic Title: Update Product Quantities in the Shopping Cart
+# Epic Title: Remove Products from the Shopping Cart
 
 from flask import Blueprint, request, jsonify
 from sqlalchemy.exc import SQLAlchemyError
@@ -9,20 +9,19 @@ from backend.product_catalog.repositories.product_repository import ProductRepos
 
 cart_bp = Blueprint('cart', __name__)
 
-@cart_bp.route('/cart/update', methods=['POST'])
-def update_cart():
+@cart_bp.route('/cart/remove', methods=['POST'])
+def remove_from_cart():
     db = next(get_db())
     data = request.get_json()
     user_id = data.get('user_id')
     product_id = data.get('product_id')
-    quantity = data.get('quantity')
 
     cart_repository = CartRepository(db)
     product_repository = ProductRepository(db)
     cart_service = CartService(cart_repository, product_repository)
 
     try:
-        response = cart_service.update_product_quantity_in_cart(db, user_id, product_id, quantity)
+        response = cart_service.remove_product_from_cart(db, user_id, product_id)
         if isinstance(response, str):
             return jsonify({"error": response}), 404
         return jsonify([{
