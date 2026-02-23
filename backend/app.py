@@ -1,13 +1,13 @@
-# Epic Title: Persist Shopping Cart State in PostgreSQL
+# Epic Title: Manage and Update Order Statuses
 
 from flask import Flask
-from backend.shopping_cart.controllers.cart_controller import cart_bp
+from backend.order_management.controllers.orders_controller import order_bp
 from backend.database.config import Base, engine
 
 app = Flask(__name__)
 
 # Register blueprints
-app.register_blueprint(cart_bp, url_prefix='/api')
+app.register_blueprint(order_bp, url_prefix='/api')
 
 @app.before_first_request
 def startup():
