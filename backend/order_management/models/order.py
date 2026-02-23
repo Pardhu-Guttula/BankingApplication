@@ -1,6 +1,6 @@
-# Epic Title: Manage and Update Order Statuses
+# Epic Title: Store Order Data in PostgreSQL
 
-from sqlalchemy import Column, Integer, String, Float, DateTime
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey
 from backend.database.config import Base
 from datetime import datetime
 
@@ -15,3 +15,12 @@ class Order(Base):
     status = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+class OrderItem(Base):
+    __tablename__ = 'order_items'
+
+    id = Column(Integer, primary_key=True, index=True)
+    order_id = Column(Integer, ForeignKey('orders.id'), nullable=False)
+    product_id = Column(Integer, nullable=False)
+    quantity = Column(Integer, nullable=False)
+    price = Column(Float, nullable=False)
