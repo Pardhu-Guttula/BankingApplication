@@ -1,4 +1,4 @@
-# Epic Title: Store Order Information in PostgreSQL Database
+# Epic Title: Store Order Data in PostgreSQL
 
 CREATE TABLE order_items (
     id SERIAL PRIMARY KEY,
