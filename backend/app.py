@@ -1,13 +1,13 @@
-# Epic Title: Ensure Secure Storage and Retrieval
+# Epic Title: Review Display
 
 from flask import Flask
-from backend.user_profile.controllers.user_controller import user_bp
+from backend.product_reviews.controllers.review_controller import review_bp
 from backend.database.config import Base, engine
 
 app = Flask(__name__)
 
 # Register blueprints
-app.register_blueprint(user_bp, url_prefix='/api')
+app.register_blueprint(review_bp, url_prefix='/api')
 
 @app.before_first_request
 def startup():
