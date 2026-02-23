@@ -1,21 +1,25 @@
-# Epic Title: Implement Data Encryption Protocols
+# Epic Title: Develop User Logout Capability
 
-import logging
 from flask import Flask
-from backend.core_banking.controllers.encryption_controller import encryption_controller
-from backend.core_banking.models.encrypted_data_model import db as core_banking_db
+from backend.authentication.controllers.login_controller import login_bp
+from backend.authentication.controllers.logout_controller import logout_bp
+from backend.database.config import Base, engine
 
-def create_app() -> Flask:
-    app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://user:password@localhost/dbname'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app = Flask(__name__)
 
-    core_banking_db.init_app(app)
-    app.register_blueprint(encryption_controller)
+# Register blueprints
+app.register_blueprint(login_bp, url_prefix='/api/auth')
+app.register_blueprint(logout_bp, url_prefix='/api/auth')
 
-    return app
+@app.before_first_request
+def startup():
+    # Create all tables in the database
+    Base.metadata.create_all(bind=engine)
+
+@app.teardown_appcontext
+def shutdown(exception):
+    # Code to run on shutdown, e.g., close db connection, clean up resources
+    pass
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    app = create_app()
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host="0.0.0.0", port=5000)
