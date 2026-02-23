@@ -1,0 +1,89 @@
+{
+    "test_login_success": [
+        {
+            "user_id": "user123",
+            "password": "password123"
+        },
+        {
+            "user_id": "sample_user",
+            "password": "sample_password"
+        },
+        {
+            "user_id": "john_doe",
+            "password": "john_password"
+        },
+        {
+            "user_id": "alice_b",
+            "password": "alice_secret"
+        },
+        {
+            "user_id": "charlie87",
+            "password": "charlie_pass"
+        }
+    ],
+    "test_login_lockout": [
+        {
+            "user_id": "locked_user_1",
+            "password": "any_password"
+        },
+        {
+            "user_id": "locked_user_2",
+            "password": "password123"
+        },
+        {
+            "user_id": "locked_user_3",
+            "password": "locked_password"
+        },
+        {
+            "user_id": "locked_account",
+            "password": "password"
+        },
+        {
+            "user_id": "user_locked_out",
+            "password": "user_password"
+        }
+    ],
+    "test_login_invalid_data": [
+        {
+            "user_id": "test_user"
+        },
+        {
+            "password": "test_password"
+        },
+        {
+            "user_id": ""
+        },
+        {
+            "password": ""
+        },
+        {
+            "user_id": "u123"
+        }
+    ],
+    "test_login_wrong_credentials": [
+        {
+            "user_id": "user123",
+            "password": "wrong123"
+        },
+        {
+            "user_id": "john_doe",
+            "password": "incorrect_password"
+        },
+        {
+            "user_id": "alice_b",
+            "password": "incorrect"
+        },
+        {
+            "user_id": "charlie87",
+            "password": "wrong_password"
+        },
+        {
+            "user_id": "wrong_user",
+            "password": "wrong_pass"
+        }
+    ],
+    "test_login_no_data": [
+        {
+        }
+    ]
+}
