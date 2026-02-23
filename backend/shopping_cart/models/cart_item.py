@@ -1,4 +1,4 @@
-# Epic Title: Update Product Quantities in the Shopping Cart
+# Epic Title: Remove Products from the Shopping Cart
 
 from sqlalchemy import Column, Integer, ForeignKey
 from backend.database.config import Base
