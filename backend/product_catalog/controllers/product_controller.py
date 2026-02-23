@@ -1,4 +1,4 @@
-# Epic Title: Filter Products by Category
+# Epic Title: Display Product Details
 
 from flask import Blueprint, request, jsonify
 from sqlalchemy.exc import SQLAlchemyError
@@ -8,25 +8,22 @@ from backend.product_catalog.services.product_service import ProductService
 
 product_bp = Blueprint('product', __name__)
 
-@product_bp.route('/products', methods=['GET'])
-def list_products():
+@product_bp.route('/product/<int:product_id>', methods=['GET'])
+def view_product_details(product_id: int):
     db = next(get_db())
     product_repository = ProductRepository(db)
     product_service = ProductService(product_repository)
-    category_id = request.args.get('category_id', type=int)
 
     try:
-        if category_id:
-            products = db.query(Product).filter(Product.category_id == category_id).all()
-        else:
-            products = db.query(Product).all()
-        if products:
-            return jsonify([{
-                "id": product.id,
-                "name": product.name,
-                "price": product.price,
-                "description": product.description
-            } for product in products])
-        return jsonify({"message": "No products found in this category"}), 404
+        product_info = product_service.fetch_product_details(db, product_id)
+        if isinstance(product_info, str):
+            return jsonify({"error": product_info}), 404
+        return jsonify({
+            "name": product_info.name,
+            "price": product_info.price,
+            "description": product_info.description
+        })
     except SQLAlchemyError as se:
-        return jsonify({"error": "Unable to retrieve products"}), 500
+        return jsonify({"error": "Unable to retrieve product details"}), 500
+    except KeyError:
+        return jsonify({"error": "Invalid input data"}), 400
