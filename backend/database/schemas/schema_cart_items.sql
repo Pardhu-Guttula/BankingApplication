@@ -1,4 +1,4 @@
-# Epic Title: Remove Products from the Shopping Cart
+# Epic Title: Persist Shopping Cart State in PostgreSQL
 
 CREATE TABLE cart_items (
     id SERIAL PRIMARY KEY,
