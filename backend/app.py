@@ -1,15 +1,35 @@
-# Epic Title: Develop User Logout Capability
+# Epic Title: Create User Table in PostgreSQL
 
 from flask import Flask
-from backend.authentication.controllers.login_controller import login_bp
-from backend.authentication.controllers.logout_controller import logout_bp
-from backend.database.config import Base, engine
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
+from backend.database.config import Base, engine, get_db
+from backend.authentication.repositories.user_repository import UserRepository
+from backend.authentication.services.registration_service import RegistrationService
 
 app = Flask(__name__)
 
-# Register blueprints
-app.register_blueprint(login_bp, url_prefix='/api/auth')
-app.register_blueprint(logout_bp, url_prefix='/api/auth')
+@app.route('/register', methods=['POST'])
+def register_user():
+    db: Session = next(get_db())
+    user_repository = UserRepository(db)
+    registration_service = RegistrationService(user_repository)
+
+    try:
+        data = request.get_json()
+
+        name = data['name']
+        email = data['email']
+        password = data['password']
+
+        new_user = registration_service.register_user(db, name, email, password)
+        return jsonify({"message": "User registered successfully"}), 201
+    except ValueError as ve:
+        return jsonify({"error": str(ve)}), 400
+    except SQLAlchemyError as se:
+        return jsonify({"error": "Database error occurred"}), 500
+    except KeyError:
+        return jsonify({"error": "Invalid input data"}), 400
 
 @app.before_first_request
 def startup():
