@@ -1,4 +1,4 @@
-# Epic Title: Ensure Secure Storage and Retrieval
+# Epic Title: Change Password
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
