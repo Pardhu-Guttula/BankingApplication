@@ -1,25 +1,11 @@
-variable "resource_group_name" {
-  description = "The name of the resource group"
-  type        = string
-}
-
 variable "location" {
-  description = "The location of the resources"
+  description = "The location where resources will be created."
   type        = string
-  default     = "East US"
+  default     = "West Europe"
 }
 
-variable "sql_admin" {
-  description = "The SQL administrator username"
+variable "resource_group_name" {
+  description = "The name of the resource group."
   type        = string
-}
-
-variable "sql_password" {
-  description = "The SQL administrator password"
-  type        = string
-}
-
-variable "tenant_id" {
-  description = "The tenant ID for the Azure subscription"
-  type        = string
+  default     = "example-resources"
 }
