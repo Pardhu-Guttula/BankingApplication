@@ -1,0 +1,64 @@
+```json
+{
+    "test_assign_role_success": [
+        {
+            "email": "test1@example.com",
+            "role": "user"
+        },
+        {
+            "email": "john.doe@example.com",
+            "role": "moderator"
+        },
+        {
+            "email": "jane.smith@example.com",
+            "role": "manager"
+        }
+    ],
+    "test_assign_role_failure": [
+        {
+            "email": "test2@example.com",
+            "role": "guest"
+        },
+        {
+            "email": "admin@example.com",
+            "role": "superuser"
+        },
+        {
+            "email": "employee@example.com",
+            "role": "employee"
+        }
+    ],
+    "test_assign_role_no_data": [
+        {},
+        {},
+        {}
+    ],
+    "test_get_permissions_success": [
+        {
+            "email": "test3@example.com"
+        },
+        {
+            "email": "alice@example.com"
+        },
+        {
+            "email": "bob@example.com"
+        }
+    ],
+    "test_get_permissions_no_email": [
+        {},
+        {},
+        {}
+    ],
+    "test_get_permissions_invalid_email": [
+        {
+            "email": "nonexistent@example.com"
+        },
+        {
+            "email": "invalid.email@example.com"
+        },
+        {
+            "email": "unknown.user@example.com"
+        }
+    ]
+}
+```
