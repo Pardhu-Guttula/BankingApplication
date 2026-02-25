@@ -1,0 +1,70 @@
+```json
+{
+  "test_find_by_email_exists": [
+    {
+      "id": 1,
+      "email": "john@example.com",
+      "first_name": "John",
+      "last_name": "Doe",
+      "role_id": 2,
+      "hashed_password": "$2b$12$eW0yBgS1wD2g/yGpQOyzTeF6R2G1G5RgYzBKTmagahYtH.kOTfLVi"
+    },
+    {
+      "id": 2,
+      "email": "jane@example.com",
+      "first_name": "Jane",
+      "last_name": "Doe",
+      "role_id": 1,
+      "hashed_password": "$2b$12$eW0yBgS1wD2g/yGpQOyzTeF6R3G1G5RgYzBKTmagahYtH.kOTfLVi"
+    },
+    {
+      "id": 3,
+      "email": "alex@example.com",
+      "first_name": "Alex",
+      "last_name": "Smith",
+      "role_id": 5,
+      "hashed_password": "$2b$12$eW0yBgS1wD2g/yGpQOyzTeF6R4G1G5RgYzBKTmagahYtH.kOTfLVi"
+    }
+  ],
+  "test_find_by_email_not_exists": [
+    {
+      "id": 4,
+      "email": "notfound@example.com",
+      "first_name": "Ghost",
+      "last_name": "User",
+      "role_id": 0,
+      "hashed_password": "$2b$12$eW0yBgS1wD2g/yGpQOyzTeF6R5G1G5RgYzBKTmagahYtH.kOTfLVi"
+    }
+  ],
+  "test_update_role_valid_user": [
+    {
+      "id": 5,
+      "email": "anna@example.com",
+      "first_name": "Anna",
+      "last_name": "Taylor",
+      "role_id": 4,
+      "hashed_password": "$2b$12$eW0yBgS1wD2g/yGpQOyzTeF6R6G1G5RgYzBKTmagahYtH.kOTfLVi"
+    }
+  ],
+  "test_update_role_invalid_user": [
+    {
+      "id": 99,
+      "email": "nouser@example.com",
+      "first_name": "No",
+      "last_name": "User",
+      "role_id": -1,
+      "hashed_password": "$2b$12$eW0yBgS1wD2g/yGpQOyzTeF6R7G1G5RgYzBKTmagahYtH.kOTfLVi"
+    }
+  ],
+  "test_update_role_invalid_role_id": [
+    {
+      "id": 6,
+      "email": "invalidrole@example.com",
+      "first_name": "Invalid",
+      "last_name": "Role",
+      "role_id": -1,
+      "hashed_password": "$2b$12$eW0yBgS1wD2g/yGpQOyzTeF6R8G1G5RgYzBKTmagahYtH.kOTfLVi"
+    }
+  ]
+}
+```
