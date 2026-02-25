@@ -1,0 +1,121 @@
+{
+  "test_role_creation": [
+    {
+      "role_id": 1,
+      "name": "Admin",
+      "permissions": ["create", "read", "update"]
+    },
+    {
+      "role_id": 2,
+      "name": "SuperAdmin",
+      "permissions": ["all"]
+    },
+    {
+      "role_id": 3,
+      "name": "Manager",
+      "permissions": ["create", "read"]
+    }
+  ],
+  "test_role_empty_permissions": [
+    {
+      "role_id": 4,
+      "name": "User",
+      "permissions": []
+    },
+    {
+      "role_id": 5,
+      "name": "Guest",
+      "permissions": []
+    },
+    {
+      "role_id": 6,
+      "name": "Newbie",
+      "permissions": []
+    }
+  ],
+  "test_role_special_characters": [
+    {
+      "role_id": 7,
+      "name": "@dmin",
+      "permissions": ["read*"]
+    },
+    {
+      "role_id": 8,
+      "name": "User#1",
+      "permissions": ["write?", "edit$"]
+    },
+    {
+      "role_id": 9,
+      "name": "T3st",
+      "permissions": ["delete^"]
+    }
+  ],
+  "test_role_negative_id": [
+    {
+      "role_id": -1,
+      "name": "Guest",
+      "permissions": ["read"]
+    },
+    {
+      "role_id": -99,
+      "name": "Visitor",
+      "permissions": ["read"]
+    },
+    {
+      "role_id": -123,
+      "name": "Anonymous",
+      "permissions": ["browse"]
+    }
+  ],
+  "test_role_large_id": [
+    {
+      "role_id": 999999999999,
+      "name": "SuperUser",
+      "permissions": ["all"]
+    },
+    {
+      "role_id": 888888888888,
+      "name": "UltraAdmin",
+      "permissions": ["full_control"]
+    },
+    {
+      "role_id": 777777777777,
+      "name": "GodMode",
+      "permissions": ["absolutepower"]
+    }
+  ],
+  "test_role_null_name": [
+    {
+      "role_id": 10,
+      "name": null,
+      "permissions": ["read"]
+    },
+    {
+      "role_id": 11,
+      "name": null,
+      "permissions": ["write"]
+    },
+    {
+      "role_id": 12,
+      "name": null,
+      "permissions": ["delete"]
+    }
+  ],
+  "test_role_null_permissions": [
+    {
+      "role_id": 13,
+      "name": "User",
+      "permissions": null
+    },
+    {
+      "role_id": 14,
+      "name": "Moderator",
+      "permissions": null
+    },
+    {
+      "role_id": 15,
+      "name": "Editor",
+      "permissions": null
+    }
+  ]
+}
