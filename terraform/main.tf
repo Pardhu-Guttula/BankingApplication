@@ -1,10 +1,20 @@
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 4.56.0"
+    }
+  }
+  required_version = ">= 1.1.0"
+}
+
 provider "azurerm" {
   features {}
 }
 
 resource "azurerm_resource_group" "example" {
   name     = "example-resources"
-  location = "West Europe"
+  location = "East US"
 }
 
 resource "azurerm_app_service_plan" "example" {
@@ -17,75 +27,62 @@ resource "azurerm_app_service_plan" "example" {
   }
 }
 
-resource "azurerm_app_service" "example" {
-  name                = "example-appservice"
+resource "azurerm_app_service" "frontend" {
+  name                = "example-frontend"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
   app_service_plan_id = azurerm_app_service_plan.example.id
-}
-
-resource "azurerm_frontdoor" "example" {
-  name                = "example-frontdoor"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
-}
-
-resource "azurerm_cdn_profile" "example" {
-  name                = "example-cdn"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
-  sku                 = "Standard_Microsoft"
-}
-
-resource "azurerm_function_app" "example" {
-  name                = "example-function"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  app_service_plan_id = azurerm_app_service_plan.example.id
-}
-
-resource "azurerm_kubernetes_cluster" "example" {
-  name                = "example-aks"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  dns_prefix          = "exampleaks"
-
-  default_node_pool {
-    name       = "agentpool"
-    node_count = 1
-    vm_size    = "Standard_DS2_v2"
+  site_config {
+    always_on         = true
+    ftps_state        = "Disabled"
   }
-
-  identity {
-    type = "SystemAssigned"
-  }
+  https_only = true
 }
 
-resource "azurerm_api_management" "example" {
-  name                = "example-apim"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  publisher_name      = "pub"
-  publisher_email     = "pub@example.com"
+resource "azurerm_sql_server" "example" {
+  name                         = "mysqlserveruniquename"
+  resource_group_name          = azurerm_resource_group.example.name
+  location                     = azurerm_resource_group.example.location
+  version                      = "12.0"
+  administrator_login          = var.sql_admin_username
+  administrator_login_password = var.sql_admin_password
 }
 
-resource "azurerm_logic_app_workflow" "example" {
-  name                = "example-logicapp"
-  location            = azurerm_resource_group.example.location
+resource "azurerm_sql_database" "example" {
+  name                = "example-db"
   resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
+  server_name         = azurerm_sql_server.example.name
+  sku_name            = "S0"
+}
+
+resource "azurerm_storage_account" "example" {
+  name                     = "examplestorageacct"
+  resource_group_name      = azurerm_resource_group.example.name
+  location                 = azurerm_resource_group.example.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+
+resource "azurerm_storage_container" "example" {
+  name                  = "content"
+  storage_account_name  = azurerm_storage_account.example.name
+  container_access_type = "private"
 }
 
 resource "azurerm_monitor_diagnostic_setting" "example" {
-  name               = "example-diagnostic"
-  target_resource_id = azurerm_api_management.example.id
+  name                 = "example-setting"
+  target_resource_id   = azurerm_app_service.frontend.id
+  eventhub_name        = "hub-name"
+  eventhub_authorization_rule_id = var.eventhub_authorization_rule_id
 
   enabled_log {
-    category = "AllLogs"
+    category = "AppServiceHTTPLogs"
     enabled  = true
   }
-
   metric {
     category = "AllMetrics"
     enabled  = true
+    retention_policy_days = 0
   }
 }
