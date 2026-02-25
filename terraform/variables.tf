@@ -1,15 +1,26 @@
-variable "sql_admin_username" {
-  description = "The administrator username for the SQL server."
+variable "resource_group_name" {
+  description = "Name of the resource group."
   type        = string
 }
 
-variable "sql_admin_password" {
-  description = "The administrator password for the SQL server."
+variable "location" {
+  description = "Azure region where resources will be created."
+  type        = string
+  default     = "East US"
+}
+
+variable "db_admin_login" {
+  description = "Administrator username for the PostgreSQL server."
+  type        = string
+}
+
+variable "db_admin_password" {
+  description = "Administrator password for the PostgreSQL server."
   type        = string
   sensitive   = true
 }
 
-variable "eventhub_authorization_rule_id" {
-  description = "The authorization rule ID for the Event Hub."
+variable "client_id" {
+  description = "Client ID for role assignment."
   type        = string
 }
