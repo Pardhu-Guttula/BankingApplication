@@ -1,11 +1,15 @@
-variable "location" {
-  description = "The location where resources will be created."
+variable "sql_admin_username" {
+  description = "The administrator username for the SQL server."
   type        = string
-  default     = "West Europe"
 }
 
-variable "resource_group_name" {
-  description = "The name of the resource group."
+variable "sql_admin_password" {
+  description = "The administrator password for the SQL server."
   type        = string
-  default     = "example-resources"
+  sensitive   = true
+}
+
+variable "eventhub_authorization_rule_id" {
+  description = "The authorization rule ID for the Event Hub."
+  type        = string
 }
