@@ -5,84 +5,60 @@ terraform {
       version = "~> 4.56.0"
     }
   }
-  required_version = ">= 1.1.0"
+  required_version = ">= 0.14.9"
 }
 
 provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "East US"
+resource "azurerm_resource_group" "rg" {
+  name     = var.resource_group_name
+  location = var.location
 }
 
-resource "azurerm_app_service_plan" "example" {
-  name                = "example-appserviceplan"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  sku {
-    tier = "Standard"
-    size = "S1"
-  }
-}
-
-resource "azurerm_app_service" "frontend" {
-  name                = "example-frontend"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  app_service_plan_id = azurerm_app_service_plan.example.id
-  site_config {
-    always_on         = true
-    ftps_state        = "Disabled"
-  }
-  https_only = true
-}
-
-resource "azurerm_sql_server" "example" {
-  name                         = "mysqlserveruniquename"
-  resource_group_name          = azurerm_resource_group.example.name
-  location                     = azurerm_resource_group.example.location
-  version                      = "12.0"
-  administrator_login          = var.sql_admin_username
-  administrator_login_password = var.sql_admin_password
-}
-
-resource "azurerm_sql_database" "example" {
-  name                = "example-db"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
-  server_name         = azurerm_sql_server.example.name
-  sku_name            = "S0"
-}
-
-resource "azurerm_storage_account" "example" {
-  name                     = "examplestorageacct"
-  resource_group_name      = azurerm_resource_group.example.name
-  location                 = azurerm_resource_group.example.location
+resource "azurerm_storage_account" "storage" {
+  name                     = "examplestoracc"
+  resource_group_name      = azurerm_resource_group.rg.name
+  location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
 }
 
-resource "azurerm_storage_container" "example" {
-  name                  = "content"
-  storage_account_name  = azurerm_storage_account.example.name
-  container_access_type = "private"
+resource "azurerm_postgresql_server" "postgresql" {
+  name                = "examplepgserver"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  administrator_login = var.db_admin_login
+  administrator_login_password = var.db_admin_password
+  version             = "11"
+  sku_name            = "GP_Gen5_2"
+  storage_profile {
+    storage_mb            = 5120
+    backup_retention_days = 7
+    geo_redundant_backup  = "Disabled"
+  }
+  public_network_access_enabled = true
+  ssl_enforcement_enabled = true
 }
 
-resource "azurerm_monitor_diagnostic_setting" "example" {
-  name                 = "example-setting"
-  target_resource_id   = azurerm_app_service.frontend.id
-  eventhub_name        = "hub-name"
-  eventhub_authorization_rule_id = var.eventhub_authorization_rule_id
+resource "azurerm_postgresql_database" "exampledb" {
+  name                = "exampledb"
+  resource_group_name = azurerm_resource_group.rg.name
+  server_name         = azurerm_postgresql_server.postgresql.name
+  charset             = "UTF8"
+  collation           = "English_United States.1252"
+}
 
-  enabled_log {
-    category = "AppServiceHTTPLogs"
-    enabled  = true
-  }
-  metric {
-    category = "AllMetrics"
-    enabled  = true
-    retention_policy_days = 0
-  }
+resource "azurerm_role_assignment" "example" {
+  scope                = azurerm_postgresql_server.postgresql.id
+  role_definition_name = "Contributor"
+  principal_id         = var.client_id
+}
+
+resource "azurerm_application_insights" "ai" {
+  name                = "exampleai"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  application_type    = "web"
 }
