@@ -1,0 +1,62 @@
+{
+  "test_get_role_by_name_existing_role": [
+    {
+      "id": 1,
+      "name": "admin",
+      "permissions": ["manage_users", "view_reports", "edit_content"]
+    },
+    {
+      "id": 1,
+      "name": "admin",
+      "permissions": ["manage_users", "view_reports", "edit_content"]
+    }
+  ],
+  "test_get_role_by_name_non_existing_role": [
+    {
+      "id": 2,
+      "name": "superuser",
+      "permissions": []
+    },
+    {
+      "id": 3,
+      "name": "guest",
+      "permissions": ["read_only"]
+    }
+  ],
+  "test_get_role_by_name_case_sensitive": [
+    {
+      "id": 4,
+      "name": "Admin",
+      "permissions": []
+    },
+    {
+      "id": 5,
+      "name": "ADMIN",
+      "permissions": ["all_privileges"]
+    }
+  ],
+  "test_get_role_by_name_empty_string": [
+    {
+      "id": 6,
+      "name": "",
+      "permissions": []
+    },
+    {
+      "id": 7,
+      "name": "",
+      "permissions": []
+    }
+  ],
+  "test_get_role_by_name_none": [
+    {
+      "id": 8,
+      "name": null,
+      "permissions": []
+    },
+    {
+      "id": 9,
+      "name": null,
+      "permissions": []
+    }
+  ]
+}
