@@ -1,6 +1,5 @@
 import pytest
 from flask import Flask
-from flask.testing import FlaskClient
 from backend.analytics.controllers.sales_controller import sales_bp
 
 @pytest.fixture
@@ -10,38 +9,81 @@ def app():
     return app
 
 @pytest.fixture
-def client(app: Flask):
+def client(app):
     return app.test_client()
 
-# Test cases for get_daily_sales endpoint
 
-def test_get_daily_sales_success(client: FlaskClient):
-    response = client.get('/sales/daily?date=2023-01-01')
-    assert response.status_code == 200  # status code inferred - not explicit in source
+def test_get_daily_sales_success(client, mocker):
+    mocker.patch('backend.analytics.services.sales_service.SalesService.get_daily_sales', return_value={
+        "date": "2023-10-01",
+        "total_amount": 15000.0,
+        "sales": []
+    })
 
-
-def test_get_daily_sales_not_found(client: FlaskClient):
-    response = client.get('/sales/daily?date=9999-01-01')
-    assert response.status_code == 200  # status code inferred - not explicit in source
-
-# Test cases for get_weekly_sales endpoint
-
-def test_get_weekly_sales_success(client: FlaskClient):
-    response = client.get('/sales/weekly?start_date=2023-01-01&end_date=2023-01-07')
-    assert response.status_code == 200  # status code inferred - not explicit in source
-
-
-def test_get_weekly_sales_not_found(client: FlaskClient):
-    response = client.get('/sales/weekly?start_date=9999-01-01&end_date=9999-01-07')
-    assert response.status_code == 200  # status code inferred - not explicit in source
-
-# Test cases for get_monthly_sales endpoint
-
-def test_get_monthly_sales_success(client: FlaskClient):
-    response = client.get('/sales/monthly?year=2023&month=1')
-    assert response.status_code == 200  # status code inferred - not explicit in source
+    response = client.get('/sales/daily?date=2023-10-01')
+    assert response.status_code == 200
+    assert response.json == {
+        "date": "2023-10-01",
+        "total_amount": 15000.0,
+        "sales": []
+    }
 
 
-def test_get_monthly_sales_not_found(client: FlaskClient):
-    response = client.get('/sales/monthly?year=9999&month=1')
-    assert response.status_code == 200  # status code inferred - not explicit in source
+def test_get_daily_sales_error(client, mocker):
+    mocker.patch('backend.analytics.services.sales_service.SalesService.get_daily_sales', side_effect=Exception('DB Error'))
+
+    response = client.get('/sales/daily?date=2023-10-01')
+    assert response.status_code == 500
+    assert response.json == {"error": "Unable to process your request"}
+
+
+def test_get_weekly_sales_success(client, mocker):
+    mocker.patch('backend.analytics.services.sales_service.SalesService.get_weekly_sales', return_value={
+        "start_date": "2023-10-01",
+        "end_date": "2023-10-07",
+        "total_amount": 90000.0,
+        "sales": []
+    })
+
+    response = client.get('/sales/weekly?start_date=2023-10-01&end_date=2023-10-07')
+    assert response.status_code == 200
+    assert response.json == {
+        "start_date": "2023-10-01",
+        "end_date": "2023-10-07",
+        "total_amount": 90000.0,
+        "sales": []
+    }
+
+
+def test_get_weekly_sales_error(client, mocker):
+    mocker.patch('backend.analytics.services.sales_service.SalesService.get_weekly_sales', side_effect=Exception('DB Error'))
+
+    response = client.get('/sales/weekly?start_date=2023-10-01&end_date=2023-10-07')
+    assert response.status_code == 500
+    assert response.json == {"error": "Unable to process your request"}
+
+
+def test_get_monthly_sales_success(client, mocker):
+    mocker.patch('backend.analytics.services.sales_service.SalesService.get_monthly_sales', return_value={
+        "year": 2023,
+        "month": 10,
+        "total_amount": 380000.0,
+        "sales": []
+    })
+
+    response = client.get('/sales/monthly?year=2023&month=10')
+    assert response.status_code == 200
+    assert response.json == {
+        "year": 2023,
+        "month": 10,
+        "total_amount": 380000.0,
+        "sales": []
+    }
+
+
+def test_get_monthly_sales_error(client, mocker):
+    mocker.patch('backend.analytics.services.sales_service.SalesService.get_monthly_sales', side_effect=Exception('DB Error'))
+
+    response = client.get('/sales/monthly?year=2023&month=10')
+    assert response.status_code == 500
+    assert response.json == {"error": "Unable to process your request"}
