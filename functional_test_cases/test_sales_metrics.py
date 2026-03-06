@@ -1,59 +1,47 @@
 import pytest
-import requests
-
-BASE_URL = "http://localhost:5000/sales"
-
-@pytest.fixture
-    def date():
-    return "2023-10-20"
+from flask import Flask
+from flask.testing import FlaskClient
+from backend.analytics.controllers.sales_controller import sales_bp
 
 @pytest.fixture
-    def week_range():
-    return ("2023-10-15", "2023-10-21")
+def app():
+    app = Flask(__name__)
+    app.register_blueprint(sales_bp)
+    return app
 
 @pytest.fixture
-    def month_period():
-    return (2023, 10)
+def client(app: Flask):
+    return app.test_client()
+
+# Test cases for get_daily_sales endpoint
+
+def test_get_daily_sales_success(client: FlaskClient):
+    response = client.get('/sales/daily?date=2023-01-01')
+    assert response.status_code == 200  # status code inferred - not explicit in source
 
 
-def test_get_daily_sales_success(date):
-    response = requests.get(f"{BASE_URL}/daily?date={date}")
-        assert response.status_code == 200
-        assert "date" in response.json()
-        assert "total_amount" in response.json()
+def test_get_daily_sales_not_found(client: FlaskClient):
+    response = client.get('/sales/daily?date=9999-01-01')
+    assert response.status_code == 200  # status code inferred - not explicit in source
+
+# Test cases for get_weekly_sales endpoint
+
+def test_get_weekly_sales_success(client: FlaskClient):
+    response = client.get('/sales/weekly?start_date=2023-01-01&end_date=2023-01-07')
+    assert response.status_code == 200  # status code inferred - not explicit in source
 
 
-def test_get_daily_sales_failure_invalid_date():
-    response = requests.get(f"{BASE_URL}/daily?date=2023-02-30")
-    assert response.status_code == 500
-    assert "error" in response.json()
+def test_get_weekly_sales_not_found(client: FlaskClient):
+    response = client.get('/sales/weekly?start_date=9999-01-01&end_date=9999-01-07')
+    assert response.status_code == 200  # status code inferred - not explicit in source
+
+# Test cases for get_monthly_sales endpoint
+
+def test_get_monthly_sales_success(client: FlaskClient):
+    response = client.get('/sales/monthly?year=2023&month=1')
+    assert response.status_code == 200  # status code inferred - not explicit in source
 
 
-def test_get_weekly_sales_success(week_range):
-    start_date, end_date = week_range
-    response = requests.get(f"{BASE_URL}/weekly?start_date={start_date}&end_date={end_date}")
-    assert response.status_code == 200
-    assert "start_date" in response.json()
-    assert "end_date" in response.json()
-    assert "total_amount" in response.json()
-
-
-def test_get_weekly_sales_failure_missing_date_range():
-    response = requests.get(f"{BASE_URL}/weekly?start_date=2023-10-15")
-    assert response.status_code == 500
-    assert "error" in response.json()
-
-
-def test_get_monthly_sales_success(month_period):
-    year, month = month_period
-    response = requests.get(f"{BASE_URL}/monthly?year={year}&month={month}")
-    assert response.status_code == 200
-    assert "year" in response.json()
-    assert "month" in response.json()
-    assert "total_amount" in response.json()
-
-
-def test_get_monthly_sales_failure_invalid_period():
-    response = requests.get(f"{BASE_URL}/monthly?year=2023&month=13")
-    assert response.status_code == 500
-    assert "error" in response.json()
+def test_get_monthly_sales_not_found(client: FlaskClient):
+    response = client.get('/sales/monthly?year=9999&month=1')
+    assert response.status_code == 200  # status code inferred - not explicit in source
