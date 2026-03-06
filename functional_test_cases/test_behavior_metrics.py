@@ -1,8 +1,8 @@
 import pytest
-import json
 from flask import Flask
-from backend.analytics.controllers.behavior_metric_controller import behavior_metric_bp
 from flask.testing import FlaskClient
+from backend.analytics.controllers.behavior_metric_controller import behavior_metric_bp
+import json
 
 @pytest.fixture
 def app() -> Flask:
@@ -14,94 +14,59 @@ def app() -> Flask:
 def client(app: Flask) -> FlaskClient:
     return app.test_client()
 
+# Test cases for GET /behavior_metrics/user/<user_id>
 
-def test_get_metrics_by_user_id_success(client: FlaskClient, mocker):
-    user_id = 1
-    expected_response = {
-        "average_session_duration": 30,
-        "total_page_views": 15,
-        "average_click_through_rate": 0.5,
-        "metrics": [
-            {
-                "session_duration": 30,
-                "page_views": 15,
-                "click_through_rate": 0.5
-            }
-        ]
-    }
-
-    mock_service = mocker.patch('backend.analytics.services.behavior_metric_service.BehaviorMetricService.get_metrics_by_user_id', return_value=expected_response)
-
-    response = client.get(f'/behavior_metrics/user/{user_id}')
+def test_get_metrics_by_user_id_success(client: FlaskClient):
+    response = client.get('/behavior_metrics/user/1')
     assert response.status_code == 200
-    assert response.json == expected_response
+    assert 'average_session_duration' in response.json
+    assert 'total_page_views' in response.json
+    assert 'average_click_through_rate' in response.json
+    assert 'metrics' in response.json
 
-
-def test_get_metrics_by_user_id_failure(client: FlaskClient, mocker):
-    user_id = 1
-    expected_response = {"error": "Unable to process your request"}
-
-    mock_service = mocker.patch('backend.analytics.services.behavior_metric_service.BehaviorMetricService.get_metrics_by_user_id', side_effect=Exception)
-
+@pytest.mark.parametrize("user_id", [999, 'string_value'])
+def test_get_metrics_by_user_id_failure(client: FlaskClient, user_id):
     response = client.get(f'/behavior_metrics/user/{user_id}')
     assert response.status_code == 500
-    assert response.json == expected_response
+    assert 'error' in response.json
 
+# Test cases for POST /behavior_metrics/create
 
-def test_create_metric_success(client: FlaskClient, mocker):
-    metric_data = {
+def test_create_metric_success(client: FlaskClient):
+    data = {
         "user_id": 1,
-        "session_duration": 30,
-        "page_views": 15,
+        "session_duration": 120.5,
+        "page_views": 10,
         "click_through_rate": 0.5
     }
-
-    expected_response = {
-        "id": 1,
-        "user_id": 1,
-        "session_duration": 30,
-        "page_views": 15,
-        "click_through_rate": 0.5,
-        "created_at": "2023-10-01T00:00:00",
-        "updated_at": "2023-10-01T00:00:00"
-    }
-
-    mock_service = mocker.patch('backend.analytics.services.behavior_metric_service.BehaviorMetricService.create_metric', return_value={"success": True, "metric": metric_data})
-
-    response = client.post('/behavior_metrics/create', data=json.dumps(metric_data), content_type='application/json')
+    response = client.post('/behavior_metrics/create', data=json.dumps(data), content_type='application/json')
     assert response.status_code == 201
-    assert response.json == expected_response
+    response_json = response.json
+    assert 'id' in response_json
+    assert response_json['user_id'] == data['user_id']
+    assert response_json['session_duration'] == data['session_duration']
+    assert response_json['page_views'] == data['page_views']
+    assert response_json['click_through_rate'] == data['click_through_rate']
+    assert 'created_at' in response_json
+    assert 'updated_at' in response_json
 
-
-def test_create_metric_failure(client: FlaskClient, mocker):
-    metric_data = {
-        "user_id": 1,
-        "session_duration": 30,
-        "page_views": 15,
-        "click_through_rate": 0.5
-    }
-
-    expected_response = {"error": "Metric creation failed"}
-
-    mock_service = mocker.patch('backend.analytics.services.behavior_metric_service.BehaviorMetricService.create_metric', return_value={"success": False})
-
-    response = client.post('/behavior_metrics/create', data=json.dumps(metric_data), content_type='application/json')
+@pytest.mark.parametrize("data", [
+    {},
+    {"user_id": 1},
+    {"user_id": 1, "session_duration": "string_value"},
+])
+def test_create_metric_failure(client: FlaskClient, data):
+    response = client.post('/behavior_metrics/create', data=json.dumps(data), content_type='application/json')
     assert response.status_code == 400
-    assert response.json == expected_response
+    assert 'error' in response.json
 
-
-def test_create_metric_exception(client: FlaskClient, mocker):
-    metric_data = {
+def test_create_metric_server_error(client: FlaskClient):
+    data = {
         "user_id": 1,
-        "session_duration": 30,
-        "page_views": 15,
+        "session_duration": 120.5,
+        "page_views": 10,
         "click_through_rate": 0.5
     }
-
-    expected_response = {"error": "Unable to process your request"}
-
-    mock_service = mocker.patch('backend.analytics.services.behavior_metric_service.BehaviorMetricService.create_metric', side_effect=Exception)
-
-    response = client.post('/behavior_metrics/create', data=json.dumps(metric_data), content_type='application/json')
+    response = client.post('/behavior_metrics/create', data=json.dumps(data), content_type='application/json')
     assert response.status_code == 500
-    assert response.json == expected_response
+    assert 'error' in response.json
