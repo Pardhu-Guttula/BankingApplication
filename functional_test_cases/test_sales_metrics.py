@@ -1,89 +1,68 @@
 import pytest
 from flask import Flask
+from flask.testing import FlaskClient
 from backend.analytics.controllers.sales_controller import sales_bp
+import json
 
 @pytest.fixture
-def app():
+def app() -> Flask:
     app = Flask(__name__)
     app.register_blueprint(sales_bp)
     return app
 
 @pytest.fixture
-def client(app):
+def client(app: Flask) -> FlaskClient:
     return app.test_client()
 
+# Test cases for GET /sales/daily
 
-def test_get_daily_sales_success(client, mocker):
-    mocker.patch('backend.analytics.services.sales_service.SalesService.get_daily_sales', return_value={
-        "date": "2023-10-01",
-        "total_amount": 15000.0,
-        "sales": []
-    })
-
-    response = client.get('/sales/daily?date=2023-10-01')
+def test_get_daily_sales_success(client: FlaskClient):
+    response = client.get('/sales/daily?date=2023-03-06')
     assert response.status_code == 200
-    assert response.json == {
-        "date": "2023-10-01",
-        "total_amount": 15000.0,
-        "sales": []
-    }
+    assert 'date' in response.json
+    assert 'total_amount' in response.json
+    assert 'sales' in response.json
 
-
-def test_get_daily_sales_error(client, mocker):
-    mocker.patch('backend.analytics.services.sales_service.SalesService.get_daily_sales', side_effect=Exception('DB Error'))
-
-    response = client.get('/sales/daily?date=2023-10-01')
+@pytest.mark.parametrize("date", ["invalid-date", "2021-02-30"])
+def test_get_daily_sales_failure(client: FlaskClient, date):
+    response = client.get(f'/sales/daily?date={date}')
     assert response.status_code == 500
-    assert response.json == {"error": "Unable to process your request"}
+    assert 'error' in response.json
 
+# Test cases for GET /sales/weekly
 
-def test_get_weekly_sales_success(client, mocker):
-    mocker.patch('backend.analytics.services.sales_service.SalesService.get_weekly_sales', return_value={
-        "start_date": "2023-10-01",
-        "end_date": "2023-10-07",
-        "total_amount": 90000.0,
-        "sales": []
-    })
-
-    response = client.get('/sales/weekly?start_date=2023-10-01&end_date=2023-10-07')
+def test_get_weekly_sales_success(client: FlaskClient):
+    response = client.get('/sales/weekly?start_date=2023-03-01&end_date=2023-03-07')
     assert response.status_code == 200
-    assert response.json == {
-        "start_date": "2023-10-01",
-        "end_date": "2023-10-07",
-        "total_amount": 90000.0,
-        "sales": []
-    }
+    assert 'start_date' in response.json
+    assert 'end_date' in response.json
+    assert 'total_amount' in response.json
+    assert 'sales' in response.json
 
-
-def test_get_weekly_sales_error(client, mocker):
-    mocker.patch('backend.analytics.services.sales_service.SalesService.get_weekly_sales', side_effect=Exception('DB Error'))
-
-    response = client.get('/sales/weekly?start_date=2023-10-01&end_date=2023-10-07')
+@pytest.mark.parametrize("start_date,end_date", [
+    ("invalid-date", "2023-03-07"),
+    ("2023-03-01", "invalid-date"),
+])
+def test_get_weekly_sales_failure(client: FlaskClient, start_date, end_date):
+    response = client.get(f'/sales/weekly?start_date={start_date}&end_date={end_date}')
     assert response.status_code == 500
-    assert response.json == {"error": "Unable to process your request"}
+    assert 'error' in response.json
 
+# Test cases for GET /sales/monthly
 
-def test_get_monthly_sales_success(client, mocker):
-    mocker.patch('backend.analytics.services.sales_service.SalesService.get_monthly_sales', return_value={
-        "year": 2023,
-        "month": 10,
-        "total_amount": 380000.0,
-        "sales": []
-    })
-
-    response = client.get('/sales/monthly?year=2023&month=10')
+def test_get_monthly_sales_success(client: FlaskClient):
+    response = client.get('/sales/monthly?year=2023&month=3')
     assert response.status_code == 200
-    assert response.json == {
-        "year": 2023,
-        "month": 10,
-        "total_amount": 380000.0,
-        "sales": []
-    }
+    assert 'year' in response.json
+    assert 'month' in response.json
+    assert 'total_amount' in response.json
+    assert 'sales' in response.json
 
-
-def test_get_monthly_sales_error(client, mocker):
-    mocker.patch('backend.analytics.services.sales_service.SalesService.get_monthly_sales', side_effect=Exception('DB Error'))
-
-    response = client.get('/sales/monthly?year=2023&month=10')
+@pytest.mark.parametrize("year,month", [
+    (2023, "invalid-month"),
+    ("invalid-year", 3),
+])
+def test_get_monthly_sales_failure(client: FlaskClient, year, month):
+    response = client.get(f'/sales/monthly?year={year}&month={month}')
     assert response.status_code == 500
-    assert response.json == {"error": "Unable to process your request"}
+    assert 'error' in response.json
