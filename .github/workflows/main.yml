@@ -31,7 +31,7 @@ jobs:
       SECRET_KEY: dummy_secret_key_123
       HOST: '0.0.0.0'
       PORT: '5000'
-      DEPLOYMENT_TARGET: aws
+      DEPLOYMENT_TARGET: azure
       DB_HOST: localhost
       DB_PORT: '3306'
       DB_NAME: dummy_db
@@ -58,9 +58,9 @@ jobs:
         with:
           name: test-results
           path: test-results/
-      - name: Deploy to AWS Web App
-        uses: aws/webapps-deploy@v1
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v1
         with:
           app-name: 'BankingApplication'
-          publish-profile: ${{ secrets.AWSPublishProfile }}
+          publish-profile: ${{ secrets.AzurePublishProfile }}
           package: .
