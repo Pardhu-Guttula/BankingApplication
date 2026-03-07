@@ -10,9 +10,8 @@ def send_email():
     data = request.json
     service = EmailService()
     receipt = service.send_email(
-        email_id=data['email_id'],
-        subject=data['subject'],
-        body=data['body'],
-        to_email=data['to_email']
+        template_id=data['template_id'],
+        to_email=data['to_email'],
+        context=data.get('context', {})
     )
     return jsonify({"message": "Email sent successfully", "receipt_id": receipt.receipt_id, "status": receipt.status}), 201
