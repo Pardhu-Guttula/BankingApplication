@@ -2,7 +2,7 @@
 
 import mysql.connector
 from mysql.connector import pooling
-from backend.models.main_content.content import Content
+from backend.models.main_content.content_element import ContentElement
 
 class ContentRepository:
     def __init__(self):
@@ -15,21 +15,21 @@ class ContentRepository:
             database="banking"
         )
 
-    def get_content(self, content_id: str) -> Content:
+    def get_content_elements(self) -> list[ContentElement]:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT content_id, title, body FROM contents WHERE content_id = %s", (content_id,))
-        row = cursor.fetchone()
+        cursor.execute("SELECT element_id, content FROM content_elements")
+        rows = cursor.fetchall()
         cursor.close()
         conn.close()
-        return Content(content_id=row[0], title=row[1], body=row[2]) if row else None
+        return [ContentElement(element_id=row[0], content=row[1]) for row in rows]
 
-    def save_content(self, content: Content) -> None:
+    def save_content_element(self, content_element: ContentElement) -> None:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO contents (content_id, title, body) VALUES (%s, %s, %s)",
-            (content.content_id, content.title, content.body)
+            "INSERT INTO content_elements (element_id, content) VALUES (%s, %s)",
+            (content_element.element_id, content_element.content)
         )
         conn.commit()
         cursor.close()
