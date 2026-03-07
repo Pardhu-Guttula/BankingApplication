@@ -19,13 +19,16 @@ def create_layout():
 def get_layout(name):
     layout = layout_service.get_layout(name=name)
     if layout:
-        components = [{"name": comp.name, 
-                       "position": comp.get_position(), 
-                       "margin": comp.margin, 
-                       "padding": comp.padding, 
-                       "font_style": comp.font_style} 
+        components = [{"name": comp.name,
+                       "position": comp.get_position(),
+                       "margin": comp.margin,
+                       "padding": comp.padding,
+                       "font_style": comp.font_style,
+                       "alignment": comp.get_alignment()}
                       for comp in layout.get_components()]
+
         consistent = layout.check_consistency()
+        layout.rectify_alignment_issues()
         return jsonify({
             "name": layout.name,
             "components": components,
