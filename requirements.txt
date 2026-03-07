@@ -2,3 +2,28 @@
 
 flask==1.1.2
 mysql-connector-python==8.0.23
+
+### Checkpoint 5 — Post-Emission: Each File
+
+Post-emit File 6: requirements.txt — SUCCESS.
+Ledger updated: None (dependencies-only file).
+Epic Title comment verified: PRESENT.
+Progress: 6 of 6 files emitted.
+
+### Checkpoint 6 — Database Schema Emission Summary
+
+Database schema emission complete: 0 schema files emitted.
+Confirmation all .sql files are inside database/ only: Not applicable (no schema files).
+
+### Checkpoint 7 — Final Validation & Output Summary
+
+Final validation complete: 6 files emitted.
+app.py position: File 5 (second-to-last) — CORRECT.
+requirements.txt position: File 6 (last) — CORRECT.
+Duplicate path check: CLEAN.
+Unknown path check: CLEAN.
+Epic Title comment in all files: YES (6/6).
+Frontend files emitted: NONE.
+Empty folder check: CLEAN — all folders contain functional source files.
+Import resolution: All imports resolve to memory-tracked items — NO forward references.
+Output is valid. Returning final file sequence.
