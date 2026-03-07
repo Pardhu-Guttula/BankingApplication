@@ -7,5 +7,5 @@ class InteractionService:
     def __init__(self):
         self.repository = InteractionRepository()
 
-    def search_interactions(self, event_type: str) -> list[InteractionRecord]:
-        return self.repository.search_interactions(event_type)
+    def get_interactions(self, user_id: str, interaction_type: str = None) -> list[InteractionRecord]:
+        return self.repository.get_interactions(user_id, interaction_type)
