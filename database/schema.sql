@@ -1,8 +1,9 @@
 # Epic Title: Banking Platform — Core API
 
-CREATE TABLE IF NOT EXISTS email_statuses (
-    email_id VARCHAR(50) PRIMARY KEY,
-    status VARCHAR(50)
+CREATE TABLE IF NOT EXISTS email_templates (
+    template_id VARCHAR(50) PRIMARY KEY,
+    subject TEXT,
+    body TEXT
 );
 
 CREATE TABLE IF NOT EXISTS delivery_receipts (
