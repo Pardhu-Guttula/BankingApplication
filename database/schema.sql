@@ -1,15 +1,11 @@
 # Epic Title: Banking Platform — Core API
 
-CREATE TABLE IF NOT EXISTS navigation_menu (
+CREATE TABLE IF NOT EXISTS monitoring_alerts (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    expanded BOOLEAN
+    alert TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS navigation_link (
+CREATE TABLE IF NOT EXISTS monitoring_reports (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    navigation_menu_id INT,
-    name VARCHAR(255) NOT NULL,
-    url VARCHAR(255) NOT NULL,
-    icon VARCHAR(255),
-    FOREIGN KEY (navigation_menu_id) REFERENCES navigation_menu(id)
+    report TEXT NOT NULL
 );
