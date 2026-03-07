@@ -1,50 +1,22 @@
 # Epic Title: Banking Platform — Core API
 
 from flask import Blueprint, jsonify, request
-from backend.services.dashboard.banking_product_service import BankingProductService
+from backend.services.dashboard.realtime_data_service import RealTimeDataService
 
 dashboard_bp = Blueprint('dashboard_bp', __name__)
 
-@dashboard_bp.route('/add_product', methods=['POST'])
-def add_product():
+@dashboard_bp.route('/realtime_data', methods=['POST'])
+def update_realtime_data():
     data = request.json
-    service = BankingProductService()
-    product = service.add_banking_product(data['product_id'], data['name'], data['description'], data['eligibility_criteria'])
-    return jsonify({"message": "Banking product added successfully"}), 201
+    service = RealTimeDataService()
+    realtime_data = service.update_realtime_data(data_id=data['data_id'], content=data['content'])
+    return jsonify({"message": "Real-time data updated successfully", "content": realtime_data.content}), 201
 
-@dashboard_bp.route('/products', methods=['GET'])
-def get_all_products():
-    service = BankingProductService()
-    products = service.get_all_products()
-    return jsonify([{
-        "product_id": product.product_id,
-        "name": product.name,
-        "description": product.description,
-        "eligibility_criteria": product.eligibility_criteria
-    } for product in products])
-
-@dashboard_bp.route('/eligible_products', methods=['GET'])
-def get_eligible_products():
-    eligibility_criteria = request.args.get('eligibility_criteria')
-    service = BankingProductService()
-    products = service.get_eligible_products(eligibility_criteria)
-    return jsonify([{
-        "product_id": product.product_id,
-        "name": product.name,
-        "description": product.description,
-        "eligibility_criteria": product.eligibility_criteria
-    } for product in products])
-
-@dashboard_bp.route('/product_details/<product_id>', methods=['GET'])
-def get_product_details(product_id):
-    service = BankingProductService()
-    product = service.get_product_details(product_id)
-    if product:
-        return jsonify({
-            "product_id": product.product_id,
-            "name": product.name,
-            "description": product.description,
-            "eligibility_criteria": product.eligibility_criteria
-        })
+@dashboard_bp.route('/realtime_data', methods=['GET'])
+def get_latest_data():
+    service = RealTimeDataService()
+    realtime_data = service.get_latest_data()
+    if realtime_data:
+        return jsonify({"content": realtime_data.content, "timestamp": realtime_data.timestamp})
     else:
-        return jsonify({"message": "Product not found"}), 404
+        return jsonify({"message": "No real-time data available"}), 404
