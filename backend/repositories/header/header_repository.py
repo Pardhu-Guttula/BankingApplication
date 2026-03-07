@@ -2,7 +2,7 @@
 
 import mysql.connector
 from mysql.connector import pooling
-from backend.models.header.feature import HeaderFeature
+from backend.models.header.header_element import HeaderElement
 
 class HeaderRepository:
     def __init__(self):
@@ -15,21 +15,21 @@ class HeaderRepository:
             database="banking"
         )
 
-    def get_features(self) -> list[HeaderFeature]:
+    def get_header_elements(self) -> list[HeaderElement]:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT feature_id, name FROM header_features")
+        cursor.execute("SELECT element_id, content FROM header_elements")
         rows = cursor.fetchall()
         cursor.close()
         conn.close()
-        return [HeaderFeature(feature_id=row[0], name=row[1]) for row in rows]
+        return [HeaderElement(element_id=row[0], content=row[1]) for row in rows]
 
-    def save_feature(self, feature: HeaderFeature) -> None:
+    def save_header_element(self, header_element: HeaderElement) -> None:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO header_features (feature_id, name) VALUES (%s, %s)",
-            (feature.feature_id, feature.name)
+            "INSERT INTO header_elements (element_id, content) VALUES (%s, %s)",
+            (header_element.element_id, header_element.content)
         )
         conn.commit()
         cursor.close()
