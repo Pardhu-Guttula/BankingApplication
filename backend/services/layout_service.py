@@ -10,12 +10,14 @@ class LayoutService:
 
     def create_layout(self, name: str, components: list):
         component_objects = [Component(
-            name=comp["name"], 
+            name=comp["name"],
             position=comp["position"],
             margin=comp["margin"],
             padding=comp["padding"],
-            font_style=comp["font_style"]
+            font_style=comp["font_style"],
+            alignment=comp["alignment"]
         ) for comp in components]
+
         layout = Layout(name=name, components=component_objects)
         self.repository.save_layout(layout)
 
