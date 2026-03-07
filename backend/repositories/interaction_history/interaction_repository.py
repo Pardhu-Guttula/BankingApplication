@@ -15,21 +15,11 @@ class InteractionRepository:
             database="banking"
         )
 
-    def save_interaction(self, interaction: InteractionRecord) -> None:
+    def search_interactions(self, event_type: str) -> list[InteractionRecord]:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO interactions (interaction_id, user_id, interaction_type, timestamp, location) VALUES (%s, %s, %s, %s, %s)",
-            (interaction.interaction_id, interaction.user_id, interaction.interaction_type, interaction.timestamp, interaction.location)
-        )
-        conn.commit()
-        cursor.close()
-        conn.close()
-
-    def get_interactions(self, user_id: str) -> list[InteractionRecord]:
-        conn = self.connection_pool.get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT interaction_id, user_id, interaction_type, timestamp, location FROM interactions WHERE user_id = %s", (user_id,))
+        query = "SELECT interaction_id, user_id, interaction_type, timestamp, location FROM interactions WHERE interaction_type = %s"
+        cursor.execute(query, (event_type,))
         rows = cursor.fetchall()
         cursor.close()
         conn.close()
