@@ -1,27 +1,19 @@
 # Epic Title: Banking Platform — Core API
 
--- Side Navigation table
-CREATE TABLE IF NOT EXISTS side_navigation (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE,
-    collapsed BOOLEAN NOT NULL
+-- Layout table
+CREATE TABLE IF NOT EXISTS layout (
+    name VARCHAR(255) PRIMARY KEY
 );
 
--- MenuItem table
-CREATE TABLE IF NOT EXISTS menu_item (
+-- Component table
+CREATE TABLE IF NOT EXISTS component (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    url VARCHAR(255) NOT NULL,
-    category VARCHAR(255) NOT NULL,
-    side_navigation_id INT,
-    FOREIGN KEY (side_navigation_id) REFERENCES side_navigation(id)
-);
-
--- SubMenuItem table
-CREATE TABLE IF NOT EXISTS sub_menu_item (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    parent_id INT,
-    name VARCHAR(255) NOT NULL,
-    url VARCHAR(255) NOT NULL,
-    FOREIGN KEY (parent_id) REFERENCES menu_item(id)
+    position INT NOT NULL,
+    margin VARCHAR(50) NOT NULL,
+    padding VARCHAR(50) NOT NULL,
+    font_style VARCHAR(255) NOT NULL,
+    alignment VARCHAR(50) NOT NULL,
+    layout_name VARCHAR(255),
+    FOREIGN KEY (layout_name) REFERENCES layout(name)
 );
