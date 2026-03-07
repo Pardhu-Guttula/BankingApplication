@@ -1,0 +1,16 @@
+# Epic Title: Banking Platform — Core API
+
+from backend.repositories.interaction_history.interaction_repository import InteractionRepository
+from backend.models.interaction_history.interaction_record import InteractionRecord
+
+class InteractionService:
+    def __init__(self):
+        self.repository = InteractionRepository()
+
+    def get_interactions(self, interaction_type: str) -> list[InteractionRecord]:
+        return self.repository.get_interactions(interaction_type)
+
+    def add_interaction(self, interaction_id: str, user_id: str, interaction_type: str, timestamp: str) -> InteractionRecord:
+        interaction = InteractionRecord(interaction_id, user_id, interaction_type, timestamp)
+        self.repository.save_interaction(interaction)
+        return interaction
