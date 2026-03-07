@@ -1,120 +1,84 @@
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 4.56.0"
+    }
+  }
+  required_version = ">= 1.1.0"
+}
+
 provider "azurerm" {
   features {}
 }
 
-resource "azurerm_frontdoor" "afd" {
-  name                = "example-afd"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  enforce_backend_pools_certificate_name_check = false
-  backend_pool_health_probes = {
-    "example-probe" = {
-      probe_method  = "GET"
-      probe_path    = "/index.html"
-      probe_protocol = "Https"
-    }
-  }
-  backend_pools = {
-    "example" = {
-      backends = [{
-        address = "example-backend.azurewebsites.net"
-        host_header = "example-backend.azurewebsites.net"
-      }]
-      load_balancing_name = "example"
-      health_probe_name   = "example-probe"
-    }
-  }
+resource "azurerm_resource_group" "main" {
+  name     = var.resource_group_name
+  location = var.location
 }
 
-resource "azurerm_cdn_profile" "cdn" {
-  name                = "example-cdn"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  sku                 = "Standard_Microsoft"
+resource "azurerm_front_door" "waf" {
+  name                = "frontdoor-waf"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  # Additional configuration for Front Door
 }
 
-resource "azurerm_app_service" "portal" {
-  name                = "example-portal"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  app_service_plan_id = azurerm_app_service_plan.plan.id
+resource "azurerm_app_service" "web_portal" {
+  name                = "web-portal"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  # Additional configuration for App Service
+}
+
+resource "azurerm_b2c_directory" "b2c" {
+  name                = var.b2c_tenant_name
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  # Additional configuration for B2C
 }
 
 resource "azurerm_api_management" "apim" {
-  name                = "example-apim"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  publisher_name      = "example-publisher"
-  publisher_email     = "publisher@example.com"
-  sku_name            = "Developer_1"
+  name                = "api-management"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  # Additional configuration for API Management
 }
 
-resource "azurerm_key_vault" "kv" {
-  name                = "example-kv"
-  resource_group_name = var.resource_group_name
-  location            = var.location
+resource "azurerm_kubernetes_cluster" "backend_services" {
+  name                = "backend-services"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  # Additional configuration for AKS
 }
 
-resource "azurerm_redis_cache" "redis" {
-  name                = "example-redis"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  capacity            = 1
-  family              = "C"
+resource "azurerm_key_vault" "keyvault" {
+  name                = var.keyvault_name
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  # Additional configuration for Key Vault
 }
 
-resource "azurerm_sql_database" "sqldb" {
-  name                = "example-sqldb"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  server_name         = azurerm_sql_server.server.name
+resource "azurerm_sql_server" "sql" {
+  name                         = var.sql_server_name
+  resource_group_name          = azurerm_resource_group.main.name
+  location                     = azurerm_resource_group.main.location
+  version                      = "12.0"
+  administrator_login          = "sqladmin"
+  administrator_login_password = var.sql_admin_password
+  # Additional configuration for SQL Server
 }
 
-resource "azurerm_storage_account" "blob" {
-  name                = "exampleblob"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  account_tier        = var.storage_account_tier
-  account_kind        = "StorageV2"
+resource "azurerm_sql_database" "sql_db" {
+  name                = var.sql_db_name
+  resource_group_name = azurerm_resource_group.main.name
+  server_name         = azurerm_sql_server.sql.name
+  # Additional configuration for SQL Database
 }
 
-resource "azurerm_servicebus_namespace" "sbn" {
-  name                = "example-sbn"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  sku                 = "Standard"
-}
-
-resource "azurerm_servicebus_queue" "sq" {
-  name                = "example-sq"
-  resource_group_name = var.resource_group_name
-  namespace_name      = azurerm_servicebus_namespace.sbn.name
-}
-
-resource "azurerm_monitor_diagnostic_setting" "monitor_diagnostics" {
-  name                       = "example-monitor-diagnostics"
-  target_resource_id         = azurerm_app_service.portal.id
-  log_analytics_workspace_id = var.log_analytics_workspace_id
-  enabled_log {
-    category       = "AppServiceConsoleLogs"
-    retention_policy {
-      enabled = true
-      days    = 7
-    }
-  }
-  metric {
-    category = "AllMetrics"
-    enabled  = true
-  }
-}
-
-resource "azurerm_application_insights" "app_insights" {
-  name                = "example-app-insights"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  application_type    = "web"
-}
-
-resource "azurerm_defender_for_cloud" "defender" {
-  resource_group_name = var.resource_group_name
+resource "azurerm_servicebus_namespace" "sb" {
+  name                = var.servicebus_namespace_name
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  # Additional configuration for Service Bus
 }
