@@ -27,12 +27,3 @@ CREATE TABLE IF NOT EXISTS role_permissions (
     FOREIGN KEY (role_name) REFERENCES roles (role_name),
     FOREIGN KEY (permission_name) REFERENCES permissions (permission_name)
 );
-
-CREATE TABLE IF NOT EXISTS logs (
-    log_id VARCHAR(50) PRIMARY KEY,
-    user_id VARCHAR(50),
-    action VARCHAR(50),
-    timestamp TIMESTAMP,
-    details TEXT,
-    FOREIGN KEY (user_id) REFERENCES users (user_id)
-);
