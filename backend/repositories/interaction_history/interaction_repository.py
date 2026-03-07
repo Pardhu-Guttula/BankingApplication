@@ -15,21 +15,33 @@ class InteractionRepository:
             database="banking"
         )
 
-    def save_interaction(self, interaction: InteractionRecord) -> None:
+    def get_records_for_deletion(self) -> list[InteractionRecord]:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO interactions (interaction_id, user_id, interaction_type, timestamp, location) VALUES (%s, %s, %s, %s, %s)",
-            (interaction.interaction_id, interaction.user_id, interaction.interaction_type, interaction.timestamp, interaction.location)
-        )
+        query = """
+        SELECT interaction_id, user_id, interaction_type, timestamp, location 
+        FROM interactions 
+        WHERE timestamp < NOW() - INTERVAL %s DAY
+        """
+        cursor.execute(query, (Settings.RETENTION_PERIOD_DAYS,))
+        rows = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return [InteractionRecord(interaction_id=row[0], user_id=row[1], interaction_type=row[2], timestamp=row[3], location=row[4]) for row in rows]
+
+    def delete_record(self, interaction_id: str) -> None:
+        conn = self.connection_pool.get_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM interactions WHERE interaction_id = %s", (interaction_id,))
         conn.commit()
         cursor.close()
         conn.close()
 
-    def get_interactions(self, user_id: str) -> list[InteractionRecord]:
+    def get_records_for_compliance(self) -> list[InteractionRecord]:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT interaction_id, user_id, interaction_type, timestamp, location FROM interactions WHERE user_id = %s", (user_id,))
+        query = "SELECT interaction_id, user_id, interaction_type, timestamp, location FROM interactions"
+        cursor.execute(query)
         rows = cursor.fetchall()
         cursor.close()
         conn.close()
