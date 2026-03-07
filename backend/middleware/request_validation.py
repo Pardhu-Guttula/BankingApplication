@@ -1,11 +1,20 @@
 # Epic Title: Banking Platform — Core API
 
 from flask import request, jsonify
+from backend.services.service_modifications.validation_service import ValidationService
+from backend.models.service_modifications.modification_request import ModificationRequest
 
-def validate_account_opening_request(func):
+def validate_modification_request(func):
     def wrapper(*args, **kwargs):
         data = request.json
-        if 'user_id' not in data or 'account_type' not in data or 'initial_deposit' not in data:
-            return jsonify({"message": "Invalid data"}), 400
+        modification_request = ModificationRequest(
+            request_id=data['request_id'],
+            user_id=data['user_id'],
+            modification_type=data['modification_type'],
+            data=data['data']
+        )
+        validation_result = ValidationService.validate(modification_request)
+        if not validation_result.is_valid:
+            return jsonify({"message": validation_result.message}), 400
         return func(*args, **kwargs)
     return wrapper
