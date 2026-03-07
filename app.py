@@ -1,26 +1,37 @@
 # Epic Title: Banking Platform — Core API
 
-from backend.services.nav.service import NavService
-from backend.repositories.nav.repository import NavRepository
-from flask import Flask
-import logging
+from flask import Flask, jsonify, request
+from backend.services.layout_service import LayoutService
+from backend.repositories.layout_repository import LayoutRepository
 
-logging.basicConfig(level=logging.INFO)
+app = Flask(__name__)
 
-def create_app():
-    repository = NavRepository()
-    nav_service = NavService(repository)
+layout_repository = LayoutRepository()
+layout_service = LayoutService(layout_repository)
 
-    # Initialize Flask app and routes
-    app = Flask(__name__)
+@app.route('/layout', methods=['POST'])
+def create_layout():
+    data = request.json
+    layout_service.create_layout(name=data['name'], components=data['components'])
+    return jsonify({"message": "Layout created successfully"}), 201
 
-    @app.route('/navigation')
-    def navigation():
-        # Logic to generate and return navigation
-        pass
-
-    return app
+@app.route('/layout/<name>', methods=['GET'])
+def get_layout(name):
+    layout = layout_service.get_layout(name=name)
+    if layout:
+        components = [{"name": comp.name, 
+                       "position": comp.get_position(), 
+                       "margin": comp.margin, 
+                       "padding": comp.padding, 
+                       "font_style": comp.font_style} 
+                      for comp in layout.get_components()]
+        consistent = layout.check_consistency()
+        return jsonify({
+            "name": layout.name,
+            "components": components,
+            "consistent": consistent
+        })
+    return jsonify({"error": "Layout not found"}), 404
 
 if __name__ == '__main__':
-    app = create_app()
     app.run(host='0.0.0.0', port=5000)
