@@ -6,5 +6,3 @@ class User:
         self.username = username
         self.password = password
         self.role = role
-        self.last_login = None
-        self.created_at = None
