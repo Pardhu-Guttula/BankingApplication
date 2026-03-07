@@ -1,0 +1,15 @@
+{
+  "brandHeader.title": "SecureBank Portal",
+  "brandHeader.subtitle": "Your banking, simplified",
+  "authCard.title": "Sign In",
+  "authCard.description": "Enter your credentials to access your account",
+  "loginForm.emailLabel": "Username or Email",
+  "loginForm.emailPlaceholder": "john.doe@email.com",
+  "loginForm.passwordLabel": "Password",
+  "loginForm.passwordPlaceholder": "••••••••",
+  "loginForm.rememberMe": "Remember me",
+  "loginForm.forgotPassword": "Forgot password?",
+  "loginForm.submitLabel": "Continue",
+  "loginForm.loadingLabel": "Continuing...",
+  "securityNote.text": "Secured with 256-bit encryption"
+}
