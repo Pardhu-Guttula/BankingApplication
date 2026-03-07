@@ -5,18 +5,18 @@ from backend.services.header.header_service import HeaderService
 
 header_bp = Blueprint('header_bp', __name__)
 
-@header_bp.route('/header_elements', methods=['GET'])
-def get_header_elements():
+@header_bp.route('/navigation-links', methods=['GET'])
+def get_navigation_links():
     service = HeaderService()
-    elements = service.get_header_elements()
-    return jsonify([element.__dict__ for element in elements]), 200
+    links = service.get_navigation_links()
+    return jsonify([link.__dict__ for link in links]), 200
 
-@header_bp.route('/add_header_element', methods=['POST'])
-def add_header_element():
+@header_bp.route('/navigation-link/<link_id>', methods=['PUT'])
+def update_navigation_link(link_id):
     data = request.json
+    name = data['name']
+    route = data['route']
+    key_functionality = data['key_functionality']
     service = HeaderService()
-    header_element = service.add_header_element(
-        element_id=data['element_id'],
-        content=data['content']
-    )
-    return jsonify({"message": "Header element added successfully", "element_id": header_element.element_id}), 201
+    service.update_navigation_link(link_id, name, route, key_functionality)
+    return jsonify({"message": "Navigation link updated successfully"}), 200
