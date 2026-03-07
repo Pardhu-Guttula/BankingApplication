@@ -28,6 +28,12 @@ class Layout:
         for component in self.components[1:]:
             if (component.margin != first_component.margin or
                 component.padding != first_component.padding or
-                component.font_style != first_component.font_style):
+                component.font_style != first_component.font_style or
+                component.alignment != first_component.alignment):
                 return False
         return True
+
+    def rectify_alignment_issues(self):
+        for component in self.components:
+            if component.alignment not in ['left', 'center', 'right']:
+                component.set_alignment('left')
