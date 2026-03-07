@@ -1,31 +1,15 @@
+variable "subscription_id" {
+  description = "The subscription ID"
+  type        = string
+}
+
 variable "resource_group_name" {
-  description = "The name of the resource group"
+  description = "The resource group name"
   type        = string
 }
 
 variable "location" {
   description = "The Azure region"
-  type        = string
-  default     = "West Europe"
-}
-
-variable "storage_account_name" {
-  description = "The name of the storage account"
-  type        = string
-}
-
-variable "key_vault_name" {
-  description = "The name of the Key Vault"
-  type        = string
-}
-
-variable "api_management_name" {
-  description = "The name of the API Management service"
-  type        = string
-}
-
-variable "function_app_name" {
-  description = "The name of the Function App"
   type        = string
 }
 
@@ -37,24 +21,20 @@ variable "sql_admin_username" {
 variable "sql_admin_password" {
   description = "The SQL admin password"
   type        = string
+  sensitive   = true
 }
 
-variable "sql_server_name" {
-  description = "The SQL server name"
+variable "webapp_sku" {
+  description = "The SKU for the web app"
   type        = string
 }
 
-variable "sql_database_name" {
-  description = "The SQL database name"
+variable "redis_sku" {
+  description = "The SKU for the Redis Cache"
   type        = string
 }
 
-variable "monitor_name" {
-  description = "The name of the Azure Monitor"
-  type        = string
-}
-
-variable "app_insights_name" {
-  description = "The name of the Application Insights"
+variable "storage_account_tier" {
+  description = "The tier for the storage account"
   type        = string
 }
