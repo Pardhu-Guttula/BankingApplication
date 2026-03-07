@@ -2,8 +2,7 @@
 
 import mysql.connector
 from mysql.connector import pooling
-from backend.models.notifications.delivery_receipt import DeliveryReceipt
-from backend.models.notifications.email_status import EmailStatus
+from backend.models.notifications.notification import Notification
 
 class NotificationRepository:
     def __init__(self):
@@ -16,33 +15,22 @@ class NotificationRepository:
             database="banking"
         )
 
-    def get_email_status(self, email_id: str) -> EmailStatus:
-        conn = self.connection_pool.get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT email_id, status FROM email_statuses WHERE email_id = %s", (email_id,))
-        row = cursor.fetchone()
-        cursor.close()
-        conn.close()
-        return EmailStatus(email_id=row[0], status=row[1]) if row else None
-
-    def save_delivery_receipt(self, receipt: DeliveryReceipt) -> None:
+    def save_notification(self, notification: Notification) -> None:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO delivery_receipts (receipt_id, email, status) VALUES (%s, %s, %s)",
-            (receipt.receipt_id, receipt.email, receipt.status)
+            "INSERT INTO notifications (user_id, notification_type, message, timestamp) VALUES (%s, %s, %s, %s)",
+            (notification.user_id, notification.notification_type, notification.message, notification.timestamp)
         )
         conn.commit()
         cursor.close()
         conn.close()
 
-    def update_email_status(self, email_id: str, status: str) -> None:
+    def get_notifications(self, user_id: str) -> list[Notification]:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
-        cursor.execute(
-            "UPDATE email_statuses SET status = %s WHERE email_id = %s",
-            (status, email_id)
-        )
-        conn.commit()
+        cursor.execute("SELECT user_id, notification_type, message, timestamp FROM notifications WHERE user_id = %s", (user_id,))
+        rows = cursor.fetchall()
         cursor.close()
         conn.close()
+        return [Notification(user_id=row[0], notification_type=row[1], message=row[2], timestamp=row[3]) for row in rows]
