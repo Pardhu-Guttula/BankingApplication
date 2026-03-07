@@ -21,7 +21,7 @@ def get_layout(name):
     if layout:
         return jsonify({
             "name": layout.name,
-            "components": [{"name": comp.name, "position": comp.get_position()} for comp in layout.get_components()]
+            "components": layout.components
         })
     return jsonify({"error": "Layout not found"}), 404
 
