@@ -1,11 +1,12 @@
 # Epic Title: Banking Platform — Core API
 
 from flask import Flask
-from backend.controllers.account_opening.account_controller import account_opening_bp
-from backend.middleware.request_validation import validate_account_opening_request
+from backend.controllers.auth.session_controller import session_bp
+from backend.middleware.session_expiration import session_expiration_middleware
 
 app = Flask(__name__)
-app.register_blueprint(account_opening_bp, url_prefix='/api')
+app.register_blueprint(session_bp, url_prefix='/api')
+session_expiration_middleware(app)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
