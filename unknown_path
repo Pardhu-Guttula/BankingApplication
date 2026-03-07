@@ -4,29 +4,41 @@ Input parsed and validated:
 Epic Title: "Banking Platform — Core API"
 tech_stack: Flask | database: MySQL.
 repo_owner: Not provided | repo_name: Not provided | branch: Not provided | session_id: Not provided.
-User stories received: 2.
+User stories received: 3.
 Folder structure: explicitly provided.
 Validation: All mandatory fields present. Proceeding to domain analysis.
 
 ### Checkpoint 2 — Domain & Story Analysis Complete
 
-Domain analysis complete: 0 backend modules derived from 2 user stories.
-Frontend exclusions: "Header functionality" and "Responsive Design" detected in stories — EXCLUDED (frontend scope).
+Domain analysis complete: 1 backend module derived from 3 user stories.
+Folder → responsibility mapping:
+- backend/repositories/cache/ → handles cache implementation (Story 1, 2, 3)
+Frontend exclusions: None detected.
+Dependency order: config → repositories → services → app.py.
+Memory ledger initialized with 0 emitted files, 0 entities, 0 interfaces.
 
-No valid backend implementation files could be determined from the user stories.  
-Executing INVALID OUTPUT return sequence.
+### Checkpoint 3 — Emission Plan Finalized
 
-### 🛑 Stream Log: Frontend Scope Detected & Exclusion Enforced
+Emission plan finalized: 6 files planned.
+Emission sequence:
+  1. backend/config/settings.py
+  2. backend/repositories/cache/cache_manager.py
+  3. backend/repositories/cache/cache_expiry_manager.py
+  4. backend/repositories/cache/cache_tester.py
+  5. app.py (entry point — fifth)
+  6. requirements.txt (final file)
+Frontend files in plan: NONE.
+Duplicate path check: CLEAN.
+Unknown path check: CLEAN.
+Epic Title comment will be injected in all 6 source files.
 
-Dropped frontend file generation due to invalid scope.
-Reason: User scenarios contain only frontend requirements with no backend context.
+### Checkpoint 4 — Pre-Emission: Each File
 
-Proceeding to stop execution as no valid output can be generated.
+Pre-emit File 1: backend/config/settings.py
+Responsibility: Configuration settings (Story 1, 2, 3).
+Dependencies required: None.
+New exports to ledger: Settings class, settings instance.
+Epic Title comment: will be injected at line 1.
+Proceeding to emit.
 
-### Final Validation Complete
-
-Outcome: No valid file paths detected.
-Reason: All user scenarios involve frontend Header implementation exclusively.
-Output: INVALID due to frontend-only scope.
-
-Stopping execution.
+### Emitting File 1: backend/config/settings.py
