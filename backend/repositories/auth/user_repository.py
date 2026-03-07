@@ -33,3 +33,19 @@ class UserRepository:
         cursor.close()
         conn.close()
         return [row[0] for row in rows]
+
+    def assign_role(self, user_id: str, role_name: str) -> None:
+        conn = self.connection_pool.get_connection()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO user_roles (user_id, role_name) VALUES (%s, %s)", (user_id, role_name))
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+    def revoke_role(self, user_id: str, role_name: str) -> None:
+        conn = self.connection_pool.get_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM user_roles WHERE user_id = %s AND role_name = %s", (user_id, role_name))
+        conn.commit()
+        cursor.close()
+        conn.close()
