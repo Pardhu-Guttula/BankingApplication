@@ -1,11 +1,25 @@
 # Epic Title: Banking Platform — Core API
 
-CREATE TABLE IF NOT EXISTS monitoring_alerts (
+CREATE TABLE IF NOT EXISTS transaction (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    alert TEXT NOT NULL
+    transaction_id VARCHAR(50) UNIQUE,
+    user_id VARCHAR(50),
+    amount FLOAT,
+    timestamp TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS monitoring_reports (
+CREATE TABLE IF NOT EXISTS performance_metrics (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    report TEXT NOT NULL
+    metrics_id VARCHAR(50) UNIQUE,
+    operation VARCHAR(255),
+    duration FLOAT,
+    timestamp TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS user_request (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    request_id VARCHAR(50) UNIQUE,
+    user_id VARCHAR(50),
+    operation VARCHAR(255),
+    timestamp TIMESTAMP
 );
