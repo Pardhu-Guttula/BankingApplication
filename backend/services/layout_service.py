@@ -11,7 +11,7 @@ class LayoutService:
 
     def create_layout(self, name: str, components: list, breakpoints: list):
         component_objects = [Component(
-            name=comp["name"],
+            name=comp["name"], 
             position=comp["position"],
             margin=comp["margin"],
             padding=comp["padding"],
@@ -19,7 +19,7 @@ class LayoutService:
         ) for comp in components]
 
         breakpoint_objects = [Breakpoint(
-            name=bp["name"],
+            name=bp["name"], 
             min_width=bp["min_width"],
             max_width=bp["max_width"]
         ) for bp in breakpoints]
