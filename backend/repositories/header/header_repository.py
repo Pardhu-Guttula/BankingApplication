@@ -1,8 +1,8 @@
 # Epic Title: Banking Platform — Core API
 
-from backend.models.header.header_menu import HeaderMenu, HeaderLink
 import mysql.connector
 from mysql.connector import pooling
+from backend.models.header.feature import HeaderFeature
 
 class HeaderRepository:
     def __init__(self):
@@ -15,52 +15,22 @@ class HeaderRepository:
             database="banking"
         )
 
-    def save_header_menu(self, header_menu: HeaderMenu) -> None:
+    def get_features(self) -> list[HeaderFeature]:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO header_menu (title) VALUES (%s)",
-            (header_menu.title,)
-        )
-        header_menu_id = cursor.lastrowid
-        conn.commit()
+        cursor.execute("SELECT feature_id, name FROM header_features")
+        rows = cursor.fetchall()
         cursor.close()
         conn.close()
-        for link in header_menu.get_links():
-            self.save_header_link(header_menu_id, link)
+        return [HeaderFeature(feature_id=row[0], name=row[1]) for row in rows]
 
-    def save_header_link(self, header_menu_id: int, link: HeaderLink) -> None:
+    def save_feature(self, feature: HeaderFeature) -> None:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO header_link (header_menu_id, name, url) VALUES (%s, %s, %s)",
-            (header_menu_id, link.name, link.url)
+            "INSERT INTO header_features (feature_id, name) VALUES (%s, %s)",
+            (feature.feature_id, feature.name)
         )
         conn.commit()
         cursor.close()
         conn.close()
-
-    def get_header_menu(self) -> HeaderMenu:
-        conn = self.connection_pool.get_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM header_menu LIMIT 1")
-        row = cursor.fetchone()
-        cursor.close()
-        conn.close()
-        if row:
-            links = self.get_header_links(row['id'])
-            header_menu = HeaderMenu(title=row['title'], links=links)
-            return header_menu
-        return None
-
-    def get_header_links(self, header_menu_id: int) -> list:
-        conn = self.connection_pool.get_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM header_link WHERE header_menu_id = %s", (header_menu_id,))
-        links = [HeaderLink(
-            name=row['name'],
-            url=row['url']
-        ) for row in cursor.fetchall()]
-        cursor.close()
-        conn.close()
-        return links
