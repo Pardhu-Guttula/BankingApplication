@@ -2,13 +2,15 @@
 
 from flask import Blueprint, jsonify, request
 from backend.services.service_modifications.validation_service import ValidationService
+from backend.services.service_modifications.process_service import ProcessService
 from backend.repositories.service_modifications.modification_request_repository import ModificationRequestRepository
 from backend.models.service_modifications.modification_request import ModificationRequest
+from backend.models.service_modifications.process_result import ProcessResult
 
 modification_request_bp = Blueprint('modification_request_bp', __name__)
 
-@modification_request_bp.route('/validate_modification_request', methods=['POST'])
-def validate_modification_request():
+@modification_request_bp.route('/process_modification_request', methods=['POST'])
+def process_modification_request():
     data = request.json
     modification_request = ModificationRequest(
         request_id=data['request_id'],
@@ -23,4 +25,6 @@ def validate_modification_request():
     
     repository = ModificationRequestRepository()
     repository.save_modification_request(modification_request)
-    return jsonify({"message": "Modification request is valid and has been saved"}), 200
+
+    process_result = ProcessService.process(modification_request)
+    return jsonify({"message": process_result.message}), 200 if process_result.success else 500
