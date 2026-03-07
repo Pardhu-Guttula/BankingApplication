@@ -15,11 +15,15 @@ class InteractionRepository:
             database="banking"
         )
 
-    def search_interactions(self, event_type: str) -> list[InteractionRecord]:
+    def get_interactions(self, user_id: str, interaction_type: str = None) -> list[InteractionRecord]:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
-        query = "SELECT interaction_id, user_id, interaction_type, timestamp, location FROM interactions WHERE interaction_type = %s"
-        cursor.execute(query, (event_type,))
+        query = "SELECT interaction_id, user_id, interaction_type, timestamp, location FROM interactions WHERE user_id = %s"
+        params = [user_id]
+        if interaction_type:
+            query += " AND interaction_type = %s"
+            params.append(interaction_type)
+        cursor.execute(query, tuple(params))
         rows = cursor.fetchall()
         cursor.close()
         conn.close()
