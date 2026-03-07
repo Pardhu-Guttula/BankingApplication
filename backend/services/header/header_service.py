@@ -1,15 +1,16 @@
 # Epic Title: Banking Platform — Core API
 
-from backend.repositories.header.navigation_link_repository import NavigationLinkRepository
-from backend.models.header.navigation_link import NavigationLink
+from backend.repositories.header.header_repository import HeaderRepository
+from backend.models.header.feature import HeaderFeature
 
 class HeaderService:
     def __init__(self):
-        self.repository = NavigationLinkRepository()
+        self.repository = HeaderRepository()
 
-    def get_navigation_links(self) -> list[NavigationLink]:
-        return self.repository.get_all_links()
+    def get_features(self) -> list[HeaderFeature]:
+        return self.repository.get_features()
 
-    def update_navigation_link(self, link_id: str, name: str, route: str, key_functionality: bool) -> None:
-        navigation_link = NavigationLink(link_id=link_id, name=name, route=route, key_functionality=key_functionality)
-        self.repository.update_link(navigation_link)
+    def add_feature(self, feature_id: str, name: str) -> HeaderFeature:
+        feature = HeaderFeature(feature_id, name)
+        self.repository.save_feature(feature)
+        return feature
