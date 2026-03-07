@@ -5,32 +5,9 @@ from backend.services.interaction_history.interaction_service import Interaction
 
 interaction_bp = Blueprint('interaction_bp', __name__)
 
-@interaction_bp.route('/interactions', methods=['GET'])
-def get_interactions():
-    user_id = request.args.get('user_id')
+@interaction_bp.route('/search_interactions', methods=['GET'])
+def search_interactions():
+    event_type = request.args.get('event_type')
     service = InteractionService()
-    interactions = service.get_interactions(user_id)
+    interactions = service.search_interactions(event_type)
     return jsonify([interaction.__dict__ for interaction in interactions]), 200
-
-@interaction_bp.route('/track_login', methods=['POST'])
-def track_login():
-    user_id = request.json['user_id']
-    service = InteractionService()
-    interaction = service.track_login(user_id)
-    return jsonify({"message": "Login tracked successfully", "interaction_id": interaction.interaction_id}), 201
-
-@interaction_bp.route('/track_page_visit', methods=['POST'])
-def track_page_visit():
-    user_id = request.json['user_id']
-    location = request.json['location']
-    service = InteractionService()
-    interaction = service.track_page_visit(user_id, location)
-    return jsonify({"message": "Page visit tracked successfully", "interaction_id": interaction.interaction_id}), 201
-
-@interaction_bp.route('/track_form_submission', methods=['POST'])
-def track_form_submission():
-    user_id = request.json['user_id']
-    location = request.json['location']
-    service = InteractionService()
-    interaction = service.track_form_submission(user_id, location)
-    return jsonify({"message": "Form submission tracked successfully", "interaction_id": interaction.interaction_id}), 201
