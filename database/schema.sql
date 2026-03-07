@@ -1,7 +1,9 @@
 # Epic Title: Banking Platform — Core API
 
-CREATE TABLE IF NOT EXISTS content_elements (
+CREATE TABLE IF NOT EXISTS modification_requests (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    element_id VARCHAR(50),
-    content TEXT
+    request_id VARCHAR(50),
+    user_id VARCHAR(50),
+    modification_type VARCHAR(50),
+    data TEXT
 );
