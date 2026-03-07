@@ -1,10 +1,10 @@
 # Epic Title: Banking Platform — Core API
 
 from flask import Flask
-from backend.controllers.layout.layout_controller import layout_bp
+from backend.controllers.dashboard.dashboard_controller import dashboard_bp
 
 app = Flask(__name__)
-app.register_blueprint(layout_bp, url_prefix='/api')
+app.register_blueprint(dashboard_bp, url_prefix='/api')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
