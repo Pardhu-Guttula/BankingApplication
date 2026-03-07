@@ -12,31 +12,16 @@ layout_service = LayoutService(layout_repository)
 @app.route('/layout', methods=['POST'])
 def create_layout():
     data = request.json
-    layout_service.create_layout(name=data['name'], components=data['components'], breakpoints=data['breakpoints'])
+    layout_service.create_layout(name=data['name'], components=data['components'])
     return jsonify({"message": "Layout created successfully"}), 201
 
 @app.route('/layout/<name>', methods=['GET'])
 def get_layout(name):
     layout = layout_service.get_layout(name=name)
     if layout:
-        components = [{"name": comp.name, 
-                       "position": comp.get_position(), 
-                       "margin": comp.margin, 
-                       "padding": comp.padding, 
-                       "font_style": comp.font_style} 
-                      for comp in layout.get_components()]
-        
-        breakpoints = [{"name": bp.name, 
-                        "min_width": bp.get_min_width(), 
-                        "max_width": bp.get_max_width()} 
-                       for bp in layout.get_breakpoints()]
-        
-        consistent = layout.check_consistency()
         return jsonify({
             "name": layout.name,
-            "components": components,
-            "breakpoints": breakpoints,
-            "consistent": consistent
+            "components": [{"name": comp.name, "position": comp.get_position()} for comp in layout.get_components()]
         })
     return jsonify({"error": "Layout not found"}), 404
 
