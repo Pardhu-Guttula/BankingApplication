@@ -18,6 +18,7 @@ def add_layout():
     service = LayoutService()
     layout = service.add_layout(
         layout_id=data['layout_id'],
-        device_type=data['device_type']
+        screen_size=data['screen_size'],
+        breakpoint=data['breakpoint']
     )
     return jsonify({"message": "Layout added successfully", "layout_id": layout.layout_id}), 201
