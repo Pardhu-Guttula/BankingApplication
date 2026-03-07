@@ -4,38 +4,42 @@ Input parsed and validated:
 Epic Title: "Banking Platform — Core API"
 tech_stack: Flask | database: MySQL.
 repo_owner: Not provided | repo_name: Not provided | branch: Not provided | session_id: Not provided.
-User stories received: 3.
+User stories received: 1.
 Folder structure: explicitly provided.
 Validation: All mandatory fields present. Proceeding to domain analysis.
 
 ### Checkpoint 2 — Domain & Story Analysis Complete
 
-Domain analysis complete: 1 backend module derived from 3 user stories.
+Domain analysis complete: 1 backend module derived from 1 user story.
 Folder → responsibility mapping:
-- backend/repositories/database/ → handles query optimization (Story 1, 2, 3)
-Frontend exclusions: None detected.
-Dependency order: config → repositories → services → app.py.
+- backend/controllers/dashboard/ → handles dashboard logic (Story 1)
+- backend/models/dashboard/ → models for dashboard entities (Story 1)
+- backend/repositories/dashboard/ → DB queries for dashboard items (Story 1)
+- backend/services/dashboard/ → business logic for dashboard (Story 1)
+Frontend exclusions: "dashboard screen" detected in story — EXCLUDED (frontend scope).
+Dependency order: config → repositories → services → controllers → app.py.
 Memory ledger initialized with 0 emitted files, 0 entities, 0 interfaces.
 
 ### Checkpoint 3 — Emission Plan Finalized
 
-Emission plan finalized: 6 files planned.
+Emission plan finalized: 7 files planned.
 Emission sequence:
   1. backend/config/settings.py
-  2. backend/repositories/database/query_optimizer.py
-  3. backend/repositories/database/indexing_manager.py
-  4. backend/repositories/database/performance_tester.py
-  5. app.py (entry point — fifth)
-  6. requirements.txt (final file)
+  2. backend/models/dashboard/widget.py
+  3. backend/repositories/dashboard/widget_repository.py
+  4. backend/services/dashboard/dashboard_service.py
+  5. backend/controllers/dashboard/dashboard_controller.py
+  6. app.py (entry point — sixth)
+  7. requirements.txt (final file)
 Frontend files in plan: NONE.
 Duplicate path check: CLEAN.
 Unknown path check: CLEAN.
-Epic Title comment will be injected in all 6 source files.
+Epic Title comment will be injected in all 7 source files.
 
 ### Checkpoint 4 — Pre-Emission: Each File
 
 Pre-emit File 1: backend/config/settings.py
-Responsibility: Configuration settings (Story 1, 2, 3).
+Responsibility: Configuration settings (Story 1).
 Dependencies required: None.
 New exports to ledger: Settings class, settings instance.
 Epic Title comment: will be injected at line 1.
