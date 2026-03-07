@@ -1,10 +1,12 @@
 # Epic Title: Banking Platform — Core API
 
 from flask import Flask
-from backend.controllers.auth.role_controller import role_bp
+from backend.controllers.auth.log_controller import log_bp
+from backend.controllers.auth.auth_controller import auth_bp
 
 app = Flask(__name__)
-app.register_blueprint(role_bp, url_prefix='/api/roles')
+app.register_blueprint(auth_bp, url_prefix='/api/auth')
+app.register_blueprint(log_bp, url_prefix='/api/logs')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
