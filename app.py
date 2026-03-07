@@ -1,15 +1,15 @@
 # Epic Title: Banking Platform — Core API
 
 from flask import Flask
-from backend.repositories.cache.cache_tester import CacheTester
+from backend.repositories.database.performance_tester import PerformanceTester
 
 app = Flask(__name__)
 
-@app.route('/api/test/cache', methods=['GET'])
-def test_cache_performance():
-    tester = CacheTester()
-    tester.test_cache_performance()
-    return "Cache performance test executed", 200
+@app.route('/api/test', methods=['GET'])
+def test_performance():
+    tester = PerformanceTester()
+    tester.test_performance()
+    return "Performance test executed", 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
