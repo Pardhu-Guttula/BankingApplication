@@ -15,16 +15,22 @@ class InteractionRepository:
             database="banking"
         )
 
-    def get_interactions(self, user_id: str, date_start: str = None, date_end: str = None) -> list[InteractionRecord]:
+    def get_interactions(self, user_id: str, date_start: str = None, date_end: str = None, interaction_type: str = None, search_query: str = None) -> list[InteractionRecord]:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
-        query = "SELECT interaction_id, user_id, interaction_type, timestamp FROM interactions WHERE user_id = %s"
+        query = "SELECT interaction_id, user_id, interaction_type, timestamp, location FROM interactions WHERE user_id = %s"
         params = [user_id]
         if date_start and date_end:
             query += " AND timestamp BETWEEN %s AND %s"
             params.extend([date_start, date_end])
+        if interaction_type:
+            query += " AND interaction_type = %s"
+            params.append(interaction_type)
+        if search_query:
+            query += " AND (interaction_id LIKE %s OR location LIKE %s)"
+            params.extend([f"%{search_query}%", f"%{search_query}%"])
         cursor.execute(query, tuple(params))
         rows = cursor.fetchall()
         cursor.close()
         conn.close()
-        return [InteractionRecord(interaction_id=row[0], user_id=row[1], interaction_type=row[2], timestamp=row[3]) for row in rows]
+        return [InteractionRecord(interaction_id=row[0], user_id=row[1], interaction_type=row[2], timestamp=row[3], location=row[4]) for row in rows]
