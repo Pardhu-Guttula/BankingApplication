@@ -14,11 +14,11 @@ Progress: 1 of 7 files emitted.
 
 ### Checkpoint 4 — Pre-Emission: Each File
 
-Pre-emit File 2: backend/models/dashboard/widget.py
-Responsibility: Models for dashboard entities (Story 1).
+Pre-emit File 2: backend/models/main_content/section.py
+Responsibility: Models for main content entities (Story 1).
 Dependencies required: None.
-New exports to ledger: Widget class.
+New exports to ledger: Section class.
 Epic Title comment: will be injected at line 1.
 Proceeding to emit.
 
-### Emitting File 2: backend/models/dashboard/widget.py
+### Emitting File 2: backend/models/main_content/section.py
