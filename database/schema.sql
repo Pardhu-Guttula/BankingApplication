@@ -1,19 +1,8 @@
 # Epic Title: Banking Platform — Core API
 
--- Layout table
-CREATE TABLE IF NOT EXISTS layout (
-    name VARCHAR(255) PRIMARY KEY
-);
-
--- Component table
-CREATE TABLE IF NOT EXISTS component (
+CREATE TABLE IF NOT EXISTS request_forms (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    position INT NOT NULL,
-    margin VARCHAR(50) NOT NULL,
-    padding VARCHAR(50) NOT NULL,
-    font_style VARCHAR(255) NOT NULL,
-    alignment VARCHAR(50) NOT NULL,
-    layout_name VARCHAR(255),
-    FOREIGN KEY (layout_name) REFERENCES layout(name)
+    user_id VARCHAR(50),
+    account_type VARCHAR(50),
+    initial_deposit FLOAT
 );
