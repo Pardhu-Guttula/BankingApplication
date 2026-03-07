@@ -19,18 +19,18 @@ def create_layout():
 def get_layout(name):
     layout = layout_service.get_layout(name=name)
     if layout:
-        components = [{"name": comp.name,
-                       "position": comp.get_position(),
-                       "margin": comp.margin,
-                       "padding": comp.padding,
-                       "font_style": comp.font_style}
+        components = [{"name": comp.name, 
+                       "position": comp.get_position(), 
+                       "margin": comp.margin, 
+                       "padding": comp.padding, 
+                       "font_style": comp.font_style} 
                       for comp in layout.get_components()]
-
-        breakpoints = [{"name": bp.name,
-                        "min_width": bp.get_min_width(),
-                        "max_width": bp.get_max_width()}
+        
+        breakpoints = [{"name": bp.name, 
+                        "min_width": bp.get_min_width(), 
+                        "max_width": bp.get_max_width()} 
                        for bp in layout.get_breakpoints()]
-
+        
         consistent = layout.check_consistency()
         return jsonify({
             "name": layout.name,
