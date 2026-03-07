@@ -1,9 +1,8 @@
 # Epic Title: Banking Platform — Core API
 
-CREATE TABLE IF NOT EXISTS banking_product (
+CREATE TABLE IF NOT EXISTS realtime_data (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    product_id VARCHAR(50) UNIQUE,
-    name VARCHAR(255),
-    description TEXT,
-    eligibility_criteria VARCHAR(255)
+    data_id VARCHAR(50) UNIQUE,
+    content TEXT,
+    timestamp TIMESTAMP
 );
