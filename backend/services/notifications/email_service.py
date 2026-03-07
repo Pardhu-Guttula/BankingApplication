@@ -3,7 +3,6 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from cryptography.fernet import Fernet
 from backend.repositories.notifications.notification_repository import NotificationRepository
 from backend.models.notifications.delivery_receipt import DeliveryReceipt
 from backend.config import settings
@@ -15,23 +14,13 @@ class EmailService:
         self.port = settings.EMAIL_PORT
         self.username = settings.EMAIL_USERNAME
         self.password = settings.EMAIL_PASSWORD
-        self.encryption_key = settings.ENCRYPTION_KEY
-        self.cipher = Fernet(self.encryption_key.encode())
-
-    def encrypt_content(self, content: str) -> str:
-        return self.cipher.encrypt(content.encode()).decode()
-
-    def decrypt_content(self, encrypted_content: str) -> str:
-        return self.cipher.decrypt(encrypted_content.encode()).decode()
 
     def send_email(self, email_id: str, subject: str, body: str, to_email: str) -> DeliveryReceipt:
-        encrypted_body = self.encrypt_content(body)
-        
         msg = MIMEMultipart()
         msg['From'] = self.username
         msg['To'] = to_email
         msg['Subject'] = subject
-        msg.attach(MIMEText(encrypted_body, 'plain'))
+        msg.attach(MIMEText(body, 'plain'))
         
         retries = 3
         for attempt in range(retries):
