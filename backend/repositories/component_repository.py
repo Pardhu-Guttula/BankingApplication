@@ -31,7 +31,7 @@ class ComponentRepository:
         cursor = conn.cursor(dictionary=True)
         cursor.execute("SELECT * FROM component WHERE layout_name = %s", (layout_name,))
         components = [Component(
-            name=row['name'],
+            name=row['name'], 
             position=row['position'],
             margin=row['margin'],
             padding=row['padding'],
