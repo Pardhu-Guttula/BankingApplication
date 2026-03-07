@@ -19,8 +19,8 @@ class ComponentRepository:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO component (name, position, margin, padding, font_style, alignment) VALUES (%s, %s, %s, %s, %s, %s)",
-            (component.name, component.get_position(), component.margin, component.padding, component.font_style, component.get_alignment())
+            "INSERT INTO component (name, position, margin, padding, font_style) VALUES (%s, %s, %s, %s, %s)",
+            (component.name, component.get_position(), component.margin, component.padding, component.font_style)
         )
         conn.commit()
         cursor.close()
@@ -35,8 +35,7 @@ class ComponentRepository:
             position=row['position'],
             margin=row['margin'],
             padding=row['padding'],
-            font_style=row['font_style'],
-            alignment=row['alignment']
+            font_style=row['font_style']
         ) for row in cursor.fetchall()]
         cursor.close()
         conn.close()
