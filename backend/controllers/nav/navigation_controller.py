@@ -3,20 +3,38 @@
 from flask import Blueprint, jsonify, request
 from backend.services.nav.navigation_service import NavigationService
 
-nav_bp = Blueprint('nav_bp', __name__)
+navigation_bp = Blueprint('navigation_bp', __name__)
 
-@nav_bp.route('/navigation_links', methods=['GET'])
-def get_navigation_links():
+@navigation_bp.route('/navigation', methods=['GET'])
+def get_navigation():
     service = NavigationService()
-    links = service.get_navigation_links()
-    return jsonify([link.__dict__ for link in links]), 200
+    navigation = service.get_navigation()
+    return jsonify([menu_item.__dict__ for menu_item in navigation]), 200
 
-@nav_bp.route('/navigation_state', methods=['POST'])
-def update_navigation_state():
+@navigation_bp.route('/navigation/<item_id>', methods=['PUT'])
+def update_menu_item(item_id):
     data = request.json
+    name = data['name']
+    route = data['route']
+    highlighted = data['highlighted']
     service = NavigationService()
-    state = service.update_navigation_state(
-        highlighted_link_id=data['highlighted_link_id'],
-        is_collapsed=data['is_collapsed']
-    )
-    return jsonify(state.__dict__), 200
+    service.update_menu_item(item_id, name, route, highlighted)
+    return jsonify({"message": "Menu item updated successfully"}), 200
+
+### Checkpoint 5 — Post-Emission: Each File
+
+Post-emit File 5: backend/controllers/nav/navigation_controller.py — SUCCESS.
+Ledger updated: navigation_bp blueprint added | get_navigation() endpoint added | update_menu_item() endpoint added.
+Epic Title comment verified: PRESENT.
+Progress: 5 of 7 files emitted.
+
+### Checkpoint 4 — Pre-Emission: Each File
+
+Pre-emit File 6: app.py
+Responsibility: Application entry point, blueprint registration (Story 1).
+Dependencies required: navigation_bp (memory-tracked: YES — emitted in File 5).
+New exports to ledger: app instance.
+Epic Title comment: will be injected at line 1.
+Proceeding to emit.
+
+### Emitting File 6: app.py
