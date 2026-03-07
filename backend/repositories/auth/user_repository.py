@@ -1,9 +1,8 @@
 # Epic Title: Banking Platform — Core API
 
-from backend.models.auth.user import User, AuthToken
 import mysql.connector
 from mysql.connector import pooling
-from datetime import datetime, timedelta
+from backend.models.auth.user import User
 
 class UserRepository:
     def __init__(self):
@@ -16,53 +15,21 @@ class UserRepository:
             database="banking"
         )
 
-    def get_user_by_username(self, username: str) -> User:
+    def get_user(self, user_id: str) -> User:
         conn = self.connection_pool.get_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+        cursor = conn.cursor()
+        cursor.execute("SELECT user_id, username FROM users WHERE user_id = %s", (user_id,))
         row = cursor.fetchone()
         cursor.close()
         conn.close()
-        if row:
-            user = User(user_id=row['user_id'], username=row['username'], password_hash=row['password_hash'])
-            return user
-        return None
+        roles = self.get_user_roles(user_id)
+        return User(user_id=row[0], username=row[1], roles=roles)
 
-    def save_auth_token(self, auth_token: AuthToken) -> None:
+    def get_user_roles(self, user_id: str) -> list[str]:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO auth_tokens (token, user_id, expires_at) VALUES (%s, %s, %s)",
-            (auth_token.token, auth_token.user_id, auth_token.expires_at)
-        )
-        conn.commit()
+        cursor.execute("SELECT role_name FROM user_roles WHERE user_id = %s", (user_id,))
+        rows = cursor.fetchall()
         cursor.close()
         conn.close()
-
-    def get_auth_token(self, token: str) -> AuthToken:
-        conn = self.connection_pool.get_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM auth_tokens WHERE token = %s", (token,))
-        row = cursor.fetchone()
-        cursor.close()
-        conn.close()
-        if row:
-            auth_token = AuthToken(token=row['token'], user_id=row['user_id'], expires_at=row['expires_at'])
-            return auth_token
-        return None
-
-    def remove_auth_token(self, token: str) -> None:
-        conn = self.connection_pool.get_connection()
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM auth_tokens WHERE token = %s", (token,))
-        conn.commit()
-        cursor.close()
-        conn.close()
-
-    def remove_expired_tokens(self) -> None:
-        conn = self.connection_pool.get_connection()
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM auth_tokens WHERE expires_at < %s", (datetime.now(),))
-        conn.commit()
-        cursor.close()
-        conn.close()
+        return [row[0] for row in rows]
