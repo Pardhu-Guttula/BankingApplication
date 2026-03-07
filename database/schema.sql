@@ -26,10 +26,3 @@ CREATE TABLE IF NOT EXISTS breakpoint (
     layout_name VARCHAR(255),
     FOREIGN KEY (layout_name) REFERENCES layout(name)
 );
-
--- Browser table
-CREATE TABLE IF NOT EXISTS browser (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    version VARCHAR(255) NOT NULL
-);
