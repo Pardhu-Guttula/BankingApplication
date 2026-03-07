@@ -1,15 +1,15 @@
 # Epic Title: Banking Platform — Core API
 
+from backend.models.main_content_area import MainContentArea
+from backend.models.side_navigation import SideNavigation
+from backend.models.header import Header
+
 class Dashboard:
-    def __init__(self, user_id: int):
-        self.user_id = user_id
-        self.widgets = []
+    def __init__(self, main_content: MainContentArea, side_navigation: SideNavigation, header: Header):
+        self.main_content = main_content
+        self.side_navigation = side_navigation
+        self.header = header
 
-    def add_widget(self, widget: object):
-        self.widgets.append(widget)
-
-    def remove_widget(self, widget: object):
-        self.widgets.remove(widget)
-
-    def get_widgets(self) -> list:
-        return self.widgets
+    def integrate_components(self):
+        # Ensure integration logic as needed
+        pass
