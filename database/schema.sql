@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS component (
     margin VARCHAR(50) NOT NULL,
     padding VARCHAR(50) NOT NULL,
     font_style VARCHAR(255) NOT NULL,
+    alignment VARCHAR(50) NOT NULL,
     layout_name VARCHAR(255),
     FOREIGN KEY (layout_name) REFERENCES layout(name)
 );
