@@ -1,40 +1,46 @@
-variable "subscription_id" {
-  description = "The subscription ID"
+variable "location" {
+  description = "The location where resources will be created"
   type        = string
+  default     = "East US"
 }
 
 variable "resource_group_name" {
-  description = "The resource group name"
+  description = "The name of the resource group"
   type        = string
+  default     = "rg-banking-portal"
 }
 
-variable "location" {
-  description = "The Azure region"
+variable "b2c_tenant_name" {
+  description = "The name of the Azure B2C tenant"
   type        = string
+  default     = "myb2ctenant"
 }
 
-variable "sql_admin_username" {
-  description = "The SQL admin username"
+variable "keyvault_name" {
+  description = "The name of the Azure Key Vault"
   type        = string
+  default     = "keyvault-banking"
+}
+
+variable "sql_server_name" {
+  description = "The name of the Azure SQL server"
+  type        = string
+  default     = "sqlserver-banking"
+}
+
+variable "sql_db_name" {
+  description = "The name of the Azure SQL database"
+  type        = string
+  default     = "sqldb-banking"
+}
+
+variable "servicebus_namespace_name" {
+  description = "The name of the Azure Service Bus namespace"
+  type        = string
+  default     = "servicebus-banking"
 }
 
 variable "sql_admin_password" {
-  description = "The SQL admin password"
-  type        = string
-  sensitive   = true
-}
-
-variable "webapp_sku" {
-  description = "The SKU for the web app"
-  type        = string
-}
-
-variable "redis_sku" {
-  description = "The SKU for the Redis Cache"
-  type        = string
-}
-
-variable "storage_account_tier" {
-  description = "The tier for the storage account"
+  description = "SQL Admin password"
   type        = string
 }
