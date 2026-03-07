@@ -15,33 +15,28 @@ class InteractionRepository:
             database="banking"
         )
 
-    def get_records_for_deletion(self) -> list[InteractionRecord]:
+    def get_failed_logins(self) -> list[InteractionRecord]:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
-        query = """
-        SELECT interaction_id, user_id, interaction_type, timestamp, location 
-        FROM interactions 
-        WHERE timestamp < NOW() - INTERVAL %s DAY
-        """
-        cursor.execute(query, (Settings.RETENTION_PERIOD_DAYS,))
+        cursor.execute("SELECT interaction_id, user_id, interaction_type, timestamp, location FROM interactions WHERE interaction_type = 'failed_login'")
         rows = cursor.fetchall()
         cursor.close()
         conn.close()
         return [InteractionRecord(interaction_id=row[0], user_id=row[1], interaction_type=row[2], timestamp=row[3], location=row[4]) for row in rows]
 
-    def delete_record(self, interaction_id: str) -> None:
+    def get_unusual_locations(self) -> list[InteractionRecord]:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM interactions WHERE interaction_id = %s", (interaction_id,))
-        conn.commit()
+        cursor.execute("SELECT interaction_id, user_id, interaction_type, timestamp, location FROM interactions WHERE location = 'unusual'")
+        rows = cursor.fetchall()
         cursor.close()
         conn.close()
+        return [InteractionRecord(interaction_id=row[0], user_id=row[1], interaction_type=row[2], timestamp=row[3], location=row[4]) for row in rows]
 
-    def get_records_for_compliance(self) -> list[InteractionRecord]:
+    def get_repeated_exports(self) -> list[InteractionRecord]:
         conn = self.connection_pool.get_connection()
         cursor = conn.cursor()
-        query = "SELECT interaction_id, user_id, interaction_type, timestamp, location FROM interactions"
-        cursor.execute(query)
+        cursor.execute("SELECT interaction_id, user_id, interaction_type, timestamp, location FROM interactions WHERE interaction_type = 'data_export' AND timestamp >= NOW() - INTERVAL 1 MINUTE")
         rows = cursor.fetchall()
         cursor.close()
         conn.close()
