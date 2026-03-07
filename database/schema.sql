@@ -1,16 +1,16 @@
 # Epic Title: Banking Platform — Core API
 
--- MainContentArea table
-CREATE TABLE IF NOT EXISTS main_content_area (
+-- Header table
+CREATE TABLE IF NOT EXISTS header (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    current_view VARCHAR(255)
+    title VARCHAR(255) NOT NULL UNIQUE
 );
 
--- MainContentView table
-CREATE TABLE IF NOT EXISTS main_content_view (
+-- NavigationLink table
+CREATE TABLE IF NOT EXISTS navigation_link (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    main_content_area_id INT,
+    header_id INT,
     name VARCHAR(255) NOT NULL,
-    content TEXT NOT NULL,
-    FOREIGN KEY (main_content_area_id) REFERENCES main_content_area(id)
+    url VARCHAR(255) NOT NULL,
+    FOREIGN KEY (header_id) REFERENCES header(id)
 );
