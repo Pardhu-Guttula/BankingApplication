@@ -2,6 +2,7 @@
 
 from backend.services.nav.service import NavService
 from backend.repositories.nav.repository import NavRepository
+from flask import Flask
 import logging
 
 logging.basicConfig(level=logging.INFO)
