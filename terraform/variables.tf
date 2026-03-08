@@ -1,65 +1,83 @@
-variable "resource_group_name" {
-  description = "Name of the resource group"
-  type        = string
+variable "region" {
+  description = "The AWS region to deploy to."
 }
 
-variable "location" {
-  description = "Location of the resources"
-  type        = string
+variable "vpc_cidr" {
+  description = "CIDR block for the VPC."
 }
 
-variable "app_service_plan_name" {
-  description = "Name of the App Service Plan"
-  type        = string
+variable "subnet_cidr" {
+  description = "CIDR block for the public subnet."
 }
 
-variable "app_service_name" {
-  description = "Name of the App Service"
-  type        = string
+variable "domain_name" {
+  description = "Domain name for Route 53 and ACM."
 }
 
-variable "api_management_name" {
-  description = "Name of the API Management"
-  type        = string
+variable "s3_bucket_name" {
+  description = "Name of the S3 bucket for SPA static hosting."
 }
 
-variable "frontdoor_name" {
-  description = "Name of the Azure Front Door instance"
-  type        = string
+variable "cognito_pool_name" {
+  description = "Name of the Cognito User Pool."
 }
 
-variable "waf_policy_name" {
-  description = "Name of the WAF Policy"
-  type        = string
+variable "cognito_client_name" {
+  description = "Name of the Cognito User Pool Client."
 }
 
-variable "sql_server_name" {
-  description = "Name of the SQL Server"
-  type        = string
+variable "api_name" {
+  description = "Name of the API Gateway REST API."
 }
 
-variable "sql_database_name" {
-  description = "Name of the SQL Database"
-  type        = string
+variable "lambda_name" {
+  description = "Name of the Lambda function."
 }
 
-variable "key_vault_name" {
-  description = "Name of the Key Vault"
-  type        = string
+variable "step_function_name" {
+  description = "Name of the Step Function."
 }
 
-variable "sql_password" {
-  description = "Password for the SQL Server admin"
-  type        = string
-  sensitive   = true
+variable "rds_name" {
+  description = "Name of the RDS cluster."
 }
 
-variable "tenant_id" {
-  description = "Azure tenant ID"
-  type        = string
+variable "s3_bucket_name_docs" {
+  description = "Name of the S3 bucket for document storage."
 }
 
-variable "client_object_id" {
-  description = "Object ID of Azure AD Client"
-  type        = string
+variable "kms_key_desc" {
+  description = "Description of the KMS key."
+}
+
+variable "eventbridge_rule_name" {
+  description = "Name of the EventBridge rule."
+}
+
+variable "sqs_name" {
+  description = "Name of the SQS queue."
+}
+
+variable "sns_name" {
+  description = "Name of the SNS topic."
+}
+
+variable "ses_identity_name" {
+  description = "Name of the SES identity."
+}
+
+variable "cloudwatch_group_name" {
+  description = "Name of the CloudWatch log group."
+}
+
+variable "xray_group_name" {
+  description = "Name of the X-Ray group."
+}
+
+variable "cloudtrail_name" {
+  description = "Name of the CloudTrail."
+}
+
+variable "secret_name" {
+  description = "Name of the Secrets Manager secret."
 }
