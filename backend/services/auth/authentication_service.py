@@ -56,3 +56,17 @@ class AuthenticationService:
             totp = pyotp.TOTP(secret.decode('utf-8'))
             return totp.verify(otp)
         return False
+
+    def setup_mfa_with_qr(self, username: str) -> str:
+        user = self.user_repository.get_user_by_username(username)
+        if user:
+            secret = pyotp.random_base32()
+            totp = pyotp.TOTP(secret)
+            otp = totp.now()
+            self.redis_client.setex(f'mfa:{username}', 300, secret)
+            uri = totp.provisioning_uri(name=username, issuer_name='MyService')
+            return uri
+        return None
+
+    def delete_mfa_credentials(self, username: str) -> None:
+        self.redis_client.delete(f'mfa:{username}')
