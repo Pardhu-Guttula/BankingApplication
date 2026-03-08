@@ -1,7 +1,6 @@
 import React, { useId, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { LabeledInput } from '../ui/LabeledInput';
-import { RememberRow } from '../ui/RememberRow';
 import { PrimaryButton } from '../ui/PrimaryButton';
 import { validateEmailOrUsername, validatePassword } from '../../utils/validators';
 import { noop } from '../../utils/noop';
@@ -76,12 +75,6 @@ export function LoginForm({
         autoComplete="current-password"
         onChange={onPasswordChange}
         error={showPasswordError}
-      />
-
-      <RememberRow
-        checked={rememberMe}
-        onCheckedChange={onRememberMeChange}
-        onForgotPassword={onForgotPassword}
       />
 
       <PrimaryButton
