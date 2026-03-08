@@ -5,7 +5,7 @@ terraform {
       version = "~> 4.56.0"
     }
   }
-  required_version = ">= 1.1.0"
+  required_version = ">= 1.0"
 }
 
 provider "azurerm" {
@@ -17,68 +17,106 @@ resource "azurerm_resource_group" "main" {
   location = var.location
 }
 
-resource "azurerm_front_door" "waf" {
-  name                = "frontdoor-waf"
+resource "azurerm_app_service_plan" "portal_plan" {
+  name                = var.app_service_plan_name
+  location            = var.location
   resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
-  # Additional configuration for Front Door
+  sku {
+    tier = "Standard"
+    size = "S1"
+  }
 }
 
-resource "azurerm_app_service" "web_portal" {
-  name                = "web-portal"
+resource "azurerm_app_service" "portal_ui" {
+  name                = var.app_service_name
+  location            = var.location
   resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
-  # Additional configuration for App Service
+  app_service_plan_id = azurerm_app_service_plan.portal_plan.id
 }
 
-resource "azurerm_b2c_directory" "b2c" {
-  name                = var.b2c_tenant_name
+resource "azurerm_api_management" "main_apim" {
+  name                = var.api_management_name
+  location            = var.location
   resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
-  # Additional configuration for B2C
+  sku_name            = "Developer"
+  publisher_name      = "My Company"
+  publisher_email     = "company@example.com"
 }
 
-resource "azurerm_api_management" "apim" {
-  name                = "api-management"
+resource "azurerm_frontdoor" "main_frontdoor" {
+  name                = var.frontdoor_name
   resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
-  # Additional configuration for API Management
+  location            = var.location
 }
 
-resource "azurerm_kubernetes_cluster" "backend_services" {
-  name                = "backend-services"
+resource "azurerm_frontdoor_firewall_policy" "waf_policy" {
+  name                = var.waf_policy_name
   resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
-  # Additional configuration for AKS
+  location            = var.location
+
+  custom_rule {
+    name      = "BlockSQLi"
+    priority  = 1
+    rule_type = "MatchRule"
+    action    = "Block"
+    match_condition {
+      match_variable = "RequestHeaders"
+      operator       = "Contains"
+      negate_condition = false
+      selector     = "UserAgent"
+      match_value  = ["SQLi"]
+    }
+  }
 }
 
-resource "azurerm_key_vault" "keyvault" {
-  name                = var.keyvault_name
+resource "azurerm_mssql_server" "sql_server" {
+  name                = var.sql_server_name
   resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
-  # Additional configuration for Key Vault
+  location            = var.location
+  version             = "12.0"
+  administrator_login = "sqladmin"
+  administrator_login_password = var.sql_password
 }
 
-resource "azurerm_sql_server" "sql" {
-  name                         = var.sql_server_name
-  resource_group_name          = azurerm_resource_group.main.name
-  location                     = azurerm_resource_group.main.location
-  version                      = "12.0"
-  administrator_login          = "sqladmin"
-  administrator_login_password = var.sql_admin_password
-  # Additional configuration for SQL Server
+resource "azurerm_mssql_database" "sql_database" {
+  name                = var.sql_database_name
+  resource_group_name = azurerm_resource_group.main.name
+  location            = var.location
+  server_id           = azurerm_mssql_server.sql_server.id
+  sku_name            = "Standard"
 }
 
-resource "azurerm_sql_database" "sql_db" {
-  name                = var.sql_db_name
+resource "azurerm_key_vault" "main_keyvault" {
+  name                = var.key_vault_name
   resource_group_name = azurerm_resource_group.main.name
-  server_name         = azurerm_sql_server.sql.name
-  # Additional configuration for SQL Database
-}
+  location            = var.location
 
-resource "azurerm_servicebus_namespace" "sb" {
-  name                = var.servicebus_namespace_name
-  resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
-  # Additional configuration for Service Bus
+  tenant_id = var.tenant_id
+
+  sku_name = "standard"
+
+  access_policy {
+    tenant_id = var.tenant_id
+    object_id = var.client_object_id
+
+    secret_permissions = [
+      "get",
+      "list",
+      "set",
+      "delete",
+    ]
+
+    certificate_permissions = [
+      "get",
+      "list",
+      "create",
+      "update",
+    ]
+
+    key_permissions = [
+      "get",
+      "list",
+      "create",
+    ]
+  }
 }
