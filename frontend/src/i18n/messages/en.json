@@ -1,0 +1,20 @@
+{
+  "authCard.signIn": "Sign In",
+  "authCard.enterCredentials": "Enter your credentials to access your account",
+  "loginForm.usernameOrEmail": "Username or Email",
+  "loginForm.password": "Password",
+  "rememberRow.rememberMe": "Remember me",
+  "rememberRow.forgotPassword": "Forgot password?",
+  "common.continuing": "Continuing...",
+  "brandHeader.title": "SecureBank Portal",
+  "brandHeader.subtitle": "Your banking, simplified",
+  "securityNote.text": "Secured with 256-bit encryption",
+  "loginForm.submitButton": "Continue",
+  "loginPage.title": "Sign In",
+  "loginPage.description": "Enter your credentials to access your account",
+  "loginPage.emailLabel": "Email or Username",
+  "loginPage.passwordLabel": "Password",
+  "loginPage.rememberMe": "Remember me",
+  "loginPage.forgotPassword": "Forgot password?",
+  "loginPage.submitButton": "Sign In"
+}
