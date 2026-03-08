@@ -1,46 +1,65 @@
-variable "location" {
-  description = "The location where resources will be created"
-  type        = string
-  default     = "East US"
-}
-
 variable "resource_group_name" {
-  description = "The name of the resource group"
+  description = "Name of the resource group"
   type        = string
-  default     = "rg-banking-portal"
 }
 
-variable "b2c_tenant_name" {
-  description = "The name of the Azure B2C tenant"
+variable "location" {
+  description = "Location of the resources"
   type        = string
-  default     = "myb2ctenant"
 }
 
-variable "keyvault_name" {
-  description = "The name of the Azure Key Vault"
+variable "app_service_plan_name" {
+  description = "Name of the App Service Plan"
   type        = string
-  default     = "keyvault-banking"
+}
+
+variable "app_service_name" {
+  description = "Name of the App Service"
+  type        = string
+}
+
+variable "api_management_name" {
+  description = "Name of the API Management"
+  type        = string
+}
+
+variable "frontdoor_name" {
+  description = "Name of the Azure Front Door instance"
+  type        = string
+}
+
+variable "waf_policy_name" {
+  description = "Name of the WAF Policy"
+  type        = string
 }
 
 variable "sql_server_name" {
-  description = "The name of the Azure SQL server"
+  description = "Name of the SQL Server"
   type        = string
-  default     = "sqlserver-banking"
 }
 
-variable "sql_db_name" {
-  description = "The name of the Azure SQL database"
+variable "sql_database_name" {
+  description = "Name of the SQL Database"
   type        = string
-  default     = "sqldb-banking"
 }
 
-variable "servicebus_namespace_name" {
-  description = "The name of the Azure Service Bus namespace"
+variable "key_vault_name" {
+  description = "Name of the Key Vault"
   type        = string
-  default     = "servicebus-banking"
 }
 
-variable "sql_admin_password" {
-  description = "SQL Admin password"
+variable "sql_password" {
+  description = "Password for the SQL Server admin"
+  type        = string
+  sensitive   = true
+}
+
+variable "tenant_id" {
+  description = "Azure tenant ID"
+  type        = string
+}
+
+variable "client_object_id" {
+  description = "Object ID of Azure AD Client"
   type        = string
 }
