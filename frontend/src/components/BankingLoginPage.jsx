@@ -4,6 +4,7 @@ import { BrandHeader } from './sections/BrandHeader';
 import { AuthCard } from './sections/AuthCard';
 import { LoginForm } from './sections/LoginForm';
 import { SecurityNote } from './sections/SecurityNote';
+import { RememberRow } from './ui/RememberRow';
 import { noop } from '../utils/noop';
 
 export function BankingLoginPage({
