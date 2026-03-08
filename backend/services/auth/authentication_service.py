@@ -1,14 +1,15 @@
-# Epic Title: Banking Platform — Core API
-
 from backend.repositories.auth.user_repository import UserRepository
 from backend.models.auth.user import User, AuthToken
 from datetime import datetime, timedelta
 import hashlib
 import uuid
+import pyotp
+import redis
 
 class AuthenticationService:
     def __init__(self):
         self.user_repository = UserRepository()
+        self.redis_client = redis.StrictRedis(host='localhost', port=6379, db=0)
 
     def login(self, username: str, password: str) -> str:
         user = self.user_repository.get_user_by_username(username)
@@ -38,3 +39,20 @@ class AuthenticationService:
 
     def remove_expired_tokens(self) -> None:
         self.user_repository.remove_expired_tokens()
+
+    def setup_mfa(self, username: str) -> str:
+        user = self.user_repository.get_user_by_username(username)
+        if user:
+            secret = pyotp.random_base32()
+            totp = pyotp.TOTP(secret)
+            otp = totp.now()
+            self.redis_client.setex(f'mfa:{username}', 300, secret)
+            return otp
+        return None
+
+    def verify_mfa(self, username: str, otp: str) -> bool:
+        secret = self.redis_client.get(f'mfa:{username}')
+        if secret:
+            totp = pyotp.TOTP(secret.decode('utf-8'))
+            return totp.verify(otp)
+        return False
